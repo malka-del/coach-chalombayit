@@ -290,7 +290,7 @@
     <hr style="border:0; height:1px; background:rgba(226,194,102,0.2); margin:10px 0;">
 
     <h4>💡 Introduction</h4>
-    <p>Bienvenue dans <strong>Chalom Bayit Le LAB</strong> ! Votre couple est un logiciel complexe. Pour qu'il fonctionne à merveille, il faut le mettre à jour, régulièrement réviser son <em>"code source"</em>. Ce jeu est votre outil Agile pour une connexion optimale.</p>
+    <p>Bienvenue dans <strong>Chalom Bayit Le LAB</strong> ! Votre couple est un logiciel complexe. Pour qu'il fonctionne à merveille, il faut le mettre à jour, regularly réviser son <em>"code source"</em>. Ce jeu est votre outil Agile pour une connexion optimale.</p>
 
     <h4>🎯 But du jeu</h4>
     <p>Mieux se connaître, car c’est une des grandes forces du couple pour être capable d'affronter ensemble les tempêtes de la vie.</p>
@@ -324,7 +324,7 @@
     "CHALOM2026"
   ];
 
-  // WEBHOOK AIRTABLE
+  // WEBHOOK AIRTABLE (Ton URL exacte)
   const AIRTABLE_WEBHOOK_URL = "https://hooks.airtable.com/workflows/v1/genericWebhook/appoelLZhjYcrttEa/wflmijhh8ThqnzTPw/wtrVa6peMecxI8Amj";
 
   // BANQUE DE 75 QUESTIONS COMPLÈTE
@@ -417,7 +417,7 @@
   let currentCardIndex = 0;
   let turnState = 1;
   let sessionDataLog = [];
-  let isDataSynced = false; // Flag pour empêcher le double envoi
+  let isDataSynced = false;
 
   function toggleRulesModal(show) {
     const modal = document.getElementById('rules-modal');
@@ -546,44 +546,42 @@
     }
   }
 
- function submitAnswer(type) {
-  let card = gameDeck[currentCardIndex];
-  let given = document.getElementById('ans-given').value.trim();
-  let truth = document.getElementById('ans-truth').value.trim();
+  function submitAnswer(type) {
+    let card = gameDeck[currentCardIndex];
+    let given = document.getElementById('ans-given').value.trim();
+    let truth = document.getElementById('ans-truth').value.trim();
 
-  if(type !== 'skip') {
-    sessionDataLog.push({
-      card_id: card.id,
-      question: card.q,
-      responder: turnState === 1 ? p1.name : p2.name,
-      evaluator: turnState === 1 ? p2.name : p1.name,
-      answer_given: given,
-      answer_truth: truth,
-      outcome: type
-    });
-  }
-
-  if(turnState === 1) {
-    if(type === 'correct') p1.score++;
-    turnState = 2;
-    updateScoreboard();
-    setupFormTurn();
-  } else {
-    if(type === 'correct') p2.score++;
-    
-    markCardAsPlayed(card.id);
-    updateScoreboard();
-    
-    currentCardIndex++;
-    
-    // Si c'est la dernière question du lot choisi (ex: 1/1, 3/3, 15/15)
-    if(currentCardIndex >= gameDeck.length) {
-      endGame();
-    } else {
-      prepareTurn();
+    if(type !== 'skip') {
+      sessionDataLog.push({
+        card_id: card.id,
+        question: card.q,
+        responder: turnState === 1 ? p1.name : p2.name,
+        evaluator: turnState === 1 ? p2.name : p1.name,
+        answer_given: given,
+        answer_truth: truth,
+        outcome: type
+      });
     }
-  }
-}
+
+    if(turnState === 1) {
+      if(type === 'correct') p1.score++;
+      turnState = 2;
+      updateScoreboard();
+      setupFormTurn();
+    } else {
+      if(type === 'correct') p2.score++;
+      
+      markCardAsPlayed(card.id);
+      updateScoreboard();
+      
+      currentCardIndex++;
+      
+      if(currentCardIndex >= gameDeck.length) {
+        endGame();
+      } else {
+        prepareTurn();
+      }
+    }
   }
 
   function updateScoreboard() {
@@ -596,7 +594,6 @@
     document.getElementById('end-stats').innerText = `${p1.name} : ${p1.score} pt(s) | ${p2.name} : ${p2.score} pt(s)`;
     showScreen('end-screen');
     
-    // ENVOI AUTOMATIQUE ET IMMÉDIAT EN FIN DE PARTIE
     syncAirtable('completed');
   }
 
@@ -609,7 +606,6 @@
     }
   }
 
-  // FONCTION DE SYNCHRONISATION AIRTABLE
   async function syncAirtable(status = 'completed') {
     if(isDataSynced || sessionDataLog.length === 0) return;
 
@@ -619,7 +615,7 @@
       score_p2: p2.score,
       total_questions: gameDeck.length,
       questions_responded: sessionDataLog.length,
-      status: status, // 'completed' ou 'abandoned'
+      status: status,
       details_reponses: sessionDataLog,
       date: new Date().toISOString()
     };
@@ -638,7 +634,6 @@
     }
   }
 
-  // ANTI-ABANDON : DÉTECTION DE FERMETURE OU D'ABANDON DE PAGE
   function handleAbandonment() {
     if(!isDataSynced && sessionDataLog.length > 0) {
       const payload = JSON.stringify({
@@ -660,7 +655,6 @@
     }
   }
 
-  // Événements de fermeture de page / changement d'onglet
   window.addEventListener('visibilitychange', () => {
     if (document.visibilityState === 'hidden') handleAbandonment();
   });
