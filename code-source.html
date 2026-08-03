@@ -265,7 +265,7 @@
     </div>
 
     <!-- WhatsApp officiel : +33 9 74 99 72 26 -->
-    <a id="btn-whatsapp" href="https://wa.me/33974997226?text=Bonjour%20!%20Nous%20avons%20termin%C3%A9%20notre%20session%20de%20jeu%20et%20souhaitons%20poursuivre%20la%20S%C3%A9ance%202." target="_blank" class="btn btn-green" onclick="syncAirtable()">
+    <a id="btn-whatsapp" href="https://wa.me/33974997226?text=Bonjour%20!%20Nous%20avons%20termin%C3%A9%20notre%20session%20de%20jeu%20et%20souhaitons%20poursuivre%20la%20S%C3%A9ance%202." target="_blank" class="btn btn-green">
       💬 Poursuivre la Séance 2 sur WhatsApp
     </a>
 
@@ -324,7 +324,8 @@
     "CHALOM2026"
   ];
 
-  const AIRTABLE_WEBHOOK_URL = "YOUR_AIRTABLE_WEBHOOK_URL";
+  // WEBHOOK AIRTABLE
+  const AIRTABLE_WEBHOOK_URL = "https://hooks.airtable.com/workflows/v1/genericWebhook/appoelLZhjYcrttEa/wflmijhh8ThqnzTPw/wtrVa6peMecxI8Amj";
 
   // BANQUE DE 75 QUESTIONS COMPLÈTE
   const CARDS_DATABASE = [
@@ -416,6 +417,7 @@
   let currentCardIndex = 0;
   let turnState = 1;
   let sessionDataLog = [];
+  let isDataSynced = false; // Flag pour empêcher le double envoi
 
   function toggleRulesModal(show) {
     const modal = document.getElementById('rules-modal');
@@ -496,6 +498,10 @@
     available.sort(() => 0.5 - Math.random());
     gameDeck = available.slice(0, Math.min(requestedNb, available.length));
     currentCardIndex = 0;
+    sessionDataLog = [];
+    isDataSynced = false;
+    p1.score = 0;
+    p2.score = 0;
     
     updateScoreboard();
     prepareTurn();
@@ -587,7 +593,9 @@
     document.getElementById('end-questions-count').innerText = `Vous avez exploré ${gameDeck.length} question(s) lors de cette partie.`;
     document.getElementById('end-stats').innerText = `${p1.name} : ${p1.score} pt(s) | ${p2.name} : ${p2.score} pt(s)`;
     showScreen('end-screen');
-    syncAirtable();
+    
+    // ENVOI AUTOMATIQUE ET IMMÉDIAT EN FIN DE PARTIE
+    syncAirtable('completed');
   }
 
   function resetGameMemory() {
@@ -599,17 +607,22 @@
     }
   }
 
-  async function syncAirtable() {
-    if(AIRTABLE_WEBHOOK_URL === "YOUR_AIRTABLE_WEBHOOK_URL") return;
+  // FONCTION DE SYNCHRONISATION AIRTABLE
+  async function syncAirtable(status = 'completed') {
+    if(isDataSynced || sessionDataLog.length === 0) return;
 
     const payload = {
       couple: `${p1.name} & ${p2.name}`,
       score_p1: p1.score,
       score_p2: p2.score,
       total_questions: gameDeck.length,
+      questions_responded: sessionDataLog.length,
+      status: status, // 'completed' ou 'abandoned'
       details_reponses: sessionDataLog,
       date: new Date().toISOString()
     };
+
+    isDataSynced = true;
 
     try {
       await fetch(AIRTABLE_WEBHOOK_URL, {
@@ -617,10 +630,39 @@
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
       });
+      console.log("Synchronisation Airtable réussie.");
     } catch(e) {
-      console.log("Données préparées pour l'envoi.");
+      console.error("Erreur de synchronisation :", e);
     }
   }
+
+  // ANTI-ABANDON : DÉTECTION DE FERMETURE OU D'ABANDON DE PAGE
+  function handleAbandonment() {
+    if(!isDataSynced && sessionDataLog.length > 0) {
+      const payload = JSON.stringify({
+        couple: `${p1.name} & ${p2.name}`,
+        score_p1: p1.score,
+        score_p2: p2.score,
+        total_questions: gameDeck.length,
+        questions_responded: sessionDataLog.length,
+        status: 'abandoned',
+        details_reponses: sessionDataLog,
+        date: new Date().toISOString()
+      });
+
+      if (navigator.sendBeacon) {
+        const blob = new Blob([payload], { type: 'application/json' });
+        navigator.sendBeacon(AIRTABLE_WEBHOOK_URL, blob);
+      }
+      isDataSynced = true;
+    }
+  }
+
+  // Événements de fermeture de page / changement d'onglet
+  window.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'hidden') handleAbandonment();
+  });
+  window.addEventListener('pagehide', handleAbandonment);
 
   document.addEventListener('contextmenu', e => e.preventDefault());
 </script>
