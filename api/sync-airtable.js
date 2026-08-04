@@ -1,41 +1,34 @@
 export default async function handler(req, res) {
-  // 1. Autorisations CORS complètes pour intercepter le domaine custom sans blocage
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  // Autoriser l'origine exacte du frontend
+  res.setHeader('Access-Control-Allow-Origin', 'https://coach.chalombayitlelab.com');
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
-  // 2. Gestion de la requête de pré-vérification (Preflight Request OPTIONS)
+  // Réponse immédiate pour le Preflight CORS
   if (req.method === 'OPTIONS') {
     return res.status(200).end();
   }
 
-  // 3. Validation de la méthode
   if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Méthode non autorisée' });
+    return res.status(405).json({ error: 'Method Not Allowed' });
   }
 
   try {
-    const data = req.body;
+    const airtableWebhookUrl = process.env.AIRTABLE_WEBHOOK_URL;
 
-    // 4. Envoi vers le Webhook Airtable configuré dans Vercel
-    const AIRTABLE_WEBHOOK_URL = process.env.AIRTABLE_WEBHOOK_URL;
-
-    if (!AIRTABLE_WEBHOOK_URL) {
-      return res.status(500).json({ error: 'Variable AIRTABLE_WEBHOOK_URL manquante dans Vercel' });
-    }
-
-    const airtableResponse = await fetch(AIRTABLE_WEBHOOK_URL, {
+    const response = await fetch(airtableWebhookUrl, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data)
+      body: JSON.stringify(req.body)
     });
 
-    if (airtableResponse.ok) {
-      return res.status(200).json({ success: true, message: 'Données transmises avec succès à Airtable' });
+    if (response.ok) {
+      return res.status(200).json({ success: true });
     } else {
-      return res.status(500).json({ error: 'Erreur retournée par le Webhook Airtable' });
+      return res.status(response.status).json({ error: 'Airtable error' });
     }
   } catch (error) {
-    return res.status(500).json({ error: error.message });
+    return res.status(500).json({ error: 'Internal server error' });
   }
 }
