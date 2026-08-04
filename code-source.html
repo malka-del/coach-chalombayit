@@ -299,7 +299,7 @@
     <hr style="border:0; height:1px; background:rgba(226,194,102,0.2); margin:10px 0;">
 
     <h4>💡 Introduction</h4>
-    <p>Bienvenue dans <strong>Chalom Bayit Le LAB</strong> ! Votre couple est un logiciel complexe. Pour qu'il fonctionne à merveille, il faut le mettre à jour, regularly réviser son <em>"code source"</em>. Ce jeu est votre outil Agile pour une connexion optimale.</p>
+    <p>Bienvenue dans <strong>Chalom Bayit Le LAB</strong> ! Votre couple est un logiciel complexe. Pour qu'il fonctionne à merveille, il faut le mettre à jour, régulièrement réviser son <em>"code source"</em>. Ce jeu est votre outil Agile pour une connexion optimale.</p>
 
     <h4>🎯 But du jeu</h4>
     <p>Mieux se connaître, car c’est une des grandes forces du couple pour être capable d'affronter ensemble les tempêtes de la vie.</p>
@@ -328,11 +328,12 @@
 
 <script>
 
-// ── CODES AUTORISÉS ──
+  // ── CODES AUTORISÉS ──
   const AUTHORIZED_USERS = [
     "CHALOM2026",
     "SEPHORA-JOHN"
   ];
+
   // BANQUE DE 75 QUESTIONS COMPLÈTE
   const CARDS_DATABASE = [
     // NousDeux (25)
@@ -419,6 +420,7 @@
 
   let p1 = { name: "", score: 0 };
   let p2 = { name: "", score: 0 };
+  let accessCodeUsed = "";
   let gameDeck = [];
   let currentCardIndex = 0;
   let turnState = 1;
@@ -475,6 +477,8 @@
 
     p1.name = inputP1;
     p2.name = inputP2;
+    accessCodeUsed = code;
+
     updateCardsCounterBadge();
     showScreen('setup-screen');
   }
@@ -621,7 +625,9 @@
     if(isDataSynced || sessionDataLog.length === 0) return;
 
     const payload = {
-      couple: `${p1.name} & ${p2.name}`,
+      MDP_Jeu: accessCodeUsed,
+      prenom_p1: p1.name,
+      prenom_p2: p2.name,
       score_p1: p1.score,
       score_p2: p2.score,
       total_questions: gameDeck.length,
@@ -652,7 +658,9 @@
   function handleAbandonment() {
     if(!isDataSynced && sessionDataLog.length > 0) {
       const payload = JSON.stringify({
-        couple: `${p1.name} & ${p2.name}`,
+        MDP_Jeu: accessCodeUsed,
+        prenom_p1: p1.name,
+        prenom_p2: p2.name,
         score_p1: p1.score,
         score_p2: p2.score,
         total_questions: gameDeck.length,
