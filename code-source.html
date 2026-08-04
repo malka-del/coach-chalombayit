@@ -613,6 +613,9 @@
     }
   }
 
+  // URL DE L'API VERCEL DIRECTE
+  const VERCEL_API_URL = 'https://coach-chalombayit-hg8gddpul-chalom-bayit-le-lab.vercel.app/api/sync-airtable';
+
   // Synchronisation vers Airtable via l'API Vercel sécurisée
   async function syncAirtable(status = 'completed') {
     if(isDataSynced || sessionDataLog.length === 0) return;
@@ -629,7 +632,7 @@
     };
 
     try {
-      const response = await fetch('/api/sync-airtable', {
+      const response = await fetch(VERCEL_API_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
@@ -661,7 +664,7 @@
 
       if (navigator.sendBeacon) {
         const blob = new Blob([payload], { type: 'application/json' });
-        navigator.sendBeacon('/api/sync-airtable', blob);
+        navigator.sendBeacon(VERCEL_API_URL, blob);
       }
       isDataSynced = true;
     }
