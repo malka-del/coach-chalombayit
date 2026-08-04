@@ -1,13 +1,20 @@
-export default async function handler(req, res) {
-  // Gestion du CORS et de la méthode POST
+module.exports = async (req, res) => {
+  // Définition des entêtes CORS
+  res.setHeader('Access-Control-Allow-Credentials', true);
   res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
+  res.setHeader(
+    'Access-Control-Allow-Headers',
+    'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
+  );
 
+  // Gestion des requêtes de pré-vérification (Preflight OPTIONS)
   if (req.method === 'OPTIONS') {
-    return res.status(200).end();
+    res.status(200).end();
+    return;
   }
 
+  // Si ce n'est pas une requête POST, rejeter
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method Not Allowed' });
   }
@@ -15,8 +22,8 @@ export default async function handler(req, res) {
   const webhookUrl = process.env.AIRTABLE_WEBHOOK_URL;
 
   if (!webhookUrl) {
-    console.error("Variable AIRTABLE_WEBHOOK_URL manquante dans Vercel.");
-    return res.status(500).json({ error: 'Server configuration error' });
+    console.error("Variable AIRTABLE_WEBHOOK_URL manquante sur Vercel.");
+    return res.status(500).json({ error: 'Server environment variable missing' });
   }
 
   try {
@@ -29,12 +36,12 @@ export default async function handler(req, res) {
     });
 
     if (!response.ok) {
-      throw new Error(`Airtable responded with status ${response.status}`);
+      throw new Error(`Airtable HTTP error: ${response.status}`);
     }
 
-    return res.status(200).json({ success: true, message: 'Data synced to Airtable successfully' });
+    return res.status(200).json({ success: true });
   } catch (error) {
-    console.error('Error syncing to Airtable:', error);
-    return res.status(500).json({ error: 'Failed to sync data' });
+    console.error('Erreur lors de l’envoi à Airtable:', error.message);
+    return res.status(500).json({ error: error.message });
   }
-}
+};
