@@ -203,7 +203,7 @@
 
     <button class="btn btn-pink" onclick="initGame()">Lancer le Jeu</button>
 
-    <!-- BOUTONS D'ACTION RECOMMANDÉS SUR L'ÉCRAN DE CONFIGURATION -->
+    <!-- BOUTONS D'ACTION SUR L'ÉCRAN DE CONFIGURATION -->
     <a id="btn-whatsapp-setup" href="https://wa.me/33974997226?text=Bonjour%20!%20Nous%20avons%20termin%C3%A9%20notre%20session%20de%20jeu%20et%20souhaitons%20poursuivre%20la%20S%C3%A9ance%202." target="_blank" class="btn btn-green" style="margin-top: 12px;">
       💬 Poursuivre la Séance 2 sur WhatsApp
     </a>
@@ -613,7 +613,7 @@
     }
   }
 
-// Synchronisation vers Airtable via l'API Vercel sécurisée
+  // Synchronisation vers Airtable via l'API Vercel sécurisée
   async function syncAirtable(status = 'completed') {
     if(isDataSynced || sessionDataLog.length === 0) return;
 
@@ -628,17 +628,21 @@
       date: new Date().toISOString()
     };
 
-    isDataSynced = true;
-
     try {
-      await fetch('/api/sync-airtable', {
+      const response = await fetch('/api/sync-airtable', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
       });
-      console.log("Synchronisation sécurisée via Vercel réussie.");
+
+      if (response.ok) {
+        isDataSynced = true;
+        console.log("Synchronisation sécurisée via Vercel réussie.");
+      } else {
+        console.error("Erreur de synchronisation Vercel HTTP Status :", response.status);
+      }
     } catch(e) {
-      console.error("Erreur de synchronisation :", e);
+      console.error("Erreur réseau de synchronisation :", e);
     }
   }
 
