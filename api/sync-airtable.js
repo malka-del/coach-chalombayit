@@ -1,47 +1,37 @@
-module.exports = async (req, res) => {
-  // Définition des entêtes CORS
-  res.setHeader('Access-Control-Allow-Credentials', true);
+export default async function handler(req, res) {
+  // 1. Définir les autorisations CORS (Permet à ton domaine de contacter Vercel)
   res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
-  res.setHeader(
-    'Access-Control-Allow-Headers',
-    'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
-  );
+  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
-  // Gestion des requêtes de pré-vérification (Preflight OPTIONS)
+  // 2. Répondre immédiatement "OK" aux requêtes de pré-vérification du navigateur
   if (req.method === 'OPTIONS') {
-    res.status(200).end();
-    return;
+    return res.status(200).end();
   }
 
-  // Si ce n'est pas une requête POST, rejeter
+  // 3. Bloquer si ce n'est pas une requête POST
   if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method Not Allowed' });
-  }
-
-  const webhookUrl = process.env.AIRTABLE_WEBHOOK_URL;
-
-  if (!webhookUrl) {
-    console.error("Variable AIRTABLE_WEBHOOK_URL manquante sur Vercel.");
-    return res.status(500).json({ error: 'Server environment variable missing' });
+    return res.status(405).json({ error: 'Méthode non autorisée' });
   }
 
   try {
-    const response = await fetch(webhookUrl, {
+    const data = req.body;
+
+    // 4. Envoi vers le Webhook Airtable
+    const AIRTABLE_WEBHOOK_URL = process.env.AIRTABLE_WEBHOOK_URL;
+
+    const airtableResponse = await fetch(AIRTABLE_WEBHOOK_URL, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(req.body),
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
     });
 
-    if (!response.ok) {
-      throw new Error(`Airtable HTTP error: ${response.status}`);
+    if (airtableResponse.ok) {
+      return res.status(200).json({ success: true, message: 'Données envoyées à Airtable' });
+    } else {
+      return res.status(500).json({ error: 'Erreur lors de l’envoi vers Airtable' });
     }
-
-    return res.status(200).json({ success: true });
   } catch (error) {
-    console.error('Erreur lors de l’envoi à Airtable:', error.message);
     return res.status(500).json({ error: error.message });
   }
-};
+}
