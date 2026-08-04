@@ -613,8 +613,8 @@
     }
   }
 
-  // URL DE L'API VERCEL DIRECTE
-  const VERCEL_API_URL = 'https://coach-chalombayit-hg8gddpul-chalom-bayit-le-lab.vercel.app/api/sync-airtable';
+  // URL DE PRODUCTION PROPRE (SANS REDIRECTION CORS)
+  const VERCEL_API_URL = 'https://coach-chalombayit.vercel.app/api/sync-airtable';
 
   // Synchronisation vers Airtable via l'API Vercel sécurisée
   async function syncAirtable(status = 'completed') {
