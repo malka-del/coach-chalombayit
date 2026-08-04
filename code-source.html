@@ -331,7 +331,6 @@
   // ── CODES AUTORISÉS ──
   const AUTHORIZED_USERS = [
     "CHALOM2026",
-    "SEPHORA-JOHN"
   ];
 
   // BANQUE DE 75 QUESTIONS COMPLÈTE
@@ -621,11 +620,14 @@
   const VERCEL_API_URL = 'https://coach-chalombayit.vercel.app/api/sync-airtable';
 
   // Synchronisation vers Airtable via l'API Vercel sécurisée
-  async function syncAirtable(status = 'completed') {
+async function syncAirtable(status = 'completed') {
     if(isDataSynced || sessionDataLog.length === 0) return;
 
+    // Récupération directe du code secret depuis l'input ou la variable
+    const currentCode = accessCodeUsed || document.getElementById('access-code')?.value?.trim()?.toUpperCase() || "";
+
     const payload = {
-      MDP_Jeu: accessCodeUsed,
+      MDP_Jeu: currentCode,
       prenom_p1: p1.name,
       prenom_p2: p2.name,
       score_p1: p1.score,
@@ -633,7 +635,7 @@
       total_questions: gameDeck.length,
       questions_responded: sessionDataLog.length,
       status: status,
-      details_reponses: sessionDataLog,
+      details_reponses: JSON.stringify(sessionDataLog),
       date: new Date().toISOString()
     };
 
@@ -646,15 +648,12 @@
 
       if (response.ok) {
         isDataSynced = true;
-        console.log("Synchronisation sécurisée via Vercel réussie.");
-      } else {
-        console.error("Erreur de synchronisation Vercel HTTP Status :", response.status);
+        console.log("Synchronisation réussie.");
       }
     } catch(e) {
       console.error("Erreur réseau de synchronisation :", e);
     }
   }
-
   function handleAbandonment() {
     if(!isDataSynced && sessionDataLog.length > 0) {
       const payload = JSON.stringify({
