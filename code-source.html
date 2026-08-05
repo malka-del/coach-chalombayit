@@ -143,25 +143,24 @@
       justify-content: space-between; border: 1.5px solid rgba(226,194,102,0.3);
       box-shadow: 0 10px 30px rgba(0,0,0,0.5);
     }
-    .card-back { background: linear-gradient(145deg, var(--dark3), #151622); align-items: center; justify-content: center; }
-    .card-back-pattern {
-      border: 1px dashed var(--gold);
-      padding: 15px;
-      border-radius: 14px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 100%;
-      height: 100%;
-    }
-    .card-back-logo {
-      max-width: 160px;
-      max-height: 120px;
-      width: auto;
-      height: auto;
-      object-fit: contain;
-    }
-    .card-front { background: var(--dark3); transform: rotateY(180deg); text-align: center; }
+    /* Conteneur du dos de la carte */
+.card-back {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+  background: #ffffff;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+}
+
+.card-back-logo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 16px;
+}    .card-front { background: var(--dark3); transform: rotateY(180deg); text-align: center; }
     .card-theme-badge {
       font-size: 0.75rem; font-weight: 700; text-transform: uppercase;
       letter-spacing: 1px; padding: 4px 14px; border-radius: 100px; align-self: center;
@@ -313,10 +312,8 @@
       <div class="card-container">
         <div id="card-inner" class="card-inner">
           <div class="card-face card-back">
-            <div class="card-back-pattern">
-              <img src="logo-jeu.png" alt="Logo Le Code Source du Couple" class="card-back-logo">
-            </div>
-          </div>
+  <img src="logo-jeu.png" alt="Logo Le Code Source du Couple" class="card-back-logo">
+</div>
           <div class="card-face card-front">
             <div id="card-badge" class="card-theme-badge">Thème</div>
             <div id="card-question" class="card-question-text">Question</div>
