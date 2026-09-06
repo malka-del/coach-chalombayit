@@ -496,6 +496,353 @@
   </style>
 </head>
 <body>
+  <!--
+╔══════════════════════════════════════════════════════════════════════════╗
+║  POPUP "Sprint de Tichri" — Chalom Bayit Le LAB                        ║
+║  Cohérent avec coach.chalombayitlelab.com (même charte que le livre)   ║
+║  À coller JUSTE AVANT </body> dans index.html sur GitHub               ║
+╚══════════════════════════════════════════════════════════════════════════╝
+-->
+
+<!-- ── GOOGLE FONTS (même stack que le livre et le site) ── -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=DM+Mono:wght@400;500;700&family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+/* ─── OVERLAY ─────────────────────────────────────────────────── */
+#cbl-overlay {
+  display: none;
+  position: fixed; inset: 0; z-index: 9999;
+  background: rgba(30, 22, 10, 0.78);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  align-items: center; justify-content: center;
+  padding: 16px;
+  font-family: 'Manrope', 'Helvetica Neue', sans-serif;
+}
+#cbl-overlay.cbl-open { display: flex; animation: cbl-in .3s ease; }
+@keyframes cbl-in { from { opacity:0; transform:scale(.97); } to { opacity:1; transform:scale(1); } }
+
+/* ─── POPUP CARD ──────────────────────────────────────────────── */
+#cbl-card {
+  background: #FFFDF9;
+  border: 1px solid rgba(184,134,11,0.30);
+  border-radius: 20px;
+  padding: 28px 24px 22px;
+  max-width: 390px; width: 100%;
+  position: relative;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.28), 0 0 0 1px rgba(184,134,11,0.10);
+  /* fond pointillé bullet-journal identique au livre */
+  background-image: radial-gradient(rgba(140,101,18,0.09) 0.8px, transparent 0.8px);
+  background-size: 18px 18px;
+  background-color: #FFFDF9;
+}
+
+/* ─── FERMETURE ───────────────────────────────────────────────── */
+#cbl-close {
+  position: absolute; top: 13px; right: 16px;
+  background: none; border: none; cursor: pointer;
+  font-size: 1rem; color: #94A3B8; line-height: 1;
+  transition: color .2s;
+}
+#cbl-close:hover { color: #475569; }
+
+/* ─── WASHI TAPE déco (SVG inline, comme le livre) ──────────────*/
+.cbl-washi {
+  position: absolute; top: -6px;
+  height: 13px; width: 64px;
+  border-left: 2px dashed rgba(255,255,255,.7);
+  border-right: 2px dashed rgba(255,255,255,.7);
+  box-shadow: 0 2px 4px rgba(0,0,0,.06);
+  border-radius: 1px;
+}
+.cbl-washi-left  { left: 20px;  background: rgba(200,160,95,.45); transform: rotate(-3deg); }
+.cbl-washi-right { right: 20px; background: rgba(219,39,119,.28); transform: rotate(2.5deg); }
+
+/* ─── ORNEMENT SVG (même que le livre) ──────────────────────── */
+.cbl-orn { display: block; margin: 6px auto; }
+
+/* ─── BADGE LED ───────────────────────────────────────────────── */
+.cbl-badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  background: rgba(219,39,119,.09);
+  border: 1px solid rgba(219,39,119,.28);
+  border-radius: 999px; padding: 3px 11px;
+  font-family: 'DM Mono', monospace;
+  font-size: .64rem; letter-spacing: 1.5px; text-transform: uppercase;
+  font-weight: 700; color: #BE185D; margin-bottom: 10px;
+}
+.cbl-dot { width: 5px; height: 5px; border-radius: 50%; background: #F472B6; display: inline-block; }
+
+/* ─── TITRE ───────────────────────────────────────────────────── */
+.cbl-title-h1 {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 1.9rem; font-weight: 700; color: #1E293B;
+  line-height: 1.1; margin: 0 0 2px; text-align: center;
+}
+.cbl-title-le {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-style: italic; font-size: 1.1rem; color: #0284C7; font-weight: 700;
+}
+.cbl-title-ebook {
+  font-family: 'DM Mono', monospace;
+  font-size: 1rem; letter-spacing: 3px; color: #DB2777; font-weight: 700;
+}
+.cbl-filet-row {
+  display: flex; align-items: center; justify-content: center; gap: 8px; margin: 4px 0;
+}
+.cbl-filet { height: 2px; width: 24px; }
+
+.cbl-tagline {
+  font-size: .80rem; color: #475569; line-height: 1.65;
+  text-align: center; margin: 8px 0 12px;
+}
+
+/* ─── CHIPS PARACHIOT ────────────────────────────────────────── */
+.cbl-chips {
+  display: flex; flex-wrap: wrap; gap: 5px;
+  justify-content: center; margin-bottom: 14px;
+}
+.cbl-chip {
+  background: rgba(184,134,11,.09);
+  border: 1px solid rgba(184,134,11,.28);
+  border-radius: 4px; padding: 2px 8px;
+  font-family: 'DM Mono', monospace;
+  font-size: .62rem; color: #8C6512;
+}
+
+/* ─── FORMULAIRE ─────────────────────────────────────────────── */
+#cbl-form { display: flex; flex-direction: column; gap: 8px; }
+
+#cbl-form input {
+  width: 100%; background: #fff;
+  border: 1px solid #E2D8CC; border-radius: 10px;
+  padding: 11px 13px;
+  font-family: 'Manrope', sans-serif; font-size: .85rem; color: #1E293B;
+  outline: none; transition: border-color .2s, box-shadow .2s;
+  box-sizing: border-box;
+}
+#cbl-form input::placeholder { color: #B0A898; }
+#cbl-form input:focus {
+  border-color: rgba(184,134,11,.55);
+  box-shadow: 0 0 0 3px rgba(184,134,11,.08);
+}
+
+#cbl-submit {
+  width: 100%; cursor: pointer; border: none;
+  background: linear-gradient(135deg, #B8860B 0%, #8C6512 100%);
+  color: #fff; border-radius: 10px; padding: 13px 16px;
+  font-family: 'Manrope', sans-serif; font-weight: 800; font-size: .88rem;
+  letter-spacing: .3px; margin-top: 2px;
+  transition: opacity .2s, transform .15s;
+}
+#cbl-submit:hover:not(:disabled) { opacity: .88; transform: translateY(-1px); }
+#cbl-submit:disabled { opacity: .45; cursor: not-allowed; transform: none; }
+
+/* ─── RGPD ───────────────────────────────────────────────────── */
+.cbl-rgpd {
+  font-size: .62rem; color: #94A3B8; text-align: center;
+  margin-top: 7px; line-height: 1.5;
+}
+
+/* ─── ERREUR ─────────────────────────────────────────────────── */
+#cbl-error {
+  display: none;
+  background: #FEF2F2; border: 1px solid rgba(239,68,68,.25);
+  border-radius: 7px; padding: 7px 11px;
+  font-size: .75rem; color: #DC2626; text-align: center; margin-top: 4px;
+}
+
+/* ─── SUCCÈS ─────────────────────────────────────────────────── */
+#cbl-success {
+  display: none; text-align: center; padding: 10px 0;
+}
+#cbl-success .s-icon { font-size: 2.5rem; margin-bottom: 8px; }
+#cbl-success h3 {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 1.35rem; color: #B8860B; margin: 0 0 7px;
+}
+#cbl-success p { font-size: .82rem; color: #475569; line-height: 1.7; margin: 0 0 10px; }
+#cbl-success .s-tip {
+  background: #E0F2FE; border: 1px solid rgba(2,132,199,.22);
+  border-radius: 7px; padding: 8px 12px;
+  font-size: .75rem; color: #0369A1; line-height: 1.55;
+}
+#cbl-success .s-amazon {
+  display: inline-block; margin-top: 10px;
+  background: #1E293B; color: #FEF3C7; text-decoration: none;
+  font-family: 'DM Mono', monospace; font-size: .72rem; font-weight: 700;
+  padding: 8px 16px; border-radius: 20px; letter-spacing: .3px;
+}
+</style>
+
+<!-- ── SVG ORNEMENTS (même que le livre) ── -->
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none">
+  <symbol id="cbl-orn-top" viewBox="0 0 560 56">
+    <path d="M20 50 C 140 50, 220 18, 280 18 C 340 18, 420 50, 540 50" stroke="currentColor" fill="none" stroke-width="2.2" stroke-linecap="round"/>
+    <path d="M20 44 C 140 44, 220 12, 280 12 C 340 12, 420 44, 540 44" stroke="currentColor" fill="none" stroke-width="2.2" stroke-linecap="round"/>
+    <path d="M280 4 L 286 12 L 280 20 L 274 12 Z" fill="currentColor"/>
+  </symbol>
+  <symbol id="cbl-orn-bot" viewBox="0 0 560 56">
+    <path d="M40 6 C 160 18, 240 38, 280 50 C 320 38, 400 18, 520 6" stroke="currentColor" fill="none" stroke-width="2.2" stroke-linecap="round"/>
+    <path d="M40 12 C 160 24, 240 44, 280 50" stroke="currentColor" fill="none" stroke-width="2.2" stroke-linecap="round"/>
+    <path d="M520 12 C 400 24, 320 44, 280 50" stroke="currentColor" fill="none" stroke-width="2.2" stroke-linecap="round"/>
+    <path d="M280 50 L 286 42 L 280 34 L 274 42 Z" fill="currentColor"/>
+  </symbol>
+</svg>
+
+<!-- ── HTML DU POPUP ── -->
+<div id="cbl-overlay" role="dialog" aria-modal="true" aria-labelledby="cbl-h">
+  <div id="cbl-card">
+
+    <!-- Washi tapes déco -->
+    <div class="cbl-washi cbl-washi-left"></div>
+    <div class="cbl-washi cbl-washi-right"></div>
+
+    <!-- Fermeture -->
+    <button id="cbl-close" aria-label="Fermer le popup">✕</button>
+
+    <!-- En-tête -->
+    <div style="text-align:center;">
+      <div class="cbl-badge"><span class="cbl-dot"></span>Cadeau Tichri 5787</div>
+
+      <svg class="cbl-orn" style="width:120px;color:#B8860B;" viewBox="0 0 560 56"><use href="#cbl-orn-top"/></svg>
+
+      <h2 class="cbl-title-h1" id="cbl-h">Sprint de Tichri</h2>
+      <p style="font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-size:1rem;color:#475569;margin:2px 0 4px;">5 défis pour redémarrer son couple</p>
+
+      <div class="cbl-filet-row">
+        <span class="cbl-filet" style="background:#0284C7;"></span>
+        <span class="cbl-title-le">Le</span>
+        <span class="cbl-title-ebook">EBOOK</span>
+        <span class="cbl-filet" style="background:#DB2777;"></span>
+      </div>
+
+      <svg class="cbl-orn" style="width:120px;color:#B8860B;margin-bottom:8px;" viewBox="0 0 560 56"><use href="#cbl-orn-bot"/></svg>
+    </div>
+
+    <p class="cbl-tagline">
+Extrait de "Chalom Bayit Le LIVRE", 54 défis hebdomadaires inspirés de la Paracha pour devenir un couple agile, un Chabbat à la fois, disponible sur Amazon
+<br>pour entrer unis dans la nouvelle année.<strong style="color:#1E293B;"></strong>
+    </p>
+
+    <div class="cbl-chips">
+      <span class="cbl-chip">51 · Nitsavim</span>
+      <span class="cbl-chip">52 · Vayelekh</span>
+      <span class="cbl-chip">53 · Haazinou</span>
+      <span class="cbl-chip">54 · Vezot Haberakha</span>
+      <span class="cbl-chip" style="background:rgba(219,39,119,.08);border-color:rgba(219,39,119,.25);color:#BE185D;">01 · Berechit</span>
+    </div>
+
+    <!-- Formulaire -->
+    <form id="cbl-form" novalidate>
+      <input type="text"  id="cbl-prenom" placeholder="Ton prénom *"            required autocomplete="given-name">
+      <input type="email" id="cbl-email"  placeholder="Ton adresse email *"     required autocomplete="email">
+      <input type="tel"   id="cbl-tel"    placeholder="Ton WhatsApp (optionnel)"         autocomplete="tel">
+      <button type="submit" id="cbl-submit">💎 Recevoir mon ebook gratuitement</button>
+      <div id="cbl-error"></div>
+    </form>
+
+    <p class="cbl-rgpd">Gratuit jusqu'à Hoshana Raba · Aucun spam · Désabonnement en 1 clic</p>
+
+    <!-- Écran succès -->
+    <div id="cbl-success">
+      <div class="s-icon">🎉</div>
+      <h3>C'est dans ta boîte !</h3>
+      <p>Ton ebook <em>Sprint de Tichri</em> vient d'être envoyé.<br>
+         Vérifie tes spams si tu ne le vois pas dans 5 minutes.</p>
+      <div class="s-tip">
+        📩 Sujet de l'email : <strong>« Ton Sprint de Tichri est arrivé 🎉 »</strong>
+      </div>
+      <a class="s-amazon" href="https://amzn.eu/d/0fQNaUXS" target="_blank" rel="noopener">
+        📚 Découvrir le livre complet sur Amazon →
+      </a>
+    </div>
+
+  </div>
+</div>
+
+<!-- ── SCRIPT ── -->
+<script>
+(function () {
+  /* ── CONFIG ── */
+  var API      = 'https://coach-chalombayit.vercel.app/api/submit-ebook';
+  var DELAY    = 3500;   /* délai avant affichage (ms) */
+  var DONE_KEY = 'cbl_sprint_tichri_5787';
+
+  /* Ne pas ré-afficher si déjà inscrit */
+  if (localStorage.getItem(DONE_KEY)) return;
+
+  var overlay = document.getElementById('cbl-overlay');
+  var form    = document.getElementById('cbl-form');
+  var btn     = document.getElementById('cbl-submit');
+  var success = document.getElementById('cbl-success');
+  var errEl   = document.getElementById('cbl-error');
+
+  /* ── OUVERTURE ── */
+  setTimeout(function () { overlay.classList.add('cbl-open'); }, DELAY);
+
+  /* ── FERMETURE ── */
+  function close() { overlay.classList.remove('cbl-open'); }
+  document.getElementById('cbl-close').addEventListener('click', close);
+  overlay.addEventListener('click', function (e) { if (e.target === overlay) close(); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
+
+  /* ── SOUMISSION ── */
+  form.addEventListener('submit', async function (e) {
+    e.preventDefault();
+    errEl.style.display = 'none';
+
+    var prenom = document.getElementById('cbl-prenom').value.trim();
+    var email  = document.getElementById('cbl-email').value.trim();
+    var tel    = document.getElementById('cbl-tel').value.trim();
+
+    if (!prenom || !email) {
+      errEl.textContent = 'Merci de renseigner ton prénom et ton email.';
+      errEl.style.display = 'block'; return;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      errEl.textContent = 'Adresse email invalide.';
+      errEl.style.display = 'block'; return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = 'Envoi en cours…';
+
+    try {
+      var res = await fetch(API, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          prenom:            prenom,
+          email:             email,
+          telephone:         tel || null,
+          source:            'ebook_tichri_site',
+          page:              window.location.pathname,
+          date_inscription:  new Date().toISOString()
+        })
+      });
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+
+      /* Succès */
+      form.style.display    = 'none';
+      document.querySelector('.cbl-tagline').style.display = 'none';
+      document.querySelector('.cbl-chips').style.display   = 'none';
+      document.querySelector('.cbl-rgpd').style.display    = 'none';
+      success.style.display = 'block';
+      localStorage.setItem(DONE_KEY, '1');
+
+    } catch (err) {
+      btn.disabled    = false;
+      btn.textContent = '💎 Recevoir mon ebook gratuitement';
+      errEl.textContent = 'Une erreur est survenue — réessaie ou écris-moi sur Instagram 🙏';
+      errEl.style.display = 'block';
+      console.error('[CBL]', err);
+    }
+  });
+})();
+</script>
+
 
 <!-- ═══════════════════════════ NAV ═══════════════════════════ -->
 <nav>
