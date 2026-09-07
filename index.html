@@ -1498,7 +1498,10 @@
   <!-- ── SCRIPT D'OUVERTURE & SOUMISSION ── -->
   <script>
   (function () {
-    var API      = '/api/submit-ebook';
+    // Détection automatique : pointe vers Vercel si le site est hébergé sur GitHub Pages
+    var API = (window.location.hostname.includes('vercel.app'))
+      ? '/api/submit-ebook'
+      : 'https://coach-chalombayit.vercel.app/api/submit-ebook';
     var DELAY    = 3500;
     var DONE_KEY = 'cbl_sprint_tichri_5787';
 
@@ -1592,7 +1595,9 @@
         } catch (err) {
           btn.disabled    = false;
           btn.textContent = '💎 Recevoir mon ebook gratuitement';
-          errEl.textContent = 'Une erreur est survenue — réessaie ou écris-moi sur Instagram 🙏';
+          errEl.textContent = err.message && err.message.indexOf('HTTP') !== -1
+            ? 'Erreur de liaison (' + err.message + ') — réessaie dans un instant 🙏'
+            : (err.message || 'Une erreur est survenue — réessaie ou écris-moi sur Instagram 🙏');
           errEl.style.display = 'block';
           console.error('[CBL Submit]', err);
         }
