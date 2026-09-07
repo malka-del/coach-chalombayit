@@ -706,7 +706,10 @@
         grid-template-columns: 1fr;
       }
       .who-stats { grid-template-columns: repeat(3,1fr); }
-      .nav-ctas .btn--gold { display: none; }
+      .nav-btn-book { display: none; }
+    }
+    @media (max-width: 540px) {
+      .nav-ctas .btn { font-size: .72rem !important; padding: 7px 12px !important; gap: 6px !important; }
     }
     @media (max-width: 480px) {
       .hero h1 { font-size: 1.9rem; }
@@ -738,10 +741,13 @@
     <div class="nav-inner">
       <a href="#" class="nav-logo">Chalom Bayit <span class="le">Le</span> <span class="lab">LAB</span></a>
       <div class="nav-ctas">
-        <a href="https://amzn.eu/d/0fQNaUXS" target="_blank" rel="noopener noreferrer" class="btn btn--gold" style="font-size:.8rem;padding:9px 18px;">
-          📖 Le Livre Amazon
+        <a href="#livre-section" class="btn btn--ghost nav-btn-book" style="font-size:.8rem;padding:8px 16px;">
+          📖 Le Livre
         </a>
-        <a href="https://wa.me/33974997226?text=Bonjour%20!%20Je%20veux%20d%C3%A9marrer%20mon%20essai%20offert" class="btn btn--wa" style="font-size:.8rem;padding:9px 18px;">
+        <a href="https://calendar.app.google/Lkb4zXnia5J5QkBE8" target="_blank" rel="noopener noreferrer" class="btn btn--gold" style="font-size:.8rem;padding:8px 16px;">
+          📅 Prendre RDV
+        </a>
+        <a href="https://wa.me/33974997226?text=Bonjour%20!%20Je%20veux%20d%C3%A9marrer%20mon%20essai%20offert" class="btn btn--wa" style="font-size:.8rem;padding:8px 16px;">
           🎁 Essai 7 jours offerts
         </a>
       </div>
