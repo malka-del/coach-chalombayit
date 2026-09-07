@@ -1,6 +1,6 @@
 /* ========================================================================= */
 /* VERCEL SERVERLESS FUNCTION : /api/submit-ebook.js                         */
-/* Recherche multi-emails (mail_contact, mail_femme, mail_mari) + Création   */
+/* Enregistrement Airtable + Déclenchement Webhook Make                      */
 /* ========================================================================= */
 
 module.exports = async function handler(req, res) {
@@ -43,22 +43,13 @@ module.exports = async function handler(req, res) {
       try {
         let existingRecordId = null;
 
-        // Formule de recherche multi-champs (mail_contact, mail_femme, mail_mari)
-        const multiSearchFormula = `OR({mail_contact}='${emailClean}', {mail_femme}='${emailClean}', {mail_mari}='${emailClean}')`;
-        const multiSearchUrl = `https://api.airtable.com/v0/${baseId}/${encodeURIComponent(tableName)}?filterByFormula=${encodeURIComponent(multiSearchFormula)}`;
+        // Recherche sur le champ principal mail_contact
+        const searchFormula = `{mail_contact}='${emailClean}'`;
+        const searchUrl = `https://api.airtable.com/v0/${baseId}/${encodeURIComponent(tableName)}?filterByFormula=${encodeURIComponent(searchFormula)}`;
         
-        let searchRes = await fetch(multiSearchUrl, {
+        const searchRes = await fetch(searchUrl, {
           headers: { 'Authorization': `Bearer ${airtableToken}` }
         });
-
-        // Fallback si l'un des champs (ex: mail_femme) n'existe pas dans la base
-        if (!searchRes.ok) {
-          const fallbackFormula = `{mail_contact}='${emailClean}'`;
-          const fallbackUrl = `https://api.airtable.com/v0/${baseId}/${encodeURIComponent(tableName)}?filterByFormula=${encodeURIComponent(fallbackFormula)}`;
-          searchRes = await fetch(fallbackUrl, {
-            headers: { 'Authorization': `Bearer ${airtableToken}` }
-          });
-        }
 
         if (searchRes.ok) {
           const searchData = await searchRes.json();
@@ -76,7 +67,7 @@ module.exports = async function handler(req, res) {
         };
 
         if (existingRecordId) {
-          // Si le contact existe (dans n'importe quel champ mail), on met à jour sa fiche
+          // Si le contact existe, on met à jour sa fiche
           const patchRes = await fetch(`https://api.airtable.com/v0/${baseId}/${encodeURIComponent(tableName)}/${existingRecordId}`, {
             method: 'PATCH',
             headers: {
@@ -87,7 +78,7 @@ module.exports = async function handler(req, res) {
           });
           if (patchRes.ok) airtableDone = true;
         } else {
-          // Si le contact n'existe nulle part, ON LE CRÉE
+          // Si le contact n'existe pas, ON LE CRÉE
           const createRes = await fetch(`https://api.airtable.com/v0/${baseId}/${encodeURIComponent(tableName)}`, {
             method: 'POST',
             headers: {
@@ -99,11 +90,11 @@ module.exports = async function handler(req, res) {
           if (createRes.ok) airtableDone = true;
         }
       } catch (atErr) {
-        console.error('Erreur Airtable:', atErr);
+        console.error('Erreur écriture Airtable:', atErr);
       }
     }
 
-    // 2. TRANSMISSION AU WEBHOOK MAKE (Envoi de l'email)
+    // 2. TRANSMISSION AU WEBHOOK MAKE
     let makeTriggered = false;
     if (makeWebhookUrl) {
       try {
@@ -124,15 +115,15 @@ module.exports = async function handler(req, res) {
       }
     }
 
-    // Renvoyer le succès si Make ou Airtable a fonctionné
+    // Renvoyer le succès si au moins une opération a fonctionné
     if (makeTriggered || airtableDone) {
       return res.status(200).json({ success: true, message: 'Inscription réussie.' });
     } else {
-      return res.status(500).json({ success: false, message: 'Erreur de traitement de la demande.' });
+      return res.status(500).json({ success: false, message: 'Erreur lors de l\'enregistrement.' });
     }
 
   } catch (globalErr) {
-    console.error('Erreur globale:', globalErr);
+    console.error('Erreur serveur:', globalErr);
     return res.status(500).json({ success: false, message: 'Erreur serveur.' });
   }
 };
