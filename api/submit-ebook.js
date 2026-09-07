@@ -1,10 +1,11 @@
 /* ========================================================================= */
 /* VERCEL SERVERLESS FUNCTION : /api/submit-ebook.js                         */
-/* Enregistrement Airtable + Déclenchement Webhook Make                      */
+/* Passerelle sécurisée : masque le Webhook Make & transmet les données     */
 /* ========================================================================= */
 
 module.exports = async function handler(req, res) {
-  res.setHeader('Access-Control-Allow-Credentials', true);
+  // 1. En-têtes CORS complets pour autoriser les appels depuis coach.chalombayitlelab.com
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
   res.setHeader(
@@ -12,118 +13,67 @@ module.exports = async function handler(req, res) {
     'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
   );
 
+  // Réponse immédiate pour les requêtes de pré-vol OPTIONS du navigateur
   if (req.method === 'OPTIONS') {
     return res.status(200).end();
   }
 
   if (req.method !== 'POST') {
-    return res.status(405).json({ success: false, message: 'Méthode non autorisée' });
+    return res.status(405).json({ success: false, message: 'Méthode non autorisée (POST uniquement)' });
   }
 
   try {
     const { prenom, email, telephone } = req.body || {};
 
+    // Validation des champs indispensables
     if (!prenom || !email) {
-      return res.status(400).json({ success: false, message: 'Prénom et email requis.' });
+      return res.status(400).json({ success: false, message: 'Le prénom et l’email sont requis.' });
     }
 
-    const emailClean = String(email).trim().toLowerCase();
-    const prenomClean = String(prenom).trim();
-    const telClean = telephone ? String(telephone).trim() : '';
-
-    const airtableToken = process.env.AIRTABLE_API_KEY || process.env.AIRTABLE_TOKEN;
-    const baseId = process.env.AIRTABLE_BASE_ID;
-    const tableName = process.env.AIRTABLE_TABLE_NAME || 'Couples et CRM';
+    // Récupération de l'URL secrète stockée dans les variables d'environnement Vercel
     const makeWebhookUrl = process.env.MAKE_EBOOK_WEBHOOK;
 
-    let airtableDone = false;
-
-    // 1. RECHERCHE ET ÉCRITURE DANS AIRTABLE
-    if (airtableToken && baseId) {
-      try {
-        let existingRecordId = null;
-
-        // Recherche sur le champ principal mail_contact
-        const searchFormula = `{mail_contact}='${emailClean}'`;
-        const searchUrl = `https://api.airtable.com/v0/${baseId}/${encodeURIComponent(tableName)}?filterByFormula=${encodeURIComponent(searchFormula)}`;
-        
-        const searchRes = await fetch(searchUrl, {
-          headers: { 'Authorization': `Bearer ${airtableToken}` }
-        });
-
-        if (searchRes.ok) {
-          const searchData = await searchRes.json();
-          if (searchData.records && searchData.records.length > 0) {
-            existingRecordId = searchData.records[0].id;
-          }
-        }
-
-        const fieldsPayload = {
-          'prenom_contact': prenomClean,
-          'mail_contact': emailClean,
-          'tel_contact': telClean,
-          'ebook_tichri': true,
-          'Source': 'ebook_tichri_site'
-        };
-
-        if (existingRecordId) {
-          // Si le contact existe, on met à jour sa fiche
-          const patchRes = await fetch(`https://api.airtable.com/v0/${baseId}/${encodeURIComponent(tableName)}/${existingRecordId}`, {
-            method: 'PATCH',
-            headers: {
-              'Authorization': `Bearer ${airtableToken}`,
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ fields: fieldsPayload, typecast: true })
-          });
-          if (patchRes.ok) airtableDone = true;
-        } else {
-          // Si le contact n'existe pas, ON LE CRÉE
-          const createRes = await fetch(`https://api.airtable.com/v0/${baseId}/${encodeURIComponent(tableName)}`, {
-            method: 'POST',
-            headers: {
-              'Authorization': `Bearer ${airtableToken}`,
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ fields: fieldsPayload, typecast: true })
-          });
-          if (createRes.ok) airtableDone = true;
-        }
-      } catch (atErr) {
-        console.error('Erreur écriture Airtable:', atErr);
-      }
+    if (!makeWebhookUrl) {
+      console.error('Erreur critique : La variable MAKE_EBOOK_WEBHOOK n’est pas configurée sur Vercel.');
+      return res.status(500).json({
+        success: false,
+        message: 'Configuration serveur incomplète (variable webhook manquante sur Vercel).'
+      });
     }
 
-    // 2. TRANSMISSION AU WEBHOOK MAKE
-    let makeTriggered = false;
-    if (makeWebhookUrl) {
-      try {
-        const makeRes = await fetch(makeWebhookUrl, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            prenom: prenomClean,
-            email: emailClean,
-            telephone: telClean,
-            source: 'ebook_tichri_site',
-            timestamp: new Date().toISOString()
-          })
-        });
-        if (makeRes.ok) makeTriggered = true;
-      } catch (makeErr) {
-        console.error('Erreur Make:', makeErr);
-      }
+    // 2. Transmission directe et sécurisée des données au Webhook Make
+    const makeResponse = await fetch(makeWebhookUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        prenom: String(prenom).trim(),
+        email: String(email).trim().toLowerCase(),
+        telephone: telephone ? String(telephone).trim() : null,
+        source: 'ebook_tichri_site',
+        timestamp: new Date().toISOString()
+      })
+    });
+
+    if (!makeResponse.ok) {
+      const errText = await makeResponse.text();
+      console.error('Make a répondu avec une erreur :', makeResponse.status, errText);
+      return res.status(502).json({
+        success: false,
+        message: `Erreur renvoyée par Make (${makeResponse.status})`
+      });
     }
 
-    // Renvoyer le succès si au moins une opération a fonctionné
-    if (makeTriggered || airtableDone) {
-      return res.status(200).json({ success: true, message: 'Inscription réussie.' });
-    } else {
-      return res.status(500).json({ success: false, message: 'Erreur lors de l\'enregistrement.' });
-    }
+    // 3. Confirmation de succès renvoyée au popup du site
+    return res.status(200).json({
+      success: true,
+      message: 'Demande transmise avec succès à Make.'
+    });
 
-  } catch (globalErr) {
-    console.error('Erreur serveur:', globalErr);
-    return res.status(500).json({ success: false, message: 'Erreur serveur.' });
+  } catch (error) {
+    console.error('Erreur interne submit-ebook :', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Erreur interne du serveur lors de la transmission.'
+    });
   }
 };
