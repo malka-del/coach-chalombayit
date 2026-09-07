@@ -1,107 +1,138 @@
-<<<<
-        // Si la lecture des métadonnées n'est pas disponible, on applique les champs standards
-        if (availableFields.size === 0) {
-          ['mail_contact', 'prenom_contact', 'tel_contact', 'Email', 'Prénom', 'Téléphone', 'Ebook_Tichri', 'Source']
-            .forEach(f => availableFields.add(f));
+/* ========================================================================= */
+/* VERCEL SERVERLESS FUNCTION : /api/submit-ebook.js                         */
+/* Recherche multi-emails (mail_contact, mail_femme, mail_mari) + Création   */
+/* ========================================================================= */
+
+module.exports = async function handler(req, res) {
+  res.setHeader('Access-Control-Allow-Credentials', true);
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
+  res.setHeader(
+    'Access-Control-Allow-Headers',
+    'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
+  );
+
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
+  }
+
+  if (req.method !== 'POST') {
+    return res.status(405).json({ success: false, message: 'Méthode non autorisée' });
+  }
+
+  try {
+    const { prenom, email, telephone } = req.body || {};
+
+    if (!prenom || !email) {
+      return res.status(400).json({ success: false, message: 'Prénom et email requis.' });
+    }
+
+    const emailClean = String(email).trim().toLowerCase();
+    const prenomClean = String(prenom).trim();
+    const telClean = telephone ? String(telephone).trim() : '';
+
+    const airtableToken = process.env.AIRTABLE_API_KEY || process.env.AIRTABLE_TOKEN;
+    const baseId = process.env.AIRTABLE_BASE_ID;
+    const tableName = process.env.AIRTABLE_TABLE_NAME || 'Couples et CRM';
+    const makeWebhookUrl = process.env.MAKE_EBOOK_WEBHOOK;
+
+    let airtableDone = false;
+
+    // 1. RECHERCHE ET ÉCRITURE DANS AIRTABLE
+    if (airtableToken && baseId) {
+      try {
+        let existingRecordId = null;
+
+        // Formule de recherche multi-champs (mail_contact, mail_femme, mail_mari)
+        const multiSearchFormula = `OR({mail_contact}='${emailClean}', {mail_femme}='${emailClean}', {mail_mari}='${emailClean}')`;
+        const multiSearchUrl = `https://api.airtable.com/v0/${baseId}/${encodeURIComponent(tableName)}?filterByFormula=${encodeURIComponent(multiSearchFormula)}`;
+        
+        let searchRes = await fetch(multiSearchUrl, {
+          headers: { 'Authorization': `Bearer ${airtableToken}` }
+        });
+
+        // Fallback si l'un des champs (ex: mail_femme) n'existe pas dans la base
+        if (!searchRes.ok) {
+          const fallbackFormula = `{mail_contact}='${emailClean}'`;
+          const fallbackUrl = `https://api.airtable.com/v0/${baseId}/${encodeURIComponent(tableName)}?filterByFormula=${encodeURIComponent(fallbackFormula)}`;
+          searchRes = await fetch(fallbackUrl, {
+            headers: { 'Authorization': `Bearer ${airtableToken}` }
+          });
         }
 
-        // B. Construction de la formule de recherche multi-champs pour dédoublonner
-=======
-        // Si la lecture des métadonnées n'est pas disponible, on applique les champs standards
-        if (availableFields.size === 0) {
-          [
-            'mail_contact', 'prenom_contact', 'tel_contact', 
-            'Email', 'Prénom', 'Téléphone', 
-            'Ebook_Tichri', 'ebook_tichri', 'Ebook Tichri', 'Source'
-          ].forEach(f => availableFields.add(f));
-        }
-
-        // Fonction d'aide insensible à la casse et aux séparateurs (_ ou espace)
-        const getMatchingField = (candidates) => {
-          for (const cand of candidates) {
-            const normCand = cand.replace(/[\s_-]/g, '').toLowerCase();
-            for (const f of availableFields) {
-              if (f.replace(/[\s_-]/g, '').toLowerCase() === normCand) return f;
-            }
+        if (searchRes.ok) {
+          const searchData = await searchRes.json();
+          if (searchData.records && searchData.records.length > 0) {
+            existingRecordId = searchData.records[0].id;
           }
-          return null;
+        }
+
+        const fieldsPayload = {
+          'prenom_contact': prenomClean,
+          'mail_contact': emailClean,
+          'tel_contact': telClean,
+          'ebook_tichri': true,
+          'Source': 'ebook_tichri_site'
         };
 
-        // B. Construction de la formule de recherche multi-champs pour dédoublonner
->>>>
-====
-        // C. Préparation des données à enregistrer
-        // On cible prioritairement prenom_contact, mail_contact, tel_contact
-        const fieldsPayload = {};
-
-        const targetPrenom = getMatchingField(['prenom_contact', 'Prénom', 'prenom']);
-        if (targetPrenom) fieldsPayload[targetPrenom] = prenomClean;
-
-        const targetMail = getMatchingField(['mail_contact', 'Email', 'mail', 'email']);
-        if (targetMail) fieldsPayload[targetMail] = emailClean;
-
-        if (telClean) {
-          const targetTel = getMatchingField(['tel_contact', 'Téléphone', 'telephone', 'tel']);
-          if (targetTel) fieldsPayload[targetTel] = telClean;
-        }
-
-        // Détection intelligente du champ Ebook Tichri (quelle que soit la casse ou les tirets)
-        const targetEbook = getMatchingField(['ebook_tichri', 'Ebook_Tichri', 'Ebook Tichri', 'ebooktichri']);
-        if (targetEbook) {
-          fieldsPayload[targetEbook] = true;
-        } else {
-          // Fallback direct
-          fieldsPayload['ebook_tichri'] = true;
-        }
-
-        const targetSource = getMatchingField(['Source', 'source']);
-        if (targetSource) {
-          fieldsPayload[targetSource] = 'ebook_tichri_site';
-        }
-
-        // D. Écriture (PATCH si existant, POST si nouveau) avec typecast: true
->>>>
-<<<<
-          const updateUrl = `https://api.airtable.com/v0/${baseId}/${encodeURIComponent(tableName)}/${existingRecord.id}`;
-          const updateRes = await fetch(updateUrl, {
+        if (existingRecordId) {
+          // Si le contact existe (dans n'importe quel champ mail), on met à jour sa fiche
+          const patchRes = await fetch(`https://api.airtable.com/v0/${baseId}/${encodeURIComponent(tableName)}/${existingRecordId}`, {
             method: 'PATCH',
-            headers,
-            body: JSON.stringify({ fields: fieldsPayload })
-          });
-          if (updateRes.ok) {
-            airtableStatus = 'updated';
-            airtableRecordId = existingRecord.id;
-          }
-        } else {
-          // Création d'une nouvelle fiche contact
-          const createUrl = `https://api.airtable.com/v0/${baseId}/${encodeURIComponent(tableName)}`;
-          const createRes = await fetch(createUrl, {
-            method: 'POST',
-            headers,
-            body: JSON.stringify({ fields: fieldsPayload })
-          });
-=======
-          const updateUrl = `https://api.airtable.com/v0/${baseId}/${encodeURIComponent(tableName)}/${existingRecord.id}`;
-          const updateRes = await fetch(updateUrl, {
-            method: 'PATCH',
-            headers,
+            headers: {
+              'Authorization': `Bearer ${airtableToken}`,
+              'Content-Type': 'application/json'
+            },
             body: JSON.stringify({ fields: fieldsPayload, typecast: true })
           });
-          if (updateRes.ok) {
-            airtableStatus = 'updated';
-            airtableRecordId = existingRecord.id;
-          }
+          if (patchRes.ok) airtableDone = true;
         } else {
-          // Création d'une nouvelle fiche contact
-          const createUrl = `https://api.airtable.com/v0/${baseId}/${encodeURIComponent(tableName)}`;
-          const createRes = await fetch(createUrl, {
+          // Si le contact n'existe nulle part, ON LE CRÉE
+          const createRes = await fetch(`https://api.airtable.com/v0/${baseId}/${encodeURIComponent(tableName)}`, {
             method: 'POST',
-            headers,
+            headers: {
+              'Authorization': `Bearer ${airtableToken}`,
+              'Content-Type': 'application/json'
+            },
             body: JSON.stringify({ fields: fieldsPayload, typecast: true })
           });
->>>>
-```
+          if (createRes.ok) airtableDone = true;
+        }
+      } catch (atErr) {
+        console.error('Erreur Airtable:', atErr);
+      }
+    }
 
-### Pour appliquer le correctif :
-1. Dans votre fichier GitHub `api/submit-ebook.js`, collez cette version mise à jour et validez le commit.
-2. Dans Make, ouvrez le module **Google Drive (Download a File)**, videz l'option de conversion/export, et sélectionnez votre PDF depuis la liste.
+    // 2. TRANSMISSION AU WEBHOOK MAKE (Envoi de l'email)
+    let makeTriggered = false;
+    if (makeWebhookUrl) {
+      try {
+        const makeRes = await fetch(makeWebhookUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            prenom: prenomClean,
+            email: emailClean,
+            telephone: telClean,
+            source: 'ebook_tichri_site',
+            timestamp: new Date().toISOString()
+          })
+        });
+        if (makeRes.ok) makeTriggered = true;
+      } catch (makeErr) {
+        console.error('Erreur Make:', makeErr);
+      }
+    }
+
+    // Renvoyer le succès si Make ou Airtable a fonctionné
+    if (makeTriggered || airtableDone) {
+      return res.status(200).json({ success: true, message: 'Inscription réussie.' });
+    } else {
+      return res.status(500).json({ success: false, message: 'Erreur de traitement de la demande.' });
+    }
+
+  } catch (globalErr) {
+    console.error('Erreur globale:', globalErr);
+    return res.status(500).json({ success: false, message: 'Erreur serveur.' });
+  }
+};
