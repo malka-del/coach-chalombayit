@@ -1498,10 +1498,9 @@
   <!-- ── SCRIPT D'OUVERTURE & SOUMISSION ── -->
   <script>
   (function () {
-    // Détection automatique : pointe vers Vercel si le site est hébergé sur GitHub Pages
-    var API = (window.location.hostname.includes('vercel.app'))
-      ? '/api/submit-ebook'
-      : 'https://coach-chalombayit.vercel.app/api/submit-ebook';
+    // Point de terminaison Vercel sécurisé (le webhook Make reste 100 % confidentiel)
+    var API = 'https://coach-chalombayit.vercel.app/api/submit-ebook';
+
     var DELAY    = 3500;
     var DONE_KEY = 'cbl_sprint_tichri_5787';
 
@@ -1570,14 +1569,15 @@
             body: JSON.stringify({
               prenom:    prenom,
               email:     email,
-              telephone: tel || null
+              telephone: tel || null,
+              source:    'ebook_tichri_site',
+              date:      new Date().toISOString()
             })
           });
 
-          var data = await res.json().catch(function() { return {}; });
-
-          if (!res.ok || data.success === false) {
-            throw new Error(data.message || ('HTTP ' + res.status));
+          // Make renvoie statut 200 "Accepted", ce qui valide l'envoi
+          if (!res.ok) {
+            throw new Error('Erreur réseau HTTP ' + res.status);
           }
 
           /* Succès */
@@ -1595,9 +1595,7 @@
         } catch (err) {
           btn.disabled    = false;
           btn.textContent = '💎 Recevoir mon ebook gratuitement';
-          errEl.textContent = err.message && err.message.indexOf('HTTP') !== -1
-            ? 'Erreur de liaison (' + err.message + ') — réessaie dans un instant 🙏'
-            : (err.message || 'Une erreur est survenue — réessaie ou écris-moi sur Instagram 🙏');
+          errEl.textContent = 'Une erreur est survenue — réessaie ou écris-moi sur Instagram 🙏';
           errEl.style.display = 'block';
           console.error('[CBL Submit]', err);
         }
