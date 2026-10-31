@@ -1332,7 +1332,7 @@
   'use strict';
 
   /* ═════════ CONFIG ═════════ */
-  var API_URL = 'https://coach-chalombayit.vercel.app/api/submit-quiz';
+  var API_URL = /\.vercel\.app$/.test(location.hostname) ? '/api/submit-quiz' : 'https://coach-chalombayit.vercel.app/api/submit-quiz'; // préversions Vercel : même domaine
   var WA_COACH_IA = '33974997226';   // Coach IA (essai 7 jours)
 
   var quizQuestions = [
