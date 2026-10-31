@@ -219,7 +219,7 @@ async function upsertProspect(d, result) {
     if (f.Desinscrit) patch.Desinscrit = false; // nouveau consentement explicite
     const count = (Number(f.Nb_envois_quiz) || 0) + 1;
     patch.Nb_envois_quiz = count;
-    await at(atUrl(`/${existing.id}`), { method: 'PATCH', body: JSON.stringify({ fields: patch }) });
+    await at(atUrl(`/${existing.id}`), { method: 'PATCH', body: JSON.stringify({ fields: patch, typecast: true }) });
     return { status: 'updated', count };
   }
 
@@ -238,7 +238,7 @@ async function upsertProspect(d, result) {
   };
   if (d.nom) fields.Nom_Famille = d.nom;
   if (d.telephone) fields.Telephone_contact = d.telephone;
-  await at(atUrl(), { method: 'POST', body: JSON.stringify({ fields }) });
+  await at(atUrl(), { method: 'POST', body: JSON.stringify({ fields, typecast: true }) });
   return { status: 'created', count: 1 };
 }
 
