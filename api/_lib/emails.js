@@ -239,10 +239,10 @@ function renderBlock(b, ctx) {
 
 const sub = (s, ctx) => String(s).replace(/\{prenom\}/g, ctx.prenom);
 
-/* Numéro perso d'Alison : lu dans la variable Vercel ALISON_WA, jamais écrit dans le code (dépôt public). */
+/* Lien « écrire à Alison » : passe par /api/ecrire-alison, donc le numéro perso n'apparaît jamais dans le mail ni dans le code. */
 function waAlisonHref() {
-  const n = String(process.env.ALISON_WA || '').replace(/\D/g, '');
-  return n.length >= 8 ? 'https://wa.me/' + n : '';
+  if (String(process.env.ALISON_WA || '').replace(/\D/g, '').length < 8) return '';
+  return (process.env.API_BASE_URL || 'https://coach-chalombayit.vercel.app').replace(/\/$/, '') + '/api/ecrire-alison';
 }
 function buildEmail({ etape, profil, prenom, score, unsubUrl, bookUrl }) {
   const ctx = { prenom: String(prenom || '').trim() || 'Bonjour', score: Number(score), bookUrl: bookUrl || 'https://amzn.eu/d/0fQNaUXS', hdr: HEADERS[profil] };

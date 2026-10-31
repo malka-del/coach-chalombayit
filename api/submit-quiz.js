@@ -52,7 +52,7 @@ module.exports = async function handler(req, res) {
     pillars,
     emailSent,
     limited,
-    waAlison: profile.code === 'urgence' ? core.alisonWaNumber() : '',
+    contact: profile.code === 'urgence' && !!core.alisonWaNumber(),
     bookUrl: core.bookUrl(),
   });
 };

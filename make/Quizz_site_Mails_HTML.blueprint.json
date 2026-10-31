@@ -101,7 +101,7 @@
                 "from": "\"Alison Malka\" <malka@chalombayitlelab.com>",
                 "subject": "{{1.subject}}",
                 "bodyType": "rawHtml",
-                "html": "{{1.html}}"
+                "content": "{{1.html}}"
             },
             "metadata": {
                 "designer": {

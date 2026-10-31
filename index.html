@@ -1747,10 +1747,9 @@
     $('qz-overlay').scrollTop = 0;
   }
 
-  /* Le numéro perso d'Alison n'est jamais dans le code : le serveur le renvoie (profil Urgence seulement). */
+  /* Le numéro perso d'Alison n'est jamais dans la page : le bouton passe par /api/ecrire-alison (redirection vers WhatsApp au clic). */
   function alisonContactHref() {
-    var n = serverData && serverData.waAlison ? String(serverData.waAlison).replace(/\D/g, '') : '';
-    if (n) return 'https://wa.me/' + n + '?text=' + encodeURIComponent('Bonjour Alison, voici mon audio de 2 minutes suite au quiz (profil urgence)');
+    if (serverData && serverData.contact) return API_URL.replace('submit-quiz', 'ecrire-alison');
     return 'mailto:malka@chalombayitlelab.com?subject=' + encodeURIComponent('Suite à mon quiz (profil urgence)');
   }
 
