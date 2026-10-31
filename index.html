@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Chalom Bayit Le LAB, l'incubateur pour les couples</title>
   <link rel="icon" type="image/png" href="favicon.png">
+  <meta property="og:title" content="Votre couple est-il équipé pour durer ?">
+  <meta property="og:description" content="Le test gratuit en 2 minutes : repérez les fissures de votre couple avant qu'elles ne grandissent.">
 
   <!-- Polices Google Fonts officielles -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -598,101 +600,7 @@
     .footer-links a:hover { color: var(--gold); }
     .footer-copy { font-size: .72rem; color: rgba(138,143,168,.5); }
 
-    /* ── STYLES POPUP MODAL ────────────────────────────── */
-    #cbl-overlay {
-      display: none;
-      position: fixed; inset: 0; z-index: 9999;
-      background: rgba(15, 23, 42, 0.78);
-      backdrop-filter: blur(6px);
-      -webkit-backdrop-filter: blur(6px);
-      align-items: center; justify-content: center;
-      padding: 16px;
-      font-family: 'Manrope', sans-serif;
-    }
-    #cbl-overlay.cbl-open { display: flex; animation: cbl-in .25s ease-out; }
-    @keyframes cbl-in { from { opacity:0; transform:scale(.96); } to { opacity:1; transform:scale(1); } }
-
-    #cbl-card {
-      background: #FFFDF9;
-      border: 1px solid rgba(184,134,11,0.30);
-      border-radius: 20px;
-      padding: 28px 24px 22px;
-      max-width: 410px; width: 100%;
-      position: relative;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.35);
-      background-image: radial-gradient(rgba(140,101,18,0.1) 0.8px, transparent 0.8px);
-      background-size: 18px 18px;
-    }
-    #cbl-close {
-      position: absolute; top: 12px; right: 16px;
-      background: none; border: none; cursor: pointer;
-      font-size: 1.2rem; color: #94A3B8; line-height: 1;
-      transition: color .15s;
-    }
-    #cbl-close:hover { color: #0F172A; }
-    .cbl-washi {
-      position: absolute; top: -6px; height: 13px; width: 64px;
-      border-left: 2px dashed rgba(255,255,255,.7); border-right: 2px dashed rgba(255,255,255,.7);
-      box-shadow: 0 2px 4px rgba(0,0,0,.06);
-    }
-    .cbl-washi-left  { left: 20px;  background: rgba(200,160,95,.45); transform: rotate(-3deg); }
-    .cbl-washi-right { right: 20px; background: rgba(219,39,119,.28); transform: rotate(2.5deg); }
-
-    .cbl-badge {
-      display: inline-flex; align-items: center; gap: 5px;
-      background: #FEF3C7; border: 1px solid rgba(184,134,11,.35);
-      border-radius: 999px; padding: 3px 11px;
-      font-family: 'DM Mono', monospace; font-size: .64rem; letter-spacing: 1px;
-      text-transform: uppercase; font-weight: 700; color: #8C6512; margin-bottom: 8px;
-    }
-    .cbl-dot { width: 5px; height: 5px; border-radius: 50%; background: #D97706; display: inline-block; }
-    .cbl-title-h1 {
-      font-family: 'Cormorant Garamond', Georgia, serif;
-      font-size: 1.95rem; font-weight: 700; color: #451A03;
-      line-height: 1.1; margin: 0 0 2px; text-align: center;
-    }
-    .cbl-title-le { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 1.1rem; color: #0284C7; font-weight: 700; }
-    .cbl-title-ebook { font-family: 'DM Mono', monospace; font-size: 1.05rem; letter-spacing: 3px; color: #DB2777; font-weight: 800; }
     .cbl-filet-row { display: flex; align-items: center; justify-content: center; gap: 8px; margin: 4px 0; }
-    .cbl-filet { height: 2px; width: 24px; }
-    .cbl-tagline { font-size: .80rem; color: #475569; line-height: 1.55; text-align: center; margin: 8px 0 12px; }
-    .cbl-chips { display: flex; flex-wrap: wrap; gap: 5px; justify-content: center; margin-bottom: 14px; }
-    .cbl-chip {
-      background: rgba(184,134,11,.09); border: 1px solid rgba(184,134,11,.28);
-      border-radius: 4px; padding: 2px 8px; font-family: 'DM Mono', monospace;
-      font-size: .62rem; color: #8C6512;
-    }
-    #cbl-form { display: flex; flex-direction: column; gap: 8px; }
-    #cbl-form input {
-      width: 100%; background: #fff; border: 1px solid #CBD5E1; border-radius: 10px;
-      padding: 11px 13px; font-family: 'Manrope', sans-serif; font-size: .85rem; color: #0F172A;
-      outline: none; transition: border-color .2s, box-shadow .2s;
-    }
-    #cbl-form input:focus { border-color: #B8860B; box-shadow: 0 0 0 3px rgba(184,134,11,.12); }
-    #cbl-submit {
-      width: 100%; cursor: pointer; border: none;
-      background: linear-gradient(135deg, #B8860B 0%, #DB2777 50%, #0284C7 100%);
-      color: #fff; border-radius: 10px; padding: 13px 16px;
-      font-family: 'Manrope', sans-serif; font-weight: 800; font-size: .88rem;
-      letter-spacing: .3px; margin-top: 4px; transition: opacity .2s, transform .15s;
-    }
-    #cbl-submit:hover:not(:disabled) { opacity: .94; transform: translateY(-1px); }
-    #cbl-submit:disabled { opacity: .5; cursor: not-allowed; transform: none; }
-    .cbl-rgpd { font-size: .62rem; color: #94A3B8; text-align: center; margin-top: 7px; line-height: 1.4; }
-    #cbl-error {
-      display: none; background: #FEF2F2; border: 1px solid rgba(239,68,68,.25);
-      border-radius: 8px; padding: 8px 12px; font-size: .75rem; color: #DC2626; text-align: center; margin-top: 4px;
-    }
-    #cbl-success { display: none; text-align: center; padding: 10px 0; }
-    #cbl-success .s-icon { font-size: 2.4rem; margin-bottom: 6px; }
-    #cbl-success h3 { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 1.45rem; color: #B8860B; margin: 0 0 6px; }
-    #cbl-success p { font-size: .82rem; color: #475569; line-height: 1.6; margin: 0 0 10px; }
-    #cbl-success .s-tip { background: #ECFDF5; border: 1px solid #A7F3D0; border-radius: 8px; padding: 8px 12px; font-size: .75rem; color: #065F46; }
-    #cbl-success .s-amazon {
-      display: inline-block; margin-top: 12px; background: #1E293B; color: #FEF3C7;
-      text-decoration: none; font-family: 'DM Mono', monospace; font-size: .72rem;
-      font-weight: 700; padding: 8px 18px; border-radius: 999px;
-    }
 
     /* ── RESPONSIVE ────────────────────────────────────── */
     @media (max-width: 900px) {
@@ -710,6 +618,12 @@
     }
     @media (max-width: 540px) {
       .nav-ctas .btn { font-size: .72rem !important; padding: 7px 12px !important; gap: 6px !important; }
+    }
+    @media (max-width: 600px) {
+      /* Correctif mobile : aucun élément ne doit dépasser l'écran (évite le défilement latéral) */
+      .btn { white-space: normal; text-align: center; }
+      .hero-ctas .btn, .cta-final .cta-buttons .btn, .urgency-inner .btn--lg { width: 100%; }
+      .offers-grid > *, .how-steps > *, .method-grid > *, .testi-grid > *, .case-cards > *, .urgency-choices > *, .pain-grid > * { min-width: 0; }
     }
     @media (max-width: 480px) {
       .hero h1 { font-size: 1.9rem; }
@@ -767,8 +681,8 @@
           </div>
 
           <h1>
-            Votre couple mérite<br>
-            <em>plus que de la bonne volonté.</em>
+            Donnez enfin vraiment<br>
+            <em>une chance à votre couple.</em>
           </h1>
 
           <p class="hero-sub">
@@ -778,11 +692,12 @@
           </p>
 
           <div class="hero-ctas">
+            <a href="#" onclick="openQuiz();return false;" class="btn btn--pink btn--lg">📊 Faites le quiz (2 min)</a>
             <a href="https://wa.me/33974997226?text=Bonjour%20!%20Je%20veux%20d%C3%A9marrer%20mon%20essai%20offert" class="btn btn--wa btn--lg">
               <span class="ico">📲</span> Commencer l'essai offert de 7 jours
             </a>
             <a href="#livre-section" class="btn btn--gold">
-              📖 Découvrir le livre &amp; l'eBook
+              📖 Découvrir le livre
             </a>
           </div>
           <p class="hero-note">✨ Sans engagement · Confidentiel · Réponse instantanée sur WhatsApp</p>
@@ -867,13 +782,7 @@
             <a href="https://amzn.eu/d/0fQNaUXS" target="_blank" rel="noopener noreferrer" class="btn btn--amazon">
               🛒 Commander le livre sur Amazon →
             </a>
-            <button type="button" onclick="window.openEbookPopup()" class="btn btn--pink">
-              🎁 Télécharger l'extrait gratuit (eBook)
-            </button>
           </div>
-          <p style="font-size:.75rem;color:var(--muted);margin-top:12px;">
-            ✦ Vous hésitez ? Cliquez sur le bouton rose pour recevoir immédiatement le guide extrait <em>« Sprint de Tichri »</em> par email.
-          </p>
         </div>
 
       </div>
@@ -911,7 +820,7 @@
         </div>
         <div class="pain-card">
           <span class="icon">🥚</span>
-          <p>Vous marchez sur des œufs pour éviter l'explosion, ou vous criez pour <strong>être enfin entendu·e</strong>.</p>
+          <p>Vous marchez sur des œufs pour éviter l'explosion, ou vous criez pour <strong>être enfin entendu(e)</strong>.</p>
         </div>
         <div class="pain-card">
           <span class="icon">⏳</span>
@@ -1059,7 +968,7 @@
               <li><span>0 € aujourd'hui, mais combien dans 1 an ?</span></li>
               <li><span>La prochaine dispute comme les autres</span></li>
               <li><span>Le fossé continue de se creuser</span></li>
-              <li><span>Vous portez la charge mentale seul·e</span></li>
+              <li><span>Vous portez la charge mentale seul(e)</span></li>
               <li><span>On intervient trop tard, quand c'est profond</span></li>
             </ul>
           </div>
@@ -1277,7 +1186,7 @@
             </div>
             <ul class="offer-features">
               <li><span>1h en visio avec Malka</span></li>
-              <li><span>En couple ou seul·e (le couple est systémique)</span></li>
+              <li><span>En couple ou seul(e) (le couple est systémique)</span></li>
               <li><span>Déblocage ciblé ou exploration</span></li>
               <li><span>Des outils concrets à appliquer dès le soir</span></li>
             </ul>
@@ -1294,7 +1203,7 @@
               <span class="amount">Sur devis</span>
             </div>
             <ul class="offer-features">
-              <li><span>7 séances d'1h en visio avec Malka</span></li>
+              <li><span>1 à 7 séances d'1h en visio avec Malka</span></li>
               <li><span>Tous les 15 jours, sur 3 à 4 mois</span></li>
               <li><span>Méthode Torah x Agile x PNL</span></li>
               <li><span>Accès au Coach IA entre les séances</span></li>
@@ -1310,25 +1219,20 @@
 
   <!-- ── RESSOURCES OFFERTES ── -->
   <section style="background:var(--dark);padding:80px 0;">
-    <div class="container">
-      <div style="max-width:760px;margin:0 auto;background:linear-gradient(135deg,rgba(226,194,102,.08),rgba(76,201,240,.05));border:1px solid rgba(226,194,102,.2);border-radius:28px;padding:48px 40px;text-align:center;">
-        <span class="pill section-label" style="margin-bottom:16px;display:inline-block;">Pas encore prêt·e à vous lancer ?</span>
-        <h2 style="font-size:1.8rem;color:#fff;margin-bottom:12px;">Avancez à votre rythme, gratuitement 🎁</h2>
-        <p style="font-size:.95rem;color:var(--muted);max-width:520px;margin:0 auto 32px;line-height:1.7;">
-          En 2 minutes et 15 questions, découvrez où en est vraiment votre couple. Vous pouvez aussi télécharger l'extrait exclusif de notre livre avec les 5 défis pour les fêtes.
-        </p>
-        <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;">
-          <a href="https://form.jotform.com/261224184626051" class="btn btn--pink btn--lg" style="display:inline-flex;">
-            🎁 Faire le quiz gratuitement
-          </a>
-          <button type="button" onclick="window.openEbookPopup()" class="btn btn--gold btn--lg" style="display:inline-flex;">
-            📖 Télécharger l'eBook Tichri
-          </button>
-        </div>
-        <p style="font-size:.75rem;color:var(--muted);margin-top:14px;">100 % gratuit · Profil personnalisé · Sans engagement</p>
-      </div>
+  <div class="container">
+    <div style="max-width:760px;margin:0 auto;background:linear-gradient(135deg,rgba(226,194,102,.08),rgba(76,201,240,.05));border:1px solid rgba(226,194,102,.2);border-radius:28px;padding:48px 40px;text-align:center;">
+      <span class="pill section-label" style="margin-bottom:16px;display:inline-block;">Pas encore prêt(e) à vous lancer ?</span>
+      <h2 style="font-size:1.8rem;color:#fff;margin-bottom:12px;">Votre couple est-il équipé pour durer ?</h2>
+      <p style="font-size:.95rem;color:var(--muted);max-width:520px;margin:0 auto 32px;line-height:1.7;">
+        Un couple s'use par petites fissures qu'on ne regarde pas. En 2 minutes et 15 questions, repérez les vôtres et repartez avec un profil personnalisé et des pistes concrètes.
+      </p>
+      <a href="#" onclick="openQuiz();return false;" class="btn btn--pink btn--lg" style="display:inline-flex;">
+        📊 Faites le quiz (2 min)
+      </a>
+      <p style="font-size:.75rem;color:var(--muted);margin-top:14px;">15 questions · 2 minutes · Profil personnalisé · Offert</p>
     </div>
-  </section>
+  </div>
+</section>
 
   <!-- ── FAQ ── -->
   <section class="faq">
@@ -1338,11 +1242,11 @@
 
       <div class="faq-list">
         <details open>
-          <summary>Est-ce que je peux venir seul·e si mon partenaire n'est pas prêt·e ? <span class="arrow">▼</span></summary>
-          <div class="faq-body">
-            Pour le <strong>coaching de couple en 7 séances</strong>, les deux partenaires doivent être présents : c'est un travail d'équipe, les résultats en profondeur le nécessitent. Mais si votre partenaire n'est pas encore prêt·e, le <strong>Coach IA</strong> est accessible à vous seul·e dès maintenant. Et notre livre <strong>Chalom Bayit, Le LIVRE</strong> vous donne des clés concrètes pour initier le déclic sans forcer.
-          </div>
-        </details>
+          <summary>Puis-je venir seul(e) si mon conjoint n'est pas prêt ? <span class="arrow">▼</span></summary>
+        <div class="faq-body">
+          <strong>Oui.</strong> Une femme peut tout à fait venir seule en coaching si son mari n'est pas prêt à venir : c'est même très fréquent, et ça fonctionne. <strong>Un couple est un système</strong> : quand l'un des deux change sa façon de réagir, de demander, d'écouter, tout l'équilibre se réorganise, et l'autre finit souvent par bouger à son tour, sans qu'on ait eu à le forcer. Vous pouvez donc démarrer seule, à votre rythme, et l'inviter plus tard à vous rejoindre s'il le souhaite.
+        </div>
+      </details>
 
         <details>
           <summary>Faut-il être religieux pour suivre le coaching ou lire le livre ? <span class="arrow">▼</span></summary>
@@ -1428,181 +1332,439 @@
     </div>
   </footer>
 
-  <!-- ═══════════════════════════════════════════════════════════ -->
-  <!-- ── POPUP EBOOK SPRINT DE TICHRI (MODAL) ────────────────── -->
-  <!-- ═══════════════════════════════════════════════════════════ -->
-  <div id="cbl-overlay" role="dialog" aria-modal="true" aria-labelledby="cbl-h">
-    <div id="cbl-card">
+<!-- ═══════════════════════ MODULE QUIZ IMMERSIF PLEIN ÉCRAN (v2) ═══════════════════════
+     À coller juste avant </body>. Le quiz envoie ses données à l'API Vercel (/api/submit-quiz) :
+     le webhook Make n'est plus appelé depuis le navigateur. -->
+<style>
+  #qz-overlay {
+    position: fixed; inset: 0; z-index: 99999;
+    background: #0B0C10;
+    background: radial-gradient(circle at 50% 10%, #1A1B26 0%, #0B0C10 90%);
+    display: none; flex-direction: column;
+    overflow-y: auto; -webkit-overflow-scrolling: touch;
+    padding: 16px 14px 40px;
+    font-family: 'Inter', sans-serif;
+  }
+  #qz-overlay.active { display: flex; animation: qzFadeIn 0.25s ease-out; }
+  @keyframes qzFadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+  @media (prefers-reduced-motion: reduce) { #qz-overlay.active { animation: none; } }
 
-      <div class="cbl-washi cbl-washi-left"></div>
-      <div class="cbl-washi cbl-washi-right"></div>
+  .qz-topbar { display: flex; justify-content: space-between; align-items: center; max-width: 600px; width: 100%; margin: 0 auto 16px; padding: 4px 2px; }
+  .qz-badge-top { font-size: 0.72rem; letter-spacing: 1.5px; text-transform: uppercase; color: #E2C266; font-weight: 700; }
+  .qz-close {
+    background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.16);
+    color: #F0EDE6; width: 38px; height: 38px; border-radius: 50%;
+    font-size: 1.1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.2s;
+  }
+  .qz-close:hover { background: rgba(255,255,255,.22); }
 
-      <button id="cbl-close" aria-label="Fermer le popup">✕</button>
+  .qz-container { max-width: 600px; width: 100%; margin: 0 auto; text-align: center; }
+  .qz-title { font-family: 'DM Serif Display', Georgia, serif; font-size: clamp(1.45rem, 5.5vw, 2.1rem); color: #FFFFFF; line-height: 1.25; margin-bottom: 14px; }
+  .qz-sub { font-size: 0.95rem; color: #8A8FA8; line-height: 1.6; margin-bottom: 24px; }
+  .qz-pill { display: inline-block; background: rgba(226,194,102,.12); color: #E2C266; border: 1px solid rgba(226,194,102,.35);
+    font-size: 0.72rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; padding: 5px 14px; border-radius: 100px; margin-bottom: 12px; }
 
-      <div style="text-align:center;">
-        <div class="cbl-badge"><span class="cbl-dot"></span>Cadeau Tichri 5787</div>
+  .qz-progress-wrap { height: 5px; background: rgba(255,255,255,.1); border-radius: 99px; overflow: hidden; margin-bottom: 24px; }
+  .qz-progress-bar { height: 100%; background: linear-gradient(90deg, #E845A8, #E2C266); width: 0%; transition: width 0.3s ease; }
 
-        <svg class="cbl-orn" style="width:120px;color:#B8860B;" viewBox="0 0 560 56"><use href="#cbl-orn-top"/></svg>
+  .qz-option-btn {
+    display: flex; align-items: center; justify-content: space-between;
+    width: 100%; text-align: left; padding: 16px 20px;
+    background: #13141A; border: 1px solid rgba(255,255,255,.12); border-radius: 14px;
+    color: #F0EDE6; font-size: 1rem; font-weight: 600; margin-bottom: 10px;
+    cursor: pointer; transition: all 0.2s; font-family: 'Inter', sans-serif;
+  }
+  .qz-option-btn:hover, .qz-option-btn:active, .qz-option-btn:focus-visible { border-color: #E2C266; background: rgba(226,194,102,.08); outline: none; }
+  .qz-option-btn span.arr { color: #E845A8; font-size: 1.1rem; }
+  .qz-hook { font-size: clamp(1.9rem, 8vw, 2.9rem); margin: 14px 0 16px; }
+  .qz-hook span { color: #E2C266; }
+  .qz-profiles-label { font-size: 0.78rem; letter-spacing: 1px; text-transform: uppercase; color: #E2C266; font-weight: 700; margin-bottom: 10px; }
+  .qz-profiles { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-bottom: 24px; }
+  .qz-profiles span { background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.14); border-radius: 100px; padding: 7px 14px; font-size: 0.82rem; color: #F0EDE6; }
+  .qz-trust { font-size: 0.78rem; color: #8A8FA8; margin-top: 16px; }
+  .qz-by { font-size: 0.75rem; color: #6B7090; margin-top: 18px; line-height: 1.6; }
+  .qz-skip { background: none; border: none; color: #8A8FA8; font-size: 0.8rem; margin-top: 18px; cursor: pointer; text-decoration: underline; font-family: 'Inter', sans-serif; }
+  .qz-prev { background: none; border: none; color: #8A8FA8; font-size: 0.82rem; cursor: pointer; margin-top: 6px; text-decoration: underline; font-family: 'Inter', sans-serif; }
 
-        <h2 class="cbl-title-h1" id="cbl-h">Sprint de Tichri</h2>
-        <p style="font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-size:1rem;color:#475569;margin:2px 0 4px;">5 défis pour redémarrer son couple</p>
+  .qz-field { width: 100%; padding: 14px 16px; margin-bottom: 10px; box-sizing: border-box; background: #13141A; border: 1px solid rgba(255,255,255,.16);
+    border-radius: 10px; color: #fff; font-size: 0.95rem; font-family: 'Inter', sans-serif; }
+  .qz-field:focus { outline: none; border-color: #E2C266; background: #171822; }
+  .qz-field[aria-invalid="true"] { border-color: #F472B6; }
+  .qz-field-hint { font-size: 0.75rem; color: #E2C266; text-align: left; margin: -6px 0 12px 4px; line-height: 1.4; }
+  .qz-err { font-size: 0.78rem; color: #F9A8D4; text-align: left; margin: -4px 0 10px 4px; }
+  .qz-consent { display: flex; gap: 10px; align-items: flex-start; text-align: left; font-size: 0.78rem; color: #8A8FA8; line-height: 1.5; margin: 6px 0 12px; }
+  .qz-consent input { flex: none; width: 20px; height: 20px; margin-top: 2px; accent-color: #E845A8; }
+  .qz-consent a { color: #E2C266; }
+  .qz-hp { position: absolute; left: -5000px; width: 1px; height: 1px; opacity: 0; }
 
-        <div class="cbl-filet-row">
-          <span class="cbl-filet" style="background:#0284C7;"></span>
-          <span class="cbl-title-le">Le</span>
-          <span class="cbl-title-ebook">EBOOK</span>
-          <span class="cbl-filet" style="background:#DB2777;"></span>
-        </div>
+  .cta-card { background: #13141A; border: 1.5px solid rgba(226,194,102,.3); border-radius: 16px; padding: 16px 18px; text-align: left; margin-bottom: 12px;
+    text-decoration: none; display: block; box-shadow: 0 4px 16px rgba(0,0,0,.35); }
+  .cta-card--calm { border-color: rgba(76,201,240,.45); box-shadow: 0 8px 24px rgba(76,201,240,.10); }
+  .cta-card-badge { font-size: 0.68rem; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; color: #E2C266; margin-bottom: 4px;
+    display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+  .cta-card--calm .cta-card-badge { color: #4CC9F0; }
+  .cta-card-title { font-size: 1.05rem; font-weight: 700; color: #FFFFFF; margin-bottom: 4px; font-family: 'DM Serif Display', Georgia, serif; }
+  .cta-card-desc { font-size: 0.85rem; color: #8A8FA8; line-height: 1.5; margin-bottom: 12px; }
+  .cta-card-action { display: inline-flex; align-items: center; gap: 6px; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; border-radius: 100px; padding: 8px 16px; }
+  .cta-card-action--gold { background: linear-gradient(135deg, #E2C266, #B8860B); color: #0B0C10; }
+  .cta-card-action--pink { background: linear-gradient(135deg, #E845A8, #BE185D); color: #FFFFFF; }
+  .cta-card-action--wa   { background: #25D366; color: #000000; }
 
-        <svg class="cbl-orn" style="width:120px;color:#B8860B;margin-bottom:8px;" viewBox="0 0 560 56"><use href="#cbl-orn-bot"/></svg>
-      </div>
+  .qz-mail-ok { font-size: 0.8rem; color: #8A8FA8; margin-top: 20px; }
+  .qz-mail-ko { margin-top: 20px; border: 1px solid rgba(244,114,182,.35); background: rgba(244,114,182,.07); color: #F9A8D4; border-radius: 12px; padding: 12px 14px; font-size: 0.82rem; }
+  .qz-mail-ko button { margin-top: 8px; background: none; border: 1.5px solid #E2C266; color: #E2C266; border-radius: 100px; padding: 8px 18px; font-weight: 700; cursor: pointer; font-family: 'Inter', sans-serif; }
 
-      <p class="cbl-tagline">
-        Extrait de « Chalom Bayit Le LIVRE », 54 défis hebdomadaires inspirés de la Paracha pour devenir un couple agile, un Chabbat à la fois (disponible sur Amazon).
-      </p>
+  #qz-tel-modal { position: fixed; inset: 0; z-index: 100000; background: rgba(0,0,0,0.85); display: none; align-items: center; justify-content: center; padding: 20px; }
+  #qz-tel-modal.active { display: flex; }
+  .qz-tel-box { background: #171822; border: 1.5px solid #25D366; border-radius: 16px; padding: 24px 20px; max-width: 360px; width: 100%; text-align: center; }
 
-      <div class="cbl-chips">
-        <span class="cbl-chip">51 · Nitsavim</span>
-        <span class="cbl-chip">52 · Vayelekh</span>
-        <span class="cbl-chip">53 · Haazinou</span>
-        <span class="cbl-chip">54 · Vezot Haberakha</span>
-        <span class="cbl-chip" style="background:rgba(219,39,119,.08);border-color:rgba(219,39,119,.25);color:#BE185D;">01 · Berechit</span>
-      </div>
+  #qz-fab { position: fixed; bottom: 20px; right: 20px; z-index: 999; background: linear-gradient(135deg, #E845A8 0%, #BE185D 100%);
+    color: #fff; border: 1px solid rgba(255,255,255,.25); border-radius: 50px; padding: 12px 20px; font-weight: 700; font-size: 0.85rem; cursor: pointer;
+    box-shadow: 0 8px 24px rgba(232,69,168,.4); display: none; align-items: center; gap: 8px; font-family: 'Inter', sans-serif; }
+</style>
 
-      <form id="cbl-form" novalidate>
-        <input type="text"  id="cbl-prenom" placeholder="Ton prénom *"            required autocomplete="given-name">
-        <input type="email" id="cbl-email"  placeholder="Ton adresse email *"     required autocomplete="email">
-        <input type="tel"   id="cbl-tel"    placeholder="Ton WhatsApp (optionnel)"         autocomplete="tel">
-        <button type="submit" id="cbl-submit">💎 Recevoir mon ebook gratuitement</button>
-        <div id="cbl-error"></div>
-      </form>
-
-      <p class="cbl-rgpd">Gratuit pour les fêtes · Aucun spam · Le guide PDF arrive directement par email</p>
-
-      <div id="cbl-success">
-        <div class="s-icon">🎉</div>
-        <h3>C'est dans ta boîte !</h3>
-        <p>Ton ebook <em>Sprint de Tichri</em> vient d'être envoyé.<br>
-           Vérifie tes spams ou ton onglet Promotions si besoin.</p>
-        <div class="s-tip">
-          📩 Sujet de l'email : <strong>« Ton Sprint de Tichri est arrivé ! 🎁 (Chalom Bayit Le LAB) »</strong>
-        </div>
-        <a class="s-amazon" href="https://amzn.eu/d/0fQNaUXS" target="_blank" rel="noopener noreferrer">
-          📚 Découvrir le livre complet sur Amazon →
-        </a>
-      </div>
-
-    </div>
+<div id="qz-overlay" role="dialog" aria-modal="true" aria-label="Test du couple">
+  <div class="qz-topbar">
+    <span class="qz-badge-top">✦ CHALOM BAYIT LE LAB ✦</span>
+    <button class="qz-close" onclick="closeQuiz()" title="Fermer et revenir au site" aria-label="Fermer le quiz">✕</button>
   </div>
 
-  <!-- ── SCRIPT D'OUVERTURE & SOUMISSION ── -->
-  <script>
-  (function () {
-    // Point de terminaison Vercel sécurisé (le webhook Make reste 100 % confidentiel)
-    var API = 'https://coach-chalombayit.vercel.app/api/submit-ebook';
+  <div class="qz-container">
+    <!-- ÉCRAN INTRO -->
+    <div id="qz-step-intro">
+      <span class="qz-pill">Test gratuit · 2 minutes · 15 questions</span>
+      <h2 class="qz-title qz-hook">Votre couple est-il <span>équipé pour durer</span>&nbsp;?</h2>
+      <p class="qz-sub">
+        Un couple s'abîme rarement d'un seul coup : il s'use par petites fissures qu'on ne regarde pas. <strong style="color:#F0EDE6;">La dette émotionnelle s'accumule en silence.</strong><br>
+        Repérez les vôtres en 2 minutes, avant qu'elles ne grandissent.
+      </p>
+      <p class="qz-profiles-label">3 profils possibles. Lequel est le vôtre&nbsp;?</p>
+      <div class="qz-profiles">
+        <span>✨ Lune de miel active</span><span>🔧 Révision Agile</span><span>🌿 Reconnexion</span>
+      </div>
+      <button class="btn btn--pink btn--lg" onclick="startQuestions()" style="width:100%; max-width:440px; border:none;">Découvrir mon profil (2 min) ➔</button>
+      <p class="qz-trust">🔒 Confidentiel &nbsp;·&nbsp; ⚡ Résultat immédiat &nbsp;·&nbsp; 🎁 Plan d'action offert</p>
+      <p class="qz-by">Un test conçu par Alison Malka, coach de couple<br>Torah × Agile × PNL</p>
+      <button class="qz-skip" onclick="closeQuiz()">Passer et découvrir le site</button>
+    </div>
 
-    var DELAY    = 3500;
-    var DONE_KEY = 'cbl_sprint_tichri_5787';
+    <!-- ÉCRAN QUESTIONS -->
+    <div id="qz-step-questions" style="display:none;">
+      <div class="qz-progress-wrap"><div id="qz-bar" class="qz-progress-bar"></div></div>
+      <p id="qz-count" style="font-size:0.75rem; color:#E2C266; text-transform:uppercase; letter-spacing:1px; font-weight:700; margin-bottom:8px;"></p>
+      <h2 id="qz-qtext" class="qz-title" style="font-size:clamp(1.15rem, 4.5vw, 1.55rem); min-height:60px; margin-bottom:20px;"></h2>
+      <div style="max-width:440px; margin:0 auto;">
+        <button class="qz-option-btn" data-v="oui" onclick="handleAnswer('oui')"><span>Oui</span><span class="arr">➔</span></button>
+        <button class="qz-option-btn" data-v="parfois" onclick="handleAnswer('parfois')"><span>Parfois</span><span class="arr">➔</span></button>
+        <button class="qz-option-btn" data-v="non" onclick="handleAnswer('non')"><span>Non</span><span class="arr">➔</span></button>
+        <button id="qz-prev" class="qz-prev" onclick="prevQuestion()" style="display:none;">← Question précédente</button>
+      </div>
+    </div>
 
-    var overlay = document.getElementById('cbl-overlay');
-    var form    = document.getElementById('cbl-form');
-    var btn     = document.getElementById('cbl-submit');
-    var success = document.getElementById('cbl-success');
-    var errEl   = document.getElementById('cbl-error');
+    <!-- ÉCRAN COORDONNÉES -->
+    <div id="qz-step-lead" style="display:none; max-width:440px; margin:0 auto;">
+      <span class="qz-pill">Diagnostic terminé</span>
+      <h2 class="qz-title">Votre résultat est prêt&nbsp;! ⚙️</h2>
+      <p class="qz-sub" style="margin-bottom:18px;">Où dois-je vous envoyer votre bilan complet et votre plan d'action personnalisé&nbsp;?</p>
 
-    /* Fonction globale pour ouvrir le popup manuellement au clic sur n'importe quel bouton */
-    window.openEbookPopup = function() {
-      if (overlay) {
-        overlay.classList.add('cbl-open');
-      }
+      <form id="qz-lead-form" onsubmit="submitResults(event)" style="text-align:left;" novalidate>
+        <input type="text" id="qz-prenom" class="qz-field" placeholder="Votre prénom *" autocomplete="given-name">
+        <div id="qz-e-prenom" class="qz-err" style="display:none;"></div>
+        <input type="text" id="qz-nom" class="qz-field" placeholder="Votre nom (facultatif)" autocomplete="family-name">
+        <input type="email" id="qz-email" class="qz-field" placeholder="Votre e-mail (pour recevoir vos résultats) *" autocomplete="email" inputmode="email">
+        <div id="qz-e-email" class="qz-err" style="display:none;"></div>
+        <input type="tel" id="qz-tel" class="qz-field" style="display:none" tabindex="-1" aria-hidden="true" placeholder="Votre WhatsApp, avec indicatif (facultatif)" autocomplete="tel" inputmode="tel">
+        <div id="qz-e-telephone" class="qz-err" style="display:none;"></div>
+        <div class="qz-hp" aria-hidden="true"><label>Ne pas remplir<input type="text" id="qz-website" tabindex="-1" autocomplete="off"></label></div>
+
+        <label class="qz-consent">
+          <input type="checkbox" id="qz-consent">
+          <span>J'accepte de recevoir mon résultat par e-mail ainsi que quelques conseils de Chalom Bayit Le LAB dans les jours qui suivent. Désinscription en 1 clic à tout moment. Mes données ne sont jamais revendues. <a href="https://coach.chalombayitlelab.com/politique-confidentialite" target="_blank" rel="noopener">Politique de confidentialité</a></span>
+        </label>
+        <div id="qz-e-consent" class="qz-err" style="display:none;"></div>
+        <div id="qz-e-global" class="qz-err" style="display:none;"></div>
+
+        <button type="submit" id="qz-btn-submit" class="btn btn--pink btn--lg" style="width:100%; border:none; margin-top:4px;">Découvrir mon profil immédiat ➔</button>
+      </form>
+    </div>
+
+    <!-- ÉCRAN RÉSULTAT -->
+    <div id="qz-step-result" style="display:none;">
+      <h2 id="qz-res-heading" class="qz-title" style="color:#FFFFFF; margin-bottom:14px;"></h2>
+      <div id="qz-res-text" class="qz-sub" style="max-width:540px; margin:0 auto 20px; line-height:1.65;"></div>
+      <div id="qz-res-actions" style="max-width:480px; margin:0 auto;"></div>
+      <div id="qz-res-mail"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal express numéro WhatsApp (si omis lors du quiz) -->
+
+
+<!-- Bouton flottant de reprise -->
+<button id="qz-fab" onclick="openQuiz()"><span>📊</span> <span id="qz-fab-text">Reprendre le quiz</span></button>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ═════════ CONFIG ═════════ */
+  var API_URL = /\.vercel\.app$/.test(location.hostname) ? '/api/submit-quiz' : 'https://coach-chalombayit.vercel.app/api/submit-quiz'; // préversions Vercel : même domaine
+  var WA_COACH_IA = '33974997226';   // Coach IA (essai 7 jours)
+
+  var quizQuestions = [
+    { t: "Avez-vous le sentiment que vos efforts et vos petites victoires sont invisibles et ne sont pas reconnus par votre partenaire ?", inv: false },
+    { t: "Lorsque la frustration monte, est-ce que les critiques sur la personne (« Tu es toujours en retard ») prennent souvent le pas sur la demande constructive ?", inv: false },
+    { t: "Pensez-vous que vous et votre partenaire vous concentrez plus souvent sur les défauts que sur les qualités profondes de l'autre ?", inv: false },
+    { t: "En dehors des relations intimes, y a-t-il moins de 3 gestes tendres spontanés (caresses, regards, câlins) par jour dans votre quotidien ?", inv: false },
+    { t: "Vous sentez-vous suffisamment en sécurité pour partager vos peurs et vos insécurités les plus profondes, sans craindre le jugement ou la minimisation ?", inv: false },
+    { t: "Avez-vous l'impression que vous cohabitez (gérer l'administratif) plus que vous ne partagez vraiment (échanger des idées, rire ensemble) ?", inv: false },
+    { t: "Êtes-vous souvent paralysé(e) par la peur de l'échec ou par des pensées d'auto-critique qui vous empêchent d'agir ou de prendre des initiatives dans votre couple ?", inv: false },
+    { t: "Avez-vous du mal à relativiser vos erreurs (ou celles de votre partenaire) et à les voir comme de simples leçons plutôt que comme des preuves d'échec ?", inv: false },
+    { t: "Est-ce que vous vous surprenez à douter de l'amour de votre partenaire après une simple dispute, ou à penser que vous ne « méritez » pas d'être aimé(e) ?", inv: false },
+    { t: "Lorsque vous avez un désaccord, est-ce que le problème a tendance à s'éterniser sur plusieurs jours avant qu'une action concrète ne soit décidée ?", inv: false },
+    { t: "Lorsque vous faites une demande à votre partenaire, est-elle souvent vague (« Aide-moi plus ») plutôt que spécifique (« Peux-tu sortir les poubelles à 19h ») ?", inv: false },
+    { t: "Lorsque la colère monte, avez-vous une règle claire et immédiatement applicable pour arrêter la dispute avant qu'elle ne dégénère ?", inv: true },
+    { t: "Est-ce que vos discussions se concentrent principalement sur les problèmes du passé ou du quotidien, plutôt que sur la construction d'une vision d'avenir commun ?", inv: false },
+    { t: "Avez-vous le sentiment de ne pas avoir le même niveau d'engagement ou les mêmes priorités que votre partenaire pour améliorer votre relation ?", inv: false },
+    { t: "Malgré les difficultés, êtes-vous convaincu(e) qu'il est possible de passer de la crise à un couple renouvelé, sans changer de conjoint ?", inv: true }
+  ];
+  var PTS = { oui: 2, parfois: 1, non: 0 };
+
+  var qIdx = 0, answers = [], quizCompleted = false, busy = false;
+  var userLeadData = { prenom: '', nom: '', email: '', tel: '' };
+  var serverData = null, localScore = 0;
+
+  var $ = function (id) { return document.getElementById(id); };
+  function store(k, v) { try { if (v === undefined) return window.localStorage.getItem(k); window.localStorage.setItem(k, v); } catch (e) { return null; } }
+  function sstore(k, v) { try { if (v === undefined) return window.sessionStorage.getItem(k); window.sessionStorage.setItem(k, v); } catch (e) { return null; } }
+
+  function computeScore() {
+    return answers.reduce(function (s, a, i) {
+      var p = PTS[a]; if (quizQuestions[i].inv) p = 2 - p; return s + p;
+    }, 0);
+  }
+
+  /* ═════════ OUVERTURE / FERMETURE ═════════ */
+  window.openQuiz = function () {
+    $('qz-overlay').classList.add('active');
+    document.body.style.overflow = 'hidden';
+    $('qz-fab').style.display = 'none';
+  };
+  window.closeQuiz = function () {
+    sstore('cbl_quiz_closed', '1');
+    $('qz-overlay').classList.remove('active');
+    document.body.style.overflow = 'auto';
+    if (!quizCompleted) {
+      $('qz-fab').style.display = 'flex';
+      $('qz-fab-text').innerText = qIdx > 0 ? 'Reprendre le quiz (' + qIdx + '/15)' : 'Faire le quiz (2 min)';
+    }
+  };
+
+  /* ═════════ QUESTIONS ═════════ */
+  window.startQuestions = function () {
+    $('qz-step-intro').style.display = 'none';
+    $('qz-step-questions').style.display = 'block';
+    renderQ();
+  };
+  function renderQ() {
+    $('qz-count').innerText = 'Question ' + (qIdx + 1) + ' / ' + quizQuestions.length;
+    $('qz-qtext').innerText = quizQuestions[qIdx].t;
+    $('qz-bar').style.width = ((qIdx / quizQuestions.length) * 100) + '%';
+    $('qz-prev').style.display = qIdx > 0 ? 'inline-block' : 'none';
+  }
+  window.handleAnswer = function (val) {
+    answers[qIdx] = val;
+    qIdx++;
+    if (qIdx < quizQuestions.length) { renderQ(); }
+    else {
+      $('qz-bar').style.width = '100%';
+      $('qz-step-questions').style.display = 'none';
+      $('qz-step-lead').style.display = 'block';
+    }
+  };
+  window.prevQuestion = function () {
+    if (qIdx > 0) { qIdx--; renderQ(); }
+  };
+
+  /* ═════════ ESSAI WHATSAPP (Coach IA) ═════════ */
+  window.handleTrialClick = function (e) {
+    if (e && e.preventDefault) e.preventDefault();
+    launchWhatsAppTrial();
+  };
+  function launchWhatsAppTrial() {
+    // Aucun numéro à saisir : la conversation WhatsApp s'ouvre, et le coach demande « voulez-vous démarrer ? » (réponse OUI).
+    var msg = 'Bonjour ! Je souhaite démarrer mon essai offert de 7 jours (via le quiz)' + (serverData && serverData.ref ? ' réf. ' + serverData.ref : '');
+    window.open('https://wa.me/' + WA_COACH_IA + '?text=' + encodeURIComponent(msg), '_blank', 'noopener');
+  }
+
+  /* ═════════ ENVOI À L'API VERCEL ═════════ */
+  function payload() {
+    return {
+      prenom: userLeadData.prenom, nom: userLeadData.nom, email: userLeadData.email, telephone: userLeadData.tel,
+      consent: $('qz-consent').checked === true, answers: answers.slice(), website: $('qz-website').value,
+      source: document.referrer || 'direct', page: location.href
     };
+  }
+  function callApi() {
+    var ctrl = new AbortController();
+    var to = setTimeout(function () { ctrl.abort(); }, 15000);
+    return fetch(API_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload()), signal: ctrl.signal })
+      .then(function (res) { clearTimeout(to); return res.json().catch(function () { return null; }).then(function (data) { return { res: res, data: data }; }); })
+      .catch(function (e) { clearTimeout(to); throw e; });
+  }
 
-    /* Ouverture automatique après délai si non encore validé */
-    try {
-      if (!localStorage.getItem(DONE_KEY)) {
-        setTimeout(function () { 
-          if (overlay && !overlay.classList.contains('cbl-open')) {
-            overlay.classList.add('cbl-open'); 
-          }
-        }, DELAY);
-      }
-    } catch(e) {}
+  var FIELDS = ['prenom', 'email', 'telephone', 'consent'];
+  function showErrors(errs) {
+    var first = null;
+    FIELDS.forEach(function (k) {
+      var el = $('qz-e-' + k), input = k === 'consent' ? $('qz-consent') : $('qz-' + (k === 'telephone' ? 'tel' : k));
+      if (errs && errs[k]) { el.textContent = errs[k]; el.style.display = 'block'; input.setAttribute('aria-invalid', 'true'); if (!first) first = input; }
+      else { el.style.display = 'none'; input.removeAttribute('aria-invalid'); }
+    });
+    var g = $('qz-e-global');
+    if (errs && (errs._ || errs.answers)) { g.textContent = errs._ || errs.answers; g.style.display = 'block'; } else g.style.display = 'none';
+    if (first) first.focus();
+  }
+  function validateLocal() {
+    var e = {}, d = userLeadData;
+    if (!d.prenom) e.prenom = 'Merci de renseigner votre prénom.';
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(d.email)) e.email = "L'adresse e-mail ne semble pas valide.";
+    if (d.tel && !/^\+?[\d\s().-]{7,25}$/.test(d.tel)) e.telephone = 'Numéro invalide (ex. +33 6 12 34 56 78).';
+    if (!$('qz-consent').checked) e.consent = 'Merci de cocher la case pour recevoir votre résultat.';
+    return e;
+  }
 
-    function close() { 
-      if (overlay) overlay.classList.remove('cbl-open'); 
+  window.submitResults = function (ev) {
+    ev.preventDefault();
+    if (busy) return;
+    userLeadData.prenom = $('qz-prenom').value.trim();
+    userLeadData.nom = $('qz-nom').value.trim();
+    userLeadData.email = $('qz-email').value.trim();
+    userLeadData.tel = $('qz-tel').value.trim();
+    var errs = validateLocal(); showErrors(errs);
+    if (Object.keys(errs).length) return;
+
+    busy = true;
+    var btn = $('qz-btn-submit'); btn.disabled = true; btn.innerText = 'Analyse en cours...';
+    localScore = computeScore();
+
+    callApi().then(function (o) { return o; }, function () { return null; }).then(function (o) {
+      busy = false; btn.disabled = false; btn.innerText = 'Découvrir mon profil immédiat ➔';
+      if (o && o.res.status === 400 && o.data && o.data.errors) { showErrors(o.data.errors); return; }
+      serverData = (o && o.res.ok && o.data && o.data.ok) ? o.data : null;
+      showResult();
+    });
+  };
+
+  window.retryMail = function () {
+    var b = $('qz-retry'); if (b) { b.disabled = true; b.innerText = 'Envoi en cours…'; }
+    callApi().then(function (o) { return (o && o.res.ok && o.data && o.data.ok) ? o.data : null; }, function () { return null; })
+      .then(function (d) { if (d) serverData = d; renderMailStatus(); });
+  };
+
+  /* ═════════ RÉSULTAT ═════════ */
+  function showResult() {
+    var score = serverData ? serverData.score : localScore;
+    var code = serverData ? serverData.profil : (score <= 9 ? 'lune' : (score <= 19 ? 'agile' : 'urgence'));
+    var title = '', desc = '', cards = '';
+    var BOOK = (serverData && serverData.bookUrl) || 'https://amzn.eu/d/0fQNaUXS';
+    var bookCard = function (n, label) {
+      return '<a href="' + BOOK + '" target="_blank" rel="noopener" class="cta-card">' +
+        '<div class="cta-card-badge"><span>' + n + ' · ' + label + '</span><span>LIVRE PAPIER 📖</span></div>' +
+        '<div class="cta-card-title">Chalom Bayit, Le LIVRE</div>' +
+        '<div class="cta-card-desc">54 défis hebdomadaires inspirés de la Paracha pour devenir un couple agile, un Chabbat à la fois. Un carnet de bord pour suivre les progrès de votre couple en 10 minutes par semaine.</div>' +
+        '<span class="cta-card-action cta-card-action--gold">Commander mon exemplaire sur Amazon →</span></a>';
+    };
+    var SEANCE = 'https://calendar.app.google/Lkb4zXnia5J5QkBE8';
+
+    if (code === 'lune') {
+      title = 'Profil : Lune de Miel Active ✨';
+      desc = "<p>Vos réponses montrent que votre couple a de vraies ressources. Vous communiquez, vous avancez ensemble.</p>" +
+             "<p>Mais les couples solides ne le restent pas par hasard. Ils investissent avant que les problèmes n'arrivent. <strong>Vous êtes dans la meilleure position pour aller encore plus loin, avec beaucoup moins d'efforts.</strong></p>";
+      cards = bookCard('01', 'Maintenance Préventive') +
+        '<a href="#" onclick="handleTrialClick(event)" class="cta-card">' +
+        '<div class="cta-card-badge"><span>02 · Au Quotidien</span><span>ESSAI 7 JOURS 🎁</span></div>' +
+        '<div class="cta-card-title">Coach IA 24/7 sur WhatsApp</div>' +
+        '<div class="cta-card-desc">7 jours d\'essai offerts pour désamorcer les tensions et entretenir votre complicité.</div>' +
+        '<span class="cta-card-action cta-card-action--wa">Tester sur WhatsApp →</span></a>';
+    } else if (code === 'agile') {
+      title = 'Profil : Révision Agile Nécessaire 🔧';
+      desc = "<p>Votre couple fonctionne, mais pas à son plein potentiel. Il y a des zones de friction récurrentes, des besoins non exprimés.</p>" +
+             "<p><strong>Ce n'est pas une crise : c'est un signal.</strong> Et les signaux, ça s'écoute avant que ça devienne une panne. N'attendez pas.</p>";
+      cards = '<a href="' + SEANCE + '" target="_blank" rel="noopener" class="cta-card">' +
+        '<div class="cta-card-badge"><span>01 · Coaching Privé</span><span>CONSULTATION EN VISIO 👩‍💻</span></div>' +
+        '<div class="cta-card-title">Séance avec Alison (Humain)</div>' +
+        '<div class="cta-card-desc">Séance sur-mesure pour réaligner vos besoins, désamorcer les non-dits et repartir avec des actions concrètes.</div>' +
+        '<span class="cta-card-action cta-card-action--pink">Réserver ma séance (100 €) →</span></a>' +
+        bookCard('02', 'Révision Agile') +
+        '<a href="https://buy.stripe.com/8x29AU9FG4kK7uobRu6g801" target="_blank" rel="noopener" class="cta-card">' +
+        '<div class="cta-card-badge"><span>03 · Autonomie</span><span>COACH IA 📊</span></div>' +
+        '<div class="cta-card-title">Bilan de couple complet avec l\'IA</div>' +
+        '<div class="cta-card-desc">Un bilan approfondi en autonomie + 1 mois d\'accès au Coach IA de Poche sur WhatsApp.</div>' +
+        '<span class="cta-card-action cta-card-action--wa">Faire mon bilan IA (49 €) →</span></a>';
+    } else {
+      title = 'Profil : Urgence de Reconnexion 🌿';
+      desc = "<p>Vos réponses me parlent d'un couple qui souffre. Disputes qui s'éternisent, connexion qui s'effrite, solitude à deux.</p>" +
+             "<p>Ce que vous vivez est difficile, mais ce n'est pas une fatalité. La très grande majorité des couples qui souffrent peuvent se reconstruire. <strong>Vous n'avez pas à continuer comme ça.</strong></p>" +
+             '<p style="font-size:0.88rem; color:#E2C266; font-style:italic;">Si votre conjoint n\'est pas prêt à venir, ce n\'est pas un obstacle : on en parle directement lors de la séance.</p>';
+      cards = '<a href="' + SEANCE + '" target="_blank" rel="noopener" class="cta-card cta-card--calm">' +
+        '<div class="cta-card-badge"><span>01 · Priorité Reconnexion</span><span>CONSULTATION EN VISIO 🕊️</span></div>' +
+        '<div class="cta-card-title">Séance Déblocage avec Alison</div>' +
+        '<div class="cta-card-desc">Même si tout semble bloqué, la méthode Chalom Bayit Le LAB peut vous aider. Consultation en visio pour poser la situation à plat.</div>' +
+        '<span class="cta-card-action cta-card-action--gold">Réserver ma séance (100 €) →</span></a>' +
+        '<div class="cta-card cta-card--calm" style="cursor:default;">' +
+        '<div class="cta-card-badge"><span>02 · Contact Direct</span><span>MON NUMÉRO PRIVÉ 💬</span></div>' +
+        '<div class="cta-card-title">Échanger avec moi en direct</div>' +
+        '<div class="cta-card-desc">Je vous envoie <strong>mon numéro privé par e-mail</strong>. Vous pourrez m\'écrire ou m\'envoyer une note vocale de 2 minutes maximum, et je vous répondrai personnellement. Pensez à vérifier vos courriers indésirables.</div>' +
+        '<span class="cta-card-action cta-card-action--gold">✉️ Dans votre boîte mail</span></div>';
     }
 
-    var closeBtn = document.getElementById('cbl-close');
-    if (closeBtn) closeBtn.addEventListener('click', close);
-    if (overlay) {
-      overlay.addEventListener('click', function (e) { if (e.target === overlay) close(); });
+    quizCompleted = true;
+    store('cbl_quiz_done', '1');
+    $('qz-step-lead').style.display = 'none';
+    $('qz-res-heading').innerText = title;
+    $('qz-res-text').innerHTML = desc;
+    $('qz-res-actions').innerHTML = cards;
+    renderMailStatus();
+    $('qz-step-result').style.display = 'block';
+    $('qz-overlay').scrollTop = 0;
+  }
+
+  function renderMailStatus() {
+    var box = $('qz-res-mail');
+    if (serverData && serverData.limited) {
+      box.innerHTML = '<p class="qz-mail-ok">✦ Vous avez déjà reçu ce diagnostic par e-mail plusieurs fois : pensez à vérifier vos courriers indésirables, ou écrivez-moi simplement à malka@chalombayitlelab.com ✦</p>';
+    } else if (serverData && serverData.emailSent) {
+      box.innerHTML = '<p class="qz-mail-ok">✦ Votre diagnostic a été envoyé par e-mail (pensez à vérifier vos courriers indésirables) ✦</p>';
+    } else {
+      box.innerHTML = '<div class="qz-mail-ko">⚠️ Je n\'ai pas réussi à vous envoyer l\'e-mail pour le moment. Votre résultat est bien affiché ci-dessus.<br><button id="qz-retry" onclick="retryMail()">Réessayer l\'envoi</button></div>';
     }
-    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
+  }
 
-    if (form) {
-      form.addEventListener('submit', async function (e) {
-        e.preventDefault();
-        errEl.style.display = 'none';
-
-        var prenom = document.getElementById('cbl-prenom').value.trim();
-        var email  = document.getElementById('cbl-email').value.trim();
-        var tel    = document.getElementById('cbl-tel').value.trim();
-
-        if (!prenom || !email) {
-          errEl.textContent = 'Merci de renseigner ton prénom et ton email.';
-          errEl.style.display = 'block'; 
-          return;
-        }
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-          errEl.textContent = 'Adresse email invalide.';
-          errEl.style.display = 'block'; 
-          return;
-        }
-
-        btn.disabled = true;
-        btn.textContent = 'Envoi en cours…';
-
-        try {
-          var res = await fetch(API, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              prenom:    prenom,
-              email:     email,
-              telephone: tel || null,
-              source:    'ebook_tichri_site',
-              date:      new Date().toISOString()
-            })
-          });
-
-          // Make renvoie statut 200 "Accepted", ce qui valide l'envoi
-          if (!res.ok) {
-            throw new Error('Erreur réseau HTTP ' + res.status);
-          }
-
-          /* Succès */
-          form.style.display = 'none';
-          var tag = document.querySelector('.cbl-tagline');
-          if (tag) tag.style.display = 'none';
-          var chips = document.querySelector('.cbl-chips');
-          if (chips) chips.style.display = 'none';
-          var rgpd = document.querySelector('.cbl-rgpd');
-          if (rgpd) rgpd.style.display = 'none';
-
-          success.style.display = 'block';
-          try { localStorage.setItem(DONE_KEY, '1'); } catch(e) {}
-
-        } catch (err) {
-          btn.disabled    = false;
-          btn.textContent = '💎 Recevoir mon ebook gratuitement';
-          errEl.textContent = 'Une erreur est survenue — réessaie ou écris-moi sur Instagram 🙏';
-          errEl.style.display = 'block';
-          console.error('[CBL Submit]', err);
-        }
-      });
+  /* ═════════ OUVERTURE AUTOMATIQUE : le quiz est la première chose que voit le visiteur ═════════
+     (sauf s'il l'a déjà terminé, ou fermé volontairement pendant cette visite) */
+  /* Variante Alya : ajouter ?v=alya à l'adresse (lien à partager aux familles qui préparent l'alya) */
+  try {
+    if (/[?&]v=alya/i.test(location.search)) {
+      var h = document.querySelector('.qz-hook');
+      if (h) h.innerHTML = '\ud83c\uddee\ud83c\uddf1 Votre couple est-il <span>prêt pour l\u2019Alya</span>&nbsp;?';
+      var sub = document.querySelector('#qz-step-intro .qz-sub');
+      if (sub) sub.innerHTML = 'Un déménagement, une nouvelle langue, une administration à apprivoiser : <strong style="color:#F0EDE6;">l\u2019Alya met les couples sous pression, et fait remonter les fissures qu\u2019on avait mises de côté.</strong><br>Repérez où vous en êtes en 2 minutes, avant le grand départ.';
+      var pill = document.querySelector('#qz-step-intro .qz-pill');
+      if (pill) pill.textContent = 'Test gratuit · Spécial Alya · 2 minutes · 15 questions';
     }
-  })();
-  </script>
+  } catch (e) {}
+  function autoOpen() {
+    if (store('cbl_quiz_done')) return;
+    if (sstore('cbl_quiz_closed')) { $('qz-fab').style.display = 'flex'; $('qz-fab-text').innerText = 'Faire le quiz (2 min)'; return; }
+    window.openQuiz();
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', autoOpen); else autoOpen();
+})();
+</script>
+<!-- ════════════════════════════════════════════════════════════════════════════════ -->
+
 
 </body>
 </html>

@@ -9,5 +9,11 @@
       "src": "/(.*)",
       "dest": "/$1"
     }
+  ],
+  "crons": [
+    {
+      "path": "/api/cron-sequence",
+      "schedule": "0 7 * * *"
+    }
   ]
 }
