@@ -68,7 +68,7 @@ async function runIntake(from, body, profileName, ctx = {}) {
   }
   const f = (rec && rec.fields) || {};
   const status = String(f.Statut_Coach_IA || '');
-  if (rec && rec.id) ctx.recId = rec.id;
+  if (rec && rec.id) { ctx.recId = rec.id; ctx.name = f.Prenom_contact || f['Prénom_contact'] || ''; }
 
   if (status === 'MODE_BILAN' || status === 'MODE_VIP') return { handled: false };
 
@@ -83,6 +83,7 @@ async function runIntake(from, body, profileName, ctx = {}) {
       if (isSkip(text)) { await patch(rec.id, { Etape_onboarding: 'email' }); return { handled: true, reply: T.askEmail('') }; }
       const n = parseName(text);
       if (!n) { await patch(rec.id, { Etape_onboarding: 'fini' }); return { handled: false }; }
+      ctx.name = n.prenom;
       const upd = { Etape_onboarding: 'email', Prenom_contact: n.prenom };
       if (n.nom) upd.Nom_Famille = n.nom;
       await patch(rec.id, upd);
@@ -135,7 +136,7 @@ async function logExchange(recId, userText, reply, name) {
   const url = `https://api.airtable.com/v0/${process_env('AIRTABLE_BASE_ID') || 'appoelLZhjYcrttEa'}/tblB1AFnEiYW9xonr`;
   const now = Date.now();
   const rows = [];
-  if (String(userText || '').trim()) rows.push({ 'Lien couple': [recId], Message: String(userText).slice(0, 4000), Timestamp: new Date(now - 2000).toISOString(), Qui_a_parle: 'Utilisateur' });
+  if (String(userText || '').trim()) rows.push({ 'Lien couple': [recId], Message: String(userText).slice(0, 4000), Timestamp: new Date(now - 2000).toISOString(), Qui_a_parle: String(name || 'Utilisateur').slice(0, 60) });
   if (reply) rows.push({ 'Lien couple': [recId], Message: String(reply).slice(0, 4000), Timestamp: new Date(now).toISOString(), Qui_a_parle: 'Coach_IA' });
   for (const fields of rows) {
     try { await core.at(url, { method: 'POST', body: JSON.stringify({ fields, typecast: true }) }); }
@@ -160,7 +161,7 @@ module.exports = async function handler(req, res) {
     const ctx = {};
     const out = await runIntake(from, body, b && b.profile_name, ctx);
     // on garde l'échange d'accueil dans l'historique : le Coach IA a ainsi du contexte (et une conversation à lire) dès le premier vrai message
-    if (out.handled && ctx.recId) await logExchange(ctx.recId, body, out.reply, b && b.profile_name);
+    if (out.handled && ctx.recId) await logExchange(ctx.recId, body, out.reply, ctx.name || (b && b.profile_name));
     out.action = out.handled ? 'reply' : 'ai';
     return res.status(200).json(out);
   } catch (e) {
