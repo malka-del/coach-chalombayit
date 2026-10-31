@@ -1,0 +1,13 @@
+{
+  "email": "malka@chalombayitlelab.com",
+  "subject": "Test d'envoi",
+  "html": "<p>Bonjour, ceci est un test.</p>",
+  "etape": "J0",
+  "profil": "agile",
+  "profil_label": "Révision Agile Nécessaire",
+  "score": 14,
+  "prenom": "Test",
+  "nom": "",
+  "telephone": "",
+  "unsub_url": "https://coach-chalombayit.vercel.app/api/unsubscribe"
+}
