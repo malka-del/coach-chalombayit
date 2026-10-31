@@ -52,7 +52,7 @@ async function findByPhone(phone) {
 }
 const patch = (id, fields) => core.atWrite('PATCH', core.atUrl(`/${id}`), fields);
 
-async function runIntake(from, body, profileName) {
+async function runIntake(from, body, profileName, ctx = {}) {
   let rec = await findByPhone(from);
   // Message venant du quiz : « réf. recXXXX-xxxxxxxx » -> on rattache ce numéro à la fiche du quiz
   const refId = core.parseRef(body);
@@ -68,6 +68,7 @@ async function runIntake(from, body, profileName) {
   }
   const f = (rec && rec.fields) || {};
   const status = String(f.Statut_Coach_IA || '');
+  if (rec && rec.id) ctx.recId = rec.id;
 
   if (status === 'MODE_BILAN' || status === 'MODE_VIP') return { handled: false };
 
@@ -94,6 +95,7 @@ async function runIntake(from, body, profileName) {
         const other = await core.findByEmail(email).catch(() => null);
         if (other && other.id !== rec.id) {
           // cet e-mail a déjà une fiche (ex. quiz) : on y rattache le numéro et l'essai, la fiche WhatsApp est mise de côté
+          ctx.recId = other.id;
           await patch(other.id, { Telephone_contact: from, Statut_Coach_IA: 'MODE_SOUTIEN', Date_debut_essai: f.Date_debut_essai || core.parisDate(), Etape_onboarding: 'defi', Rappel_essai_envoye: false });
           await patch(rec.id, { Telephone_contact: '', Statut_Coach_IA: null, Etape_onboarding: 'fini', Notes_coach_humain: `Fiche fusionnée avec ${other.id} (même e-mail, numéro ${from}).` });
         } else {
@@ -123,9 +125,22 @@ async function runIntake(from, body, profileName) {
       Statut_Coach_IA: 'MODE_SOUTIEN', Date_debut_essai: today, Etape_onboarding: 'nom',
     };
     if (pname) fields.Prenom_contact = pname;
-    await core.atWrite('POST', core.atUrl(), fields);
+    const made = await core.atWrite('POST', core.atUrl(), fields);
+    ctx.recId = made && made.id;
   }
   return { handled: true, reply: T.welcome };
+}
+
+async function logExchange(recId, userText, reply, name) {
+  const url = `https://api.airtable.com/v0/${process_env('AIRTABLE_BASE_ID') || 'appoelLZhjYcrttEa'}/tblB1AFnEiYW9xonr`;
+  const now = Date.now();
+  const rows = [];
+  if (String(userText || '').trim()) rows.push({ 'Lien couple': [recId], Message: String(userText).slice(0, 4000), Timestamp: new Date(now - 2000).toISOString(), Qui_a_parle: String(name || 'Utilisateur').slice(0, 60) });
+  if (reply) rows.push({ 'Lien couple': [recId], Message: String(reply).slice(0, 4000), Timestamp: new Date(now).toISOString(), Qui_a_parle: 'Coach_IA' });
+  for (const fields of rows) {
+    try { await core.at(url, { method: 'POST', body: JSON.stringify({ fields, typecast: true }) }); }
+    catch (e) { console.error('[whatsapp-intake] historique:', e.message); }
+  }
 }
 
 module.exports = async function handler(req, res) {
@@ -142,7 +157,10 @@ module.exports = async function handler(req, res) {
   const body = String((b && b.body) || '').slice(0, 4000);
 
   try {
-    const out = await runIntake(from, body, b && b.profile_name);
+    const ctx = {};
+    const out = await runIntake(from, body, b && b.profile_name, ctx);
+    // on garde l'échange d'accueil dans l'historique : le Coach IA a ainsi du contexte (et une conversation à lire) dès le premier vrai message
+    if (out.handled && ctx.recId) await logExchange(ctx.recId, body, out.reply, b && b.profile_name);
     out.action = out.handled ? 'reply' : 'ai';
     return res.status(200).json(out);
   } catch (e) {
