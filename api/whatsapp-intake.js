@@ -135,7 +135,7 @@ async function logExchange(recId, userText, reply, name) {
   const url = `https://api.airtable.com/v0/${process_env('AIRTABLE_BASE_ID') || 'appoelLZhjYcrttEa'}/tblB1AFnEiYW9xonr`;
   const now = Date.now();
   const rows = [];
-  if (String(userText || '').trim()) rows.push({ 'Lien couple': [recId], Message: String(userText).slice(0, 4000), Timestamp: new Date(now - 2000).toISOString(), Qui_a_parle: String(name || 'Utilisateur').slice(0, 60) });
+  if (String(userText || '').trim()) rows.push({ 'Lien couple': [recId], Message: String(userText).slice(0, 4000), Timestamp: new Date(now - 2000).toISOString(), Qui_a_parle: 'Utilisateur' });
   if (reply) rows.push({ 'Lien couple': [recId], Message: String(reply).slice(0, 4000), Timestamp: new Date(now).toISOString(), Qui_a_parle: 'Coach_IA' });
   for (const fields of rows) {
     try { await core.at(url, { method: 'POST', body: JSON.stringify({ fields, typecast: true }) }); }
