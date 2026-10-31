@@ -1729,11 +1729,11 @@
         '<div class="cta-card-title">Séance Déblocage avec Alison</div>' +
         '<div class="cta-card-desc">Même si tout semble bloqué, la méthode Chalom Bayit Le LAB peut vous aider. Consultation en visio pour poser la situation à plat.</div>' +
         '<span class="cta-card-action cta-card-action--gold">Réserver ma séance (100 €) →</span></a>' +
-        '<a href="' + alisonContactHref() + '" target="_blank" rel="noopener" class="cta-card">' +
-        '<div class="cta-card-badge"><span>02 · Contact Direct</span><span>WHATSAPP ALISON 💬</span></div>' +
-        '<div class="cta-card-title">Échanger avec Alison sur WhatsApp</div>' +
-        '<div class="cta-card-desc">Envoyez-moi un message court ou une note vocale de 2 minutes maximum. Je vous répondrai personnellement pour mieux comprendre votre situation.</div>' +
-        '<span class="cta-card-action cta-card-action--wa">Envoyer mon audio (2 min max) →</span></a>';
+        '<div class="cta-card cta-card--calm" style="cursor:default;">' +
+        '<div class="cta-card-badge"><span>02 · Contact Direct</span><span>MON NUMÉRO PRIVÉ 💬</span></div>' +
+        '<div class="cta-card-title">Échanger avec moi en direct</div>' +
+        '<div class="cta-card-desc">Je vous envoie <strong>mon numéro privé par e-mail</strong>. Vous pourrez m\'écrire ou m\'envoyer une note vocale de 2 minutes maximum, et je vous répondrai personnellement. Pensez à vérifier vos courriers indésirables.</div>' +
+        '<span class="cta-card-action cta-card-action--gold">✉️ Dans votre boîte mail</span></div>';
     }
 
     quizCompleted = true;
@@ -1745,12 +1745,6 @@
     renderMailStatus();
     $('qz-step-result').style.display = 'block';
     $('qz-overlay').scrollTop = 0;
-  }
-
-  /* Le numéro perso d'Alison n'est jamais dans la page : le bouton passe par /api/ecrire-alison (redirection vers WhatsApp au clic). */
-  function alisonContactHref() {
-    if (serverData && serverData.contact) return API_URL.replace('submit-quiz', 'ecrire-alison');
-    return 'mailto:malka@chalombayitlelab.com?subject=' + encodeURIComponent('Suite à mon quiz (profil urgence)');
   }
 
   function renderMailStatus() {

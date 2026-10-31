@@ -13,6 +13,7 @@ const LINKS = {
   bilanIA: 'https://buy.stripe.com/8x29AU9FG4kK7uobRu6g801',
   essai: 'https://wa.me/33974997226?text=Bonjour%20!%20Je%20veux%20d%C3%A9marrer%20mon%20essai%20offert',
   site: 'https://coach.chalombayitlelab.com',
+  abonnement: 'https://buy.stripe.com/dRmeVeg4418y3e89Jm6g800',
 };
 
 const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -29,6 +30,7 @@ const HEADERS = {
   lune:    { from: '#B8860B', to: '#8C6512', accent: '#38BDF8' },
   agile:   { from: '#B8860B', to: '#8C6512', accent: '#F472B6' },
   urgence: { from: '#0E7490', to: '#155E75', accent: '#A5F3FC' }, // teintes apaisantes, pas de rouge
+  essai:   { from: '#B8860B', to: '#8C6512', accent: '#38BDF8' },
 };
 const PROFIL_LABEL = { lune: 'Lune de Miel Active ✨', agile: 'Révision Agile Nécessaire 🔧', urgence: 'Urgence de Reconnexion 🌿' };
 
@@ -51,13 +53,14 @@ function content(profil, etape, ctx) {
     desc: "Votre bilan avec le Coach IA, suivi d'un debrief de 30 minutes en visio avec moi. 89 € au lieu de 129 € (prix de lancement).",
     label: '📅 Réserver mon bilan →', href: LINKS.hybride };
   const seanceCiblee = seance('Séance ciblée', 'Une heure sur un point précis', "Pour débloquer une situation précise, seul(e) ou en couple. Vous repartez avec des outils concrets à appliquer dès le soir.");
-  const wa = { card: true, accent: 'green', kicker: 'Contact direct', title: 'M\'écrire sur WhatsApp',
-    desc: "Envoyez-moi un message ou une note vocale de 2 minutes pour m'expliquer votre situation. Je vous réponds personnellement.",
-    label: '💬 Discuter sur WhatsApp →', href: waAlisonHref() };
-  if (!wa.href) { // numéro perso non configuré : on bascule sur « répondez à ce mail »
-    wa.title = 'M\'écrire directement'; wa.label = '✉️ Répondre à ce mail →'; wa.href = 'mailto:malka@chalombayitlelab.com';
-    wa.desc = "Répondez simplement à cet e-mail pour m'expliquer votre situation. Je vous réponds personnellement.";
-  }
+  const ph = alisonPhone();
+  const wa = ph
+    ? { card: true, accent: 'green', kicker: 'Contact direct', title: 'M\'écrire sur WhatsApp',
+        desc: `Voici mon numéro privé : ${ph.pretty}. Envoyez-moi un message ou une note vocale de 2 minutes pour m'expliquer votre situation. Je vous réponds personnellement.`,
+        label: '💬 Ouvrir WhatsApp →', href: ph.href }
+    : { card: true, accent: 'green', kicker: 'Contact direct', title: 'M\'écrire directement',
+        desc: "Répondez simplement à cet e-mail pour m'expliquer votre situation. Je vous réponds personnellement.",
+        label: '✉️ Répondre à ce mail →', href: 'mailto:malka@chalombayitlelab.com' };
   const reply = { p: "Une question, un doute ? **Répondez simplement à cet e-mail** : je lis tout et je réponds personnellement." };
   const sep = { sep: true };
   const SECU3 = "P.S. Si, à un moment, vous ne vous sentez pas en sécurité chez vous, ce n'est plus un sujet de coaching mais de protection : en France, le 3919 (gratuit et anonyme) ; en cas de danger immédiat, le 17 en France ou le 100 en Israël.";
@@ -187,6 +190,24 @@ function content(profil, etape, ctx) {
         { note: SECU10 },
       ],
     },
+    'J6:essai': {
+      subject: '{prenom}, demain, votre essai du Coach IA se termine',
+      pre: 'Un petit mot pour que vous ne soyez pas pris(e) de court.',
+      reason: "Vous avez démarré votre essai offert du Coach IA sur WhatsApp.",
+      kicker: 'Votre essai offert', title: 'Demain, votre essai se termine', sub: 'Pour continuer à avancer, sans interruption',
+      blocks: [
+        { p: "Voilà 6 jours que vous échangez avec Notre coach de poche, et **demain, votre essai offert de 7 jours se termine**." },
+        { p: "Si ces échanges vous ont aidé(e), même un peu, à poser un mot, à respirer avant de répondre, à voir votre couple autrement, vous pouvez continuer avec le même coach, disponible à toute heure, **sans interruption**." },
+        { card: true, accent: 'gold', kicker: 'Pour continuer', title: 'Je m\'abonne au Coach IA',
+          desc: "Vous gardez le même coach sur WhatsApp, avec votre historique et son suivi, supervisé par moi. Sans engagement de durée.",
+          label: '✨ Poursuivre avec le Coach IA →', href: LINKS.abonnement },
+        { p: "Vous n'êtes pas sûr(e) que ce soit le bon moment, ou vous avez une question ? **Répondez simplement à cet e-mail** : je lis tout et je réponds personnellement." },
+        sep, { label: 'Pour aller plus loin' },
+        bilanIA,
+        seanceCalme('Ou directement avec moi', 'Une séance avec moi', "En visio, seul(e) ou en couple. Vous n'avez rien à préparer."),
+        { note: "Si vous ne souhaitez pas poursuivre, vous n'avez rien à faire : votre essai s'arrête simplement, sans aucun prélèvement." },
+      ],
+    },
   };
   return C[`${etape}:${profil}`];
 }
@@ -239,10 +260,14 @@ function renderBlock(b, ctx) {
 
 const sub = (s, ctx) => String(s).replace(/\{prenom\}/g, ctx.prenom);
 
-/* Lien « écrire à Alison » : passe par /api/ecrire-alison, donc le numéro perso n'apparaît jamais dans le mail ni dans le code. */
-function waAlisonHref() {
-  if (String(process.env.ALISON_WA || '').replace(/\D/g, '').length < 8) return '';
-  return (process.env.API_BASE_URL || 'https://coach-chalombayit.vercel.app').replace(/\/$/, '') + '/api/ecrire-alison';
+/* Numéro privé d'Alison : lu dans la variable Vercel ALISON_WA (jamais dans le code public). Il n'apparaît que dans les mails envoyés. */
+function alisonPhone() {
+  const n = String(process.env.ALISON_WA || '').replace(/\D/g, '');
+  if (n.length < 8) return null;
+  const pretty = n.startsWith('33') && n.length === 11
+    ? '+33 ' + n.slice(2, 3) + ' ' + n.slice(3).replace(/(\d{2})(?=\d)/g, '$1 ').trim()
+    : '+' + n;
+  return { href: 'https://wa.me/' + n, pretty };
 }
 function buildEmail({ etape, profil, prenom, score, unsubUrl, bookUrl }) {
   const ctx = { prenom: String(prenom || '').trim() || 'Bonjour', score: Number(score), bookUrl: bookUrl || 'https://amzn.eu/d/0fQNaUXS', hdr: HEADERS[profil] };
@@ -276,7 +301,7 @@ function buildEmail({ etape, profil, prenom, score, unsubUrl, bookUrl }) {
     </td></tr>
   </table>
   <table role="presentation" width="560" cellpadding="0" cellspacing="0" style="width:100%;max-width:560px;"><tr><td style="padding:16px 12px 0;text-align:center;">
-    <p style="font-family:${F_SANS};font-size:11.5px;color:#7C766B;line-height:1.7;margin:0;">Vous recevez cet e-mail parce que vous avez fait mon quiz sur coach.chalombayitlelab.com.<br>Si vous répondez à ce message, c'est moi qui vous lis.<br><a href="${esc(unsubUrl)}" style="color:#7C766B;text-decoration:underline;">Me désinscrire en 1 clic</a></p>
+    <p style="font-family:${F_SANS};font-size:11.5px;color:#7C766B;line-height:1.7;margin:0;">${esc(c.reason || 'Vous recevez cet e-mail parce que vous avez fait mon quiz sur coach.chalombayitlelab.com.')}<br>Si vous répondez à ce message, c'est moi qui vous lis.<br><a href="${esc(unsubUrl)}" style="color:#7C766B;text-decoration:underline;">Me désinscrire en 1 clic</a></p>
   </td></tr></table>
 </td></tr></table>
 </body></html>`;
