@@ -1475,7 +1475,6 @@
         <div id="qz-e-email" class="qz-err" style="display:none;"></div>
         <input type="tel" id="qz-tel" class="qz-field" style="display:none" tabindex="-1" aria-hidden="true" placeholder="Votre WhatsApp, avec indicatif (facultatif)" autocomplete="tel" inputmode="tel">
         <div id="qz-e-telephone" class="qz-err" style="display:none;"></div>
-        <p class="qz-field-hint">💡 Renseigner votre WhatsApp permet d'activer immédiatement votre essai de 7 jours offerts sans nouvelle démarche.</p>
         <div class="qz-hp" aria-hidden="true"><label>Ne pas remplir<input type="text" id="qz-website" tabindex="-1" autocomplete="off"></label></div>
 
         <label class="qz-consent">
@@ -1500,16 +1499,7 @@
 </div>
 
 <!-- Modal express numéro WhatsApp (si omis lors du quiz) -->
-<div id="qz-tel-modal">
-  <div class="qz-tel-box">
-    <p style="font-size:1.2rem; margin-bottom:8px;">📲</p>
-    <h3 style="color:#FFFFFF; font-size:1.1rem; margin-bottom:8px; font-family:'DM Serif Display', Georgia, serif;">Activer votre essai 7 jours offerts</h3>
-    <p style="font-size:0.85rem; color:#8A8FA8; margin-bottom:14px; line-height:1.5;">Indiquez votre numéro WhatsApp pour démarrer vos échanges avec le Coach IA :</p>
-    <input type="tel" id="qz-modal-tel-input" class="qz-field" placeholder="06 12 34 56 78">
-    <button onclick="confirmModalTel()" class="btn btn--wa" style="width:100%; padding:12px; font-size:0.85rem;">Accéder au Coach IA sur WhatsApp ➔</button>
-    <button onclick="closeModalTel()" style="background:none; border:none; color:#8A8FA8; font-size:0.75rem; margin-top:10px; cursor:pointer;">Annuler</button>
-  </div>
-</div>
+
 
 <!-- Bouton flottant de reprise -->
 <button id="qz-fab" onclick="openQuiz()"><span>📊</span> <span id="qz-fab-text">Reprendre le quiz</span></button>
@@ -1599,18 +1589,12 @@
 
   /* ═════════ ESSAI WHATSAPP (Coach IA) ═════════ */
   window.handleTrialClick = function (e) {
-    e.preventDefault();
-    if (userLeadData.tel && userLeadData.tel.replace(/\D/g, '').length >= 6) launchWhatsAppTrial();
-    else $('qz-tel-modal').classList.add('active');
+    if (e && e.preventDefault) e.preventDefault();
+    launchWhatsAppTrial();
   };
-  window.confirmModalTel = function () {
-    var val = $('qz-modal-tel-input').value.trim();
-    if (val.replace(/\D/g, '').length >= 6) { userLeadData.tel = val; window.closeModalTel(); launchWhatsAppTrial(); }
-    else alert('Merci de renseigner un numéro de téléphone valide.');
-  };
-  window.closeModalTel = function () { $('qz-tel-modal').classList.remove('active'); };
   function launchWhatsAppTrial() {
-    var msg = 'Bonjour ! Je souhaite démarrer mon essai offert de 7 jours (Inscrit(e) via le quiz' + (userLeadData.prenom ? ' : ' + userLeadData.prenom : '') + ')';
+    // Aucun numéro à saisir : la conversation WhatsApp s'ouvre, et le coach demande « voulez-vous démarrer ? » (réponse OUI).
+    var msg = 'Bonjour ! Je souhaite démarrer mon essai offert de 7 jours (via le quiz)' + (serverData && serverData.ref ? ' réf. ' + serverData.ref : '');
     window.open('https://wa.me/' + WA_COACH_IA + '?text=' + encodeURIComponent(msg), '_blank', 'noopener');
   }
 

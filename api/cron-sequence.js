@@ -1,7 +1,7 @@
 'use strict';
 /**
  * GET /api/cron-sequence  (appelé chaque jour par Vercel Cron, voir vercel.json)
- * Envoie les mails J+3 et J+10 aux prospects du quiz via le webhook Make.
+ * Envoie les mails J+3 et J+10 aux prospects du quiz, et le rappel de fin d'essai (J+6) du Coach IA, via le webhook Make.
  *
  * Règles :
  *  - seulement les prospects avec Date_quiz renseignée, Statut_Client = « Prospect »,
@@ -17,6 +17,8 @@ const core = require('./_lib/core');
 const STEPS = [
   { etape: 'J3',  flag: 'Sequence_J3',  min: 3,  max: 6 },
   { etape: 'J10', flag: 'Sequence_J10', min: 10, max: 14 },
+  // Fin d'essai du Coach IA (WhatsApp) : « demain votre essai se termine », 6 à 7 jours après le début de l'essai.
+  { etape: 'J6', flag: 'Rappel_essai_envoye', min: 6, max: 7, trial: true },
 ];
 const MAX_PER_RUN = 100;
 
@@ -35,8 +37,10 @@ module.exports = async function handler(req, res) {
   let budget = MAX_PER_RUN;
 
   for (const step of STEPS) {
-    const days = "DATETIME_DIFF(TODAY(), {Date_quiz}, 'days')";
-    const formula = `AND({Date_quiz}, {Profil_Quiz}, {Statut_Client}='Prospect', NOT({Desinscrit}), NOT({${step.flag}}), ${days}>=${step.min}, ${days}<=${step.max})`;
+    const days = step.trial ? "DATETIME_DIFF(TODAY(), {Date_debut_essai}, 'days')" : "DATETIME_DIFF(TODAY(), {Date_quiz}, 'days')";
+    const formula = step.trial
+      ? `AND({Date_debut_essai}, {Statut_Coach_IA}='MODE_SOUTIEN', {Email_contact}, NOT({Desinscrit}), NOT({${step.flag}}), ${days}>=${step.min}, ${days}<=${step.max})`
+      : `AND({Date_quiz}, {Profil_Quiz}, {Statut_Client}='Prospect', NOT({Desinscrit}), NOT({${step.flag}}), ${days}>=${step.min}, ${days}<=${step.max})`;
     let records = [];
     try {
       const json = await core.at(`${core.atUrl()}?pageSize=100&filterByFormula=${encodeURIComponent(formula)}`);
@@ -51,8 +55,8 @@ module.exports = async function handler(req, res) {
       if (budget <= 0) break;
       const f = rec.fields || {};
       const email = pick(f, ['Email_contact', 'Email_Femme', 'Email_Mari']).toLowerCase();
-      const prenom = pick(f, ['Prénom_contact', 'Prenom_Femme', 'Prenom_Mari']) || 'Bonjour';
-      const profile = core.profileFromAirtable(f.Profil_Quiz);
+      const prenom = pick(f, ['Prenom_contact', 'Prénom_contact', 'Prenom_Femme', 'Prenom_Mari']) || 'Bonjour';
+      const profile = step.trial ? { code: 'essai', label: 'Essai Coach IA' } : core.profileFromAirtable(f.Profil_Quiz);
       const score = Number(f.Score_quiz);
       if (!email || !profile) { summary.skipped.push({ id: rec.id, etape: step.etape, why: 'email ou profil manquant' }); continue; }
       if (dry) { summary.sent.push({ etape: step.etape, email, profil: profile.code }); continue; }

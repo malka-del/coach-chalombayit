@@ -129,6 +129,20 @@ function verifyEmail(email, token) {
     return false;
   }
 }
+/* Référence courte liée à une fiche (pour relier le WhatsApp de l'essai à la fiche du quiz) : id Airtable + signature. */
+function makeRef(recId) {
+  const secret = process.env.UNSUB_SECRET;
+  if (!secret || !recId) return '';
+  return `${recId}-${crypto.createHmac('sha256', secret).update('ref:' + recId).digest('base64url').slice(0, 8)}`;
+}
+function parseRef(text) {
+  const m = /(rec[A-Za-z0-9]{14})-([A-Za-z0-9_-]{8})/.exec(String(text || ''));
+  if (!m) return '';
+  const want = makeRef(m[1]);
+  const a = Buffer.from(want), b = Buffer.from(`${m[1]}-${m[2]}`);
+  return want && a.length === b.length && crypto.timingSafeEqual(a, b) ? m[1] : '';
+}
+
 function unsubUrl(email) {
   return `${apiBase()}/api/unsubscribe?e=${encodeURIComponent(email)}&t=${signEmail(email)}`;
 }
@@ -186,6 +200,21 @@ async function at(url, opts = {}) {
   return json;
 }
 
+/* Le champ prénom existe sous « Prenom_contact » (production WhatsApp) ; on retente avec l'autre orthographe si Airtable ne le connaît pas. */
+const ALIAS = { 'Prenom_contact': 'Prénom_contact', 'Prénom_contact': 'Prenom_contact' };
+async function atWrite(method, url, fields) {
+  const send = (f) => at(url, { method, body: JSON.stringify({ fields: f, typecast: true }) });
+  try { return await send(fields); }
+  catch (e) {
+    const m = e.status === 422 && /Unknown field name: "([^"]+)"/.exec(e.message);
+    if (m && ALIAS[m[1]] && Object.prototype.hasOwnProperty.call(fields, m[1])) {
+      const f2 = {}; for (const k of Object.keys(fields)) f2[k === m[1] ? ALIAS[m[1]] : k] = fields[k];
+      return send(f2);
+    }
+    throw e;
+  }
+}
+
 const fEsc = (s) => String(s).replace(/\\/g, '\\\\').replace(/"/g, '\\"');
 
 async function findByEmail(email) {
@@ -212,19 +241,19 @@ async function upsertProspect(d, result) {
       Reponses_quiz: details,
     };
     if (!f.Date_quiz) patch.Date_quiz = today;
-    if (!f['Prénom_contact']) patch['Prénom_contact'] = d.prenom;
+    if (!f['Prenom_contact'] && !f['Prénom_contact']) patch['Prenom_contact'] = d.prenom;
     if (!f.Nom_Famille && d.nom) patch.Nom_Famille = d.nom;
     if (!f.Telephone_contact && d.telephone) patch.Telephone_contact = d.telephone;
     if (!f.Email_contact && !f.Email_Femme && !f.Email_Mari) patch.Email_contact = d.email;
     if (f.Desinscrit) patch.Desinscrit = false; // nouveau consentement explicite
     const count = (Number(f.Nb_envois_quiz) || 0) + 1;
     patch.Nb_envois_quiz = count;
-    await at(atUrl(`/${existing.id}`), { method: 'PATCH', body: JSON.stringify({ fields: patch, typecast: true }) });
-    return { status: 'updated', count };
+    await atWrite('PATCH', atUrl(`/${existing.id}`), patch);
+    return { status: 'updated', count, id: existing.id };
   }
 
   const fields = {
-    'Prénom_contact': d.prenom,
+    'Prenom_contact': d.prenom,
     Email_contact: d.email,
     Score_quiz: String(result.total),
     Profil_Quiz: result.profile.airtable,
@@ -238,8 +267,8 @@ async function upsertProspect(d, result) {
   };
   if (d.nom) fields.Nom_Famille = d.nom;
   if (d.telephone) fields.Telephone_contact = d.telephone;
-  await at(atUrl(), { method: 'POST', body: JSON.stringify({ fields, typecast: true }) });
-  return { status: 'created', count: 1 };
+  const made = await atWrite('POST', atUrl(), fields);
+  return { status: 'created', count: 1, id: made && made.id };
 }
 
 /* ───────────── Make ───────────── */
@@ -272,6 +301,6 @@ function makePayload({ etape, profile, score, prenom, nom, email, telephone }) {
 module.exports = {
   POINTS, REVERSED, QUESTION_COUNT, PROFILES,
   scoreAnswers, profileFor, profileFromAirtable, validate, clean,
-  parisDate, setCors, apiBase, signEmail, verifyEmail, unsubUrl, bookUrl, bookLine,
-  alisonWaNumber, maxSends, fetchT, at, atUrl, fEsc, findByEmail, upsertProspect, sendToMake, makePayload,
+  parisDate, setCors, apiBase, signEmail, verifyEmail, makeRef, parseRef, unsubUrl, bookUrl, bookLine,
+  alisonWaNumber, maxSends, fetchT, at, atWrite, atUrl, fEsc, findByEmail, upsertProspect, sendToMake, makePayload,
 };
