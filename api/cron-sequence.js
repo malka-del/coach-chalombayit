@@ -22,8 +22,6 @@ const STEPS = [
   // Candidatures « couples fondateurs » dont le conjoint n'est pas encore au courant : relance à J+3, puis rappel final le 18 décembre.
   // (uniquement pendant la période de candidature : voir candOpen)
   { etape: 'CAND_R1', flag: 'Relance_cand_1', min: 3, max: 12, cand: true },
-  // Présélection : Alison passe Candidature_statut à « Preselectionne » dans Airtable ; le mail « félicitations + mon agenda » part au prochain passage du cron (chaque matin).
-  { etape: 'CAND_PRESEL', flag: 'Presel_mail_envoye', presel: true },
   { etape: 'CAND_R2', flag: 'Relance_cand_2', min: 2, max: 30, cand: true, notBefore: '2026-12-18' },
 ];
 const MAX_PER_RUN = 100;
@@ -43,12 +41,10 @@ module.exports = async function handler(req, res) {
   let budget = MAX_PER_RUN;
 
   for (const step of STEPS) {
-    if (step.cand && !step.presel && !core.candOpen()) continue; // hors période de candidature : aucune relance
+    if (step.cand && !core.candOpen()) continue; // hors période de candidature : aucune relance
     if (step.notBefore && core.parisDate() < step.notBefore) continue;
-    const days = step.cand || step.presel ? "DATETIME_DIFF(TODAY(), {Candidature_date}, 'days')" : step.trial ? "DATETIME_DIFF(TODAY(), {Date_debut_essai}, 'days')" : "DATETIME_DIFF(TODAY(), {Date_quiz}, 'days')";
-    const formula = step.presel
-      ? `AND({Candidature_fondateur}, {Candidature_statut}='Preselectionne', {Email_contact}, NOT({Desinscrit}), NOT({${step.flag}}))`
-      : step.cand
+    const days = step.cand ? "DATETIME_DIFF(TODAY(), {Candidature_date}, 'days')" : step.trial ? "DATETIME_DIFF(TODAY(), {Date_debut_essai}, 'days')" : "DATETIME_DIFF(TODAY(), {Date_quiz}, 'days')";
+    const formula = step.cand
       ? `AND({Candidature_fondateur}, {Candidature_statut}='A_confirmer', {Email_contact}, NOT({Desinscrit}), NOT({${step.flag}}), ${days}>=${step.min}, ${days}<=${step.max})`
       : step.trial
       ? `AND({Date_debut_essai}, {Statut_Coach_IA}='MODE_SOUTIEN', {Email_contact}, NOT({Desinscrit}), NOT({${step.flag}}), ${days}>=${step.min}, ${days}<=${step.max})`
@@ -68,7 +64,7 @@ module.exports = async function handler(req, res) {
       const f = rec.fields || {};
       const email = pick(f, ['Email_contact', 'Email_Femme', 'Email_Mari']).toLowerCase();
       const prenom = pick(f, ['Prenom_contact', 'Prénom_contact', 'Prenom_Femme', 'Prenom_Mari']) || 'Bonjour';
-      const profile = step.cand || step.presel ? { code: 'cand', label: 'Candidature' } : step.trial ? { code: 'essai', label: 'Essai Coach IA' } : core.profileFromAirtable(f.Profil_Quiz);
+      const profile = step.cand ? { code: 'cand', label: 'Candidature' } : step.trial ? { code: 'essai', label: 'Essai Coach IA' } : core.profileFromAirtable(f.Profil_Quiz);
       const score = Number(f.Score_quiz);
       if (!email || !profile) { summary.skipped.push({ id: rec.id, etape: step.etape, why: 'email ou profil manquant' }); continue; }
       if (dry) { summary.sent.push({ etape: step.etape, email, profil: profile.code }); continue; }
@@ -84,7 +80,7 @@ module.exports = async function handler(req, res) {
         await core.sendToMake(core.makePayload({
           etape: step.etape, profile, score: Number.isFinite(score) ? score : '',
           prenom, nom: f.Nom_Famille || '', email, telephone: f.Telephone_contact || '',
-          cand: step.presel ? { conjoint: 'oui' } : step.cand ? { conjoint: 'pas_encore' } : null,
+          cand: step.cand ? { conjoint: 'pas_encore' } : null,
         }));
         summary.sent.push({ etape: step.etape, email, profil: profile.code });
       } catch (e) {
