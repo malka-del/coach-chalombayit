@@ -31,6 +31,7 @@ const HEADERS = {
   agile:   { from: '#B8860B', to: '#8C6512', accent: '#F472B6' },
   urgence: { from: '#0E7490', to: '#155E75', accent: '#A5F3FC' }, // teintes apaisantes, pas de rouge
   essai:   { from: '#B8860B', to: '#8C6512', accent: '#38BDF8' },
+  cand:    { from: '#9D174D', to: '#6B1D4A', accent: '#FBCFE8' },
 };
 const PROFIL_LABEL = { lune: 'Lune de Miel Active ✨', agile: 'Révision Agile Nécessaire 🔧', urgence: 'Urgence de Reconnexion 🌿' };
 
@@ -66,7 +67,64 @@ function content(profil, etape, ctx) {
   const SECU3 = "P.S. Si, à un moment, vous ne vous sentez pas en sécurité chez vous, ce n'est plus un sujet de coaching mais de protection : en France, le 3919 (gratuit et anonyme) ; en cas de danger immédiat, le 17 en France ou le 100 en Israël.";
   const SECU10 = "P.S. Si vous ne vous sentez pas en sécurité chez vous : 3919 en France (gratuit et anonyme) ; en cas de danger immédiat, le 17 en France ou le 100 en Israël.";
 
+  /* ── Candidature « couples fondateurs » ── */
+  const cd = ctx.cand || { statut: 'A_appeler', rdvUrl: '', confirmUrl: '' };
+  const decompte = { decompte: true };
+  const programme = { p: "**Le programme hybride** : un accompagnement avec le Coach IA sur WhatsApp, supervisé par moi, et deux temps de 30 minutes en visio avec moi (après votre bilan, puis en conclusion). Je constitue un premier groupe de **8 couples fondateurs**, et **3 programmes seront offerts** parmi eux (choisis après les appels, selon la motivation et l'adéquation)." };
+  const rdvCard = cd.rdvUrl
+    ? { card: true, accent: 'pink', kicker: 'Étape suivante · 15 à 30 minutes', title: 'Réserver votre appel de candidature',
+        desc: "Un échange avec moi pour faire connaissance, comprendre votre situation et confirmer votre place dans le groupe. Créneaux ouverts du 13 décembre au 10 janvier.",
+        label: '📅 Choisir mon créneau →', href: cd.rdvUrl }
+    : { card: true, accent: 'pink', kicker: 'Étape suivante · 15 à 30 minutes', title: 'Votre appel de candidature',
+        desc: "Je vous écris personnellement pour fixer ensemble un appel de 15 à 30 minutes, entre le 13 décembre et le 10 janvier. Vous pouvez aussi simplement répondre à cet e-mail.",
+        label: '✉️ Répondre à ce mail →', href: 'mailto:malka@chalombayitlelab.com' };
+  const confirmCard = { card: true, accent: 'gold', kicker: 'Candidature à confirmer', title: 'Nous en avons parlé, nous candidatons',
+    desc: "Dès que vous avez pu en parler à votre conjoint(e) et que vous êtes d'accord tous les deux, confirmez ici : vous pourrez alors réserver votre appel. Vous avez jusqu'au 20 décembre.",
+    label: '✅ Confirmer notre candidature →', href: cd.confirmUrl };
+  const dates = { steps: ["**Du 1er au 20 décembre** : candidatures ouvertes.", "**Du 13 décembre au 10 janvier** : appels de candidature (15 à 30 minutes).", "**Le 10 janvier** : fin de la sélection et réponse à chaque couple (les premiers couples retenus peuvent être contactés plus tôt)."] };
+  const candOkBlocks = cd.statut === 'A_confirmer'
+    ? [
+        { p: "Votre candidature au programme de coaching hybride (Coach IA + supervision humaine) a bien été prise en compte. Merci de votre confiance." },
+        { p: "Vous m'avez indiqué que votre conjoint(e) n'était **pas encore au courant**. Pas de souci : votre candidature est **à confirmer**. Parlez-en ensemble tranquillement, c'est un projet de couple." },
+        confirmCard, programme, decompte, dates,
+      ]
+    : [
+        { p: "**Votre candidature au programme de coaching hybride (Coach IA + supervision humaine) a bien été prise en compte.** Merci de votre confiance." },
+        rdvCard, programme, decompte, dates,
+      ];
+
   const C = {
+    'CAND_OK:cand': {
+      subject: '{prenom}, votre candidature a bien été prise en compte',
+      pre: 'Programme de coaching hybride : voici la suite.',
+      reason: "Vous recevez cet e-mail parce que vous avez candidaté au programme des couples fondateurs sur coach.chalombayitlelab.com.",
+      kicker: 'Couples fondateurs', title: 'Candidature bien reçue', sub: 'Programme de coaching hybride',
+      blocks: [...candOkBlocks, reply],
+    },
+    'CAND_R1:cand': {
+      subject: '{prenom}, avez-vous pu en parler en couple ?',
+      pre: 'Votre candidature est en attente de votre confirmation.',
+      reason: "Vous recevez cet e-mail parce que vous avez commencé une candidature au programme des couples fondateurs sur coach.chalombayitlelab.com.",
+      kicker: 'Couples fondateurs', title: 'Avez-vous pu en parler en couple ?', sub: 'Votre candidature attend votre confirmation',
+      blocks: [
+        { p: "Il y a quelques jours, vous avez candidaté au programme de coaching hybride pour couples fondateurs, en précisant que votre conjoint(e) n'était pas encore au courant." },
+        { p: "**Avez-vous pu en parler ?** Si oui et que vous êtes d'accord tous les deux, il vous suffit de confirmer ci-dessous pour réserver votre appel. Si vous avez des questions ou des doutes, **répondez simplement à cet e-mail** : je lis tout." },
+        confirmCard,
+        { p: "Les candidatures sont ouvertes **jusqu'au 20 décembre**." },
+      ],
+    },
+    'CAND_R2:cand': {
+      subject: '{prenom}, dernier rappel : candidatures jusqu\'au 20 décembre',
+      pre: 'Plus que quelques jours pour confirmer votre candidature.',
+      reason: "Vous recevez cet e-mail parce que vous avez commencé une candidature au programme des couples fondateurs sur coach.chalombayitlelab.com.",
+      kicker: 'Couples fondateurs', title: 'Dernier rappel', sub: 'Plus que quelques jours',
+      blocks: [
+        { p: "Un petit mot pour vous rappeler que votre candidature au programme des couples fondateurs est **toujours à confirmer**, et que les candidatures se terminent **le 20 décembre**." },
+        { p: "Si le moment n'est finalement pas le bon, aucun souci, vous n'avez rien à faire. Si vous êtes prêts tous les deux, confirmez ci-dessous." },
+        confirmCard,
+      ],
+    },
+
     'J0:lune': {
       subject: 'Votre résultat {prenom}, votre couple a de vraies ressources ✨',
       pre: 'Votre profil : Lune de Miel Active. Voici par où continuer.',
@@ -242,6 +300,16 @@ function renderBlock(b, ctx) {
         <td width="${100 - Math.max(pct, 3)}%" style="background:#E7E0D3;height:8px;border-radius:8px;font-size:0;line-height:0;">&nbsp;</td></tr></table>
     </td></tr></table>`;
   }
+  if (b.decompte) {
+    const rows = [['6 séances avec le Coach IA, valorisées 49 € chacune', '294 €'], ['2 séances de 30 min avec moi (après le bilan et en conclusion)', '100 €'], ['Temps de supervision humaine (estimé)', '300 €'], ['Bonus : 6 mois d’abonnement au Coach IA en mode soutien (9 €/mois)', '54 €']];
+    return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 16px;"><tr><td style="background:#fff;border:1px solid #E2D8CC;border-left:4px solid #DB2777;border-radius:8px;padding:14px 16px;">
+      <p style="font-family:${F_MONO};font-size:9.5px;letter-spacing:1.5px;text-transform:uppercase;color:#BE185D;margin:0 0 8px;">Le détail du programme</p>
+      ${rows.map(([l, v]) => `<table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr><td style="font-family:${F_SANS};font-size:13px;color:#475569;padding:5px 8px 5px 0;line-height:1.5;">${esc(l)}</td><td align="right" valign="top" style="font-family:${F_SANS};font-size:13px;font-weight:700;color:#1E293B;padding:5px 0;white-space:nowrap;">${esc(v)}</td></tr></table>`).join('')}
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-top:1px solid #E2D8CC;margin-top:6px;"><tr><td style="font-family:${F_SANS};font-size:13px;color:#475569;padding:8px 8px 4px 0;">Valeur totale</td><td align="right" style="font-family:${F_SANS};font-size:13px;color:#64748B;padding:8px 0 4px;text-decoration:line-through;">748 €</td></tr>
+      <tr><td style="font-family:${F_SANS};font-size:14px;font-weight:700;color:#BE185D;padding:2px 8px 4px 0;">Tarif exceptionnel couples fondateurs</td><td align="right" style="font-family:${F_SERIF};font-size:20px;font-weight:700;color:#BE185D;padding:2px 0 4px;">249 €</td></tr></table>
+      <p style="font-family:${F_SANS};font-size:12px;color:#64748B;line-height:1.6;margin:8px 0 0;">Trois des huit programmes sont offerts ; ce tarif concerne les autres couples fondateurs. Aucun paiement n'est demandé à ce stade : nous en parlons lors de l'appel.</p>
+    </td></tr></table>`;
+  }
   if (b.steps) return b.steps.map((t, i) => `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 10px;"><tr>
       <td width="34" valign="top"><div style="width:26px;height:26px;border-radius:13px;background:#B8860B;color:#fff;font-family:${F_SERIF};font-size:14px;font-weight:700;line-height:26px;text-align:center;">${i + 1}</div></td>
       <td style="font-family:${F_SANS};font-size:15px;color:#475569;line-height:1.6;padding-top:2px;">${rich(t)}</td></tr></table>`).join('') + '<div style="height:6px;"></div>';
@@ -269,11 +337,17 @@ function alisonPhone() {
     : '+' + n;
   return { href: 'https://wa.me/' + n, pretty };
 }
-function buildEmail({ etape, profil, prenom, score, unsubUrl, bookUrl }) {
-  const ctx = { prenom: String(prenom || '').trim() || 'Bonjour', score: Number(score), bookUrl: bookUrl || 'https://amzn.eu/d/0fQNaUXS', hdr: HEADERS[profil] };
+function buildEmail({ etape, profil, prenom, score, unsubUrl, bookUrl, cand }) {
+  const ctx = { prenom: String(prenom || '').trim() || 'Bonjour', score: Number(score), cand: null, bookUrl: bookUrl || 'https://amzn.eu/d/0fQNaUXS', hdr: HEADERS[profil] };
   ctx.prenom = ctx.prenom === 'Bonjour' ? '' : ctx.prenom;
+  ctx.cand = cand || null;
   const c = content(profil, etape, ctx);
   if (!c) throw new Error(`Email inconnu : ${etape}:${profil}`);
+  if (cand && etape === 'J0') {
+    const cc = content('cand', 'CAND_OK', ctx);
+    const i = c.blocks.findIndex((b) => b.score);
+    c.blocks.splice(i + 1, 0, { sep: true }, { label: 'Votre candidature · couples fondateurs' }, ...cc.blocks.filter((b) => b !== cc.blocks[cc.blocks.length - 1]), { sep: true });
+  }
   const hello = ctx.prenom ? `Bonjour ${esc(ctx.prenom)},` : 'Bonjour,';
   const subject = sub(c.subject, ctx).replace(/[<>\r\n]/g, '').replace(/^, /, '').replace(/^\s+/, '');
   const h = ctx.hdr;

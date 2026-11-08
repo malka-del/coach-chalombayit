@@ -32,16 +32,30 @@ module.exports = async function handler(req, res) {
   try { crm = await core.upsertProspect(d, result); } catch (e) { crmError = e; console.error('[submit-quiz] Airtable:', e && e.message); }
   const limited = !!(crm && crm.count > core.maxSends());
 
+  // Candidature « couples fondateurs » : seulement pendant la fenêtre d'ouverture (contrôlée côté serveur).
+  const cand = d.candidature && core.candOpen() ? d.candidature : null;
+  let candOk = false;
+  if (cand && crm && crm.id) {
+    await core.saveCandidature(crm.id, cand);
+    candOk = true;
+  }
+
   // 2) Mail via Make (sauf si la limite est atteinte pour cette adresse).
   let emailSent = false;
   if (!limited) {
     try {
       await core.sendToMake(core.makePayload({
         etape: 'J0', profile, score: total,
-        prenom: d.prenom, nom: d.nom, email: d.email, telephone: d.telephone,
+        prenom: d.prenom, nom: d.nom, email: d.email, telephone: d.telephone, cand,
       }));
       emailSent = true;
     } catch (e) { console.error('[submit-quiz] Make:', e && e.message); }
+  }
+  if (cand) {
+    // Alerte pour Alison (indépendante de la limite d'envois du mail de résultat)
+    try {
+      await core.sendToMake(core.notifPayload({ prenom: d.prenom, nom: d.nom, email: d.email, cand, score: total, profilLabel: profile.label }));
+    } catch (e) { console.error('[submit-quiz] notif candidature:', e && e.message); }
   }
 
   return res.status(200).json({
@@ -52,6 +66,9 @@ module.exports = async function handler(req, res) {
     pillars,
     emailSent,
     limited,
+    candidature: cand ? { statut: core.candStatut(cand), saved: candOk } : null,
+    candOpen: core.candOpen(),
+    rdvUrl: core.rdvUrl(),
     ref: crm && crm.id ? core.makeRef(crm.id) : '',
     bookUrl: core.bookUrl(),
   });

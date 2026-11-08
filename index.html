@@ -1410,6 +1410,28 @@
   .cta-card-action--pink { background: linear-gradient(135deg, #E845A8, #BE185D); color: #FFFFFF; }
   .cta-card-action--wa   { background: #25D366; color: #000000; }
 
+
+  /* ── Candidature « couples fondateurs » ── */
+  .cand-box { background: #13141A; border: 1.5px solid rgba(232,69,168,.45); border-radius: 18px; padding: 20px 18px; text-align: left; margin: 0 0 14px; }
+  .cand-box h3 { font-family: 'DM Serif Display', Georgia, serif; font-weight: 400; color: #FFFFFF; font-size: 1.25rem; margin: 0 0 8px; }
+  .cand-box p { font-size: 0.88rem; color: #B7BACB; line-height: 1.6; margin: 0 0 10px; }
+  .cand-box p strong { color: #F0EDE6; }
+  .cand-box--ok { border-color: rgba(37,211,102,.5); }
+  .cand-badge { display: inline-block; font-size: 0.68rem; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; color: #E845A8; margin-bottom: 6px; }
+  .cand-box--ok .cand-badge { color: #25D366; }
+  .cand-list { margin: 0 0 12px; padding-left: 18px; color: #B7BACB; font-size: 0.86rem; line-height: 1.6; }
+  .cand-list li { margin-bottom: 4px; }
+  .cand-q { font-size: 0.92rem; font-weight: 700; color: #F0EDE6; text-align: left; margin: 16px 0 8px; }
+  .cand-opt { display: flex; gap: 10px; align-items: flex-start; text-align: left; background: #13141A; border: 1px solid rgba(255,255,255,.14); border-radius: 12px; padding: 12px 14px; margin-bottom: 8px; cursor: pointer; font-size: 0.9rem; color: #F0EDE6; line-height: 1.4; }
+  .cand-opt input { flex: none; width: 18px; height: 18px; margin-top: 2px; accent-color: #E845A8; }
+  .cand-opt:has(input:checked) { border-color: #E2C266; background: rgba(226,194,102,.08); }
+  .cand-note { font-size: 0.8rem; color: #E2C266; text-align: left; margin: 8px 0 0; line-height: 1.5; }
+  .cand-decompte { width: 100%; border-collapse: collapse; margin: 8px 0 10px; }
+  .cand-decompte td { padding: 6px 0; font-size: 0.84rem; color: #B7BACB; border-bottom: 1px solid rgba(255,255,255,.07); vertical-align: top; }
+  .cand-decompte td:last-child { text-align: right; color: #F0EDE6; font-weight: 700; white-space: nowrap; padding-left: 12px; }
+  .cand-decompte tr.tot td { color: #E845A8; font-weight: 800; font-size: 1rem; border-bottom: none; }
+  .cand-decompte tr.val td:last-child { text-decoration: line-through; color: #8A8FA8; font-weight: 400; }
+
   .qz-mail-ok { font-size: 0.8rem; color: #8A8FA8; margin-top: 20px; }
   .qz-mail-ko { margin-top: 20px; border: 1px solid rgba(244,114,182,.35); background: rgba(244,114,182,.07); color: #F9A8D4; border-radius: 12px; padding: 12px 14px; font-size: 0.82rem; }
   .qz-mail-ko button { margin-top: 8px; background: none; border: 1.5px solid #E2C266; color: #E2C266; border-radius: 100px; padding: 8px 18px; font-weight: 700; cursor: pointer; font-family: 'Inter', sans-serif; }
@@ -1462,6 +1484,59 @@
     </div>
 
     <!-- ÉCRAN COORDONNÉES -->
+    <!-- ═══ CANDIDATURE (couples fondateurs) : explication ═══ -->
+    <div id="qz-step-cand-intro" style="display:none; max-width:480px; margin:0 auto;">
+      <span class="qz-pill">Avant votre résultat</span>
+      <h2 class="qz-title">Un dernier mot&nbsp;: je cherche 8 couples fondateurs ✨</h2>
+      <div class="cand-box">
+        <p>Je lance un nouveau <strong>programme de coaching de couple hybride</strong>&nbsp;: le Coach IA sur WhatsApp, <strong>supervisé par moi</strong>, avec deux temps en visio avec moi.</p>
+        <p>Je constitue un premier groupe de <strong>8 couples fondateurs</strong>, et <strong>j'offre 3 programmes parmi eux</strong> (choisis après nos échanges, selon la motivation et l'adéquation).</p>
+        <p>Candidater prend 1&nbsp;minute, se fait <strong>en couple</strong> et n'engage à rien. Candidatures ouvertes <strong>jusqu'au 20&nbsp;décembre</strong>, puis un appel de 15 à 30&nbsp;minutes avec moi pour faire connaissance.</p>
+      </div>
+      <button type="button" class="btn btn--pink btn--lg" style="width:100%; border:none;" onclick="candStart()">Je candidate (1 minute) ➔</button>
+      <button type="button" class="qz-skip" onclick="candSkip()">Non merci, voir mon résultat</button>
+    </div>
+
+    <!-- ═══ CANDIDATURE : questions ═══ -->
+    <div id="qz-step-cand-form" style="display:none; max-width:480px; margin:0 auto;">
+      <span class="qz-pill">Candidature · couples fondateurs</span>
+      <h2 class="qz-title">4 petites questions</h2>
+      <form id="qz-cand-form" onsubmit="candSubmit(event)" novalidate style="text-align:left;">
+        <p class="cand-q">1. Votre conjoint(e) est-il/elle d'accord pour participer&nbsp;?</p>
+        <label class="cand-opt"><input type="radio" name="cand-conjoint" value="oui"><span>Oui, nous en avons parlé</span></label>
+        <label class="cand-opt"><input type="radio" name="cand-conjoint" value="pas_encore"><span>Pas encore, je dois lui en parler (ma candidature sera à confirmer)</span></label>
+        <label class="cand-opt"><input type="radio" name="cand-conjoint" value="non"><span>Non, il/elle ne souhaite pas participer</span></label>
+
+        <p class="cand-q">2. Depuis combien de temps êtes-vous en couple&nbsp;?</p>
+        <select id="cand-duree" class="qz-field" style="margin-bottom:0;">
+          <option value="">Choisir…</option>
+          <option value="moins_1_an">Moins d'un an</option>
+          <option value="1_a_3_ans">1 à 3 ans</option>
+          <option value="3_a_10_ans">3 à 10 ans</option>
+          <option value="plus_10_ans">Plus de 10 ans</option>
+        </select>
+
+        <p class="cand-q">3. Pouvez-vous vous engager pendant 6&nbsp;mois maximum, avec une séance avec le Coach IA toutes les 1 à 2&nbsp;semaines&nbsp;?</p>
+        <label class="cand-opt"><input type="radio" name="cand-dispo" value="oui"><span>Oui</span></label>
+        <label class="cand-opt"><input type="radio" name="cand-dispo" value="a_discuter"><span>À discuter lors de l'appel</span></label>
+
+        <p class="cand-q">4. Qu'attendez-vous de ce programme&nbsp;? <span style="font-weight:400; color:#8A8FA8;">(facultatif)</span></p>
+        <textarea id="cand-attentes" class="qz-field" rows="3" maxlength="800" placeholder="Quelques mots suffisent" style="resize:vertical;"></textarea>
+
+        <label class="qz-consent" style="margin-top:14px;">
+          <input type="checkbox" id="cand-engagement">
+          <span>Je candidate <strong>en couple</strong> : je m'engage à participer avec mon/ma conjoint(e) et à donner mes retours sur le programme.</span>
+        </label>
+        <label class="qz-consent">
+          <input type="checkbox" id="cand-consent">
+          <span>J'accepte que ces réponses soient transmises à Alison pour étudier ma candidature et que l'on me recontacte par e-mail à ce sujet (appel de candidature, rappel si besoin). Si ma candidature n'est pas retenue, elles sont conservées 6 mois maximum après la fin de la sélection. <a href="https://coach.chalombayitlelab.com/politique-confidentialite" target="_blank" rel="noopener">Politique de confidentialité</a></span>
+        </label>
+        <div id="cand-err" class="qz-err" style="display:none;"></div>
+        <button type="submit" id="cand-btn" class="btn btn--pink btn--lg" style="width:100%; border:none; margin-top:4px;">Continuer ➔</button>
+        <div style="text-align:center;"><button type="button" class="qz-prev" onclick="candCancel()">← Retour</button></div>
+      </form>
+    </div>
+
     <div id="qz-step-lead" style="display:none; max-width:440px; margin:0 auto;">
       <span class="qz-pill">Diagnostic terminé</span>
       <h2 class="qz-title">Votre résultat est prêt&nbsp;! ⚙️</h2>
@@ -1534,6 +1609,15 @@
   var qIdx = 0, answers = [], quizCompleted = false, busy = false;
   var userLeadData = { prenom: '', nom: '', email: '', tel: '' };
   var serverData = null, localScore = 0;
+  var candidature = null;          // candidature saisie (envoyée avec le quiz, ou seule depuis la page de résultat)
+  var candMode = 'early';          // 'early' = avant le formulaire e-mail, 'late' = depuis la page de résultat
+  var candDone = false;            // la personne a déjà vu / tranché l'écran de candidature
+  /* Période de candidature (le serveur applique la même fenêtre : c'est lui qui décide). Aperçu : ajouter ?cand=1 à l'adresse. */
+  var CAND_START = Date.parse('2026-12-01T21:50:00+01:00'), CAND_END = Date.parse('2026-12-20T22:00:00+01:00');
+  function candOpenFront() {
+    if (/[?&]cand=1/.test(location.search)) return true;
+    var n = Date.now(); return n >= CAND_START && n <= CAND_END;
+  }
 
   var $ = function (id) { return document.getElementById(id); };
   function store(k, v) { try { if (v === undefined) return window.localStorage.getItem(k); window.localStorage.setItem(k, v); } catch (e) { return null; } }
@@ -1580,8 +1664,58 @@
     else {
       $('qz-bar').style.width = '100%';
       $('qz-step-questions').style.display = 'none';
-      $('qz-step-lead').style.display = 'block';
+      if (candOpenFront() && !candDone) { candMode = 'early'; $('qz-step-cand-intro').style.display = 'block'; $('qz-overlay').scrollTop = 0; }
+      else { $('qz-step-lead').style.display = 'block'; }
     }
+  };
+
+  /* ═════════ CANDIDATURE « COUPLES FONDATEURS » ═════════ */
+  function showStep(id) {
+    ['qz-step-cand-intro', 'qz-step-cand-form', 'qz-step-lead', 'qz-step-result'].forEach(function (k) { $(k).style.display = (k === id) ? 'block' : 'none'; });
+    $('qz-overlay').scrollTop = 0;
+  }
+  function radioVal(name) { var r = document.querySelector('input[name="' + name + '"]:checked'); return r ? r.value : ''; }
+  window.candStart = function () { $('cand-err').style.display = 'none'; showStep('qz-step-cand-form'); };
+  window.candSkip = function () { candDone = true; candidature = null; showStep('qz-step-lead'); };
+  window.candCancel = function () {
+    if (candMode === 'late') { showStep('qz-step-result'); } else { showStep('qz-step-cand-intro'); }
+  };
+  window.openLateCandidature = function () { candMode = 'late'; $('cand-btn').textContent = 'Envoyer ma candidature ➔'; window.candStart(); };
+  function candError(msg) { var e = $('cand-err'); e.textContent = msg; e.style.display = msg ? 'block' : 'none'; }
+  window.candSubmit = function (ev) {
+    ev.preventDefault();
+    var conjoint = radioVal('cand-conjoint'), duree = $('cand-duree').value, dispo = radioVal('cand-dispo');
+    if (!conjoint) return candError("Merci de répondre à la question 1.");
+    if (conjoint === 'non') {
+      candDone = true; candidature = null;
+      alert("Merci de votre sincérité. Ce programme se vit en couple : sans l'accord de votre conjoint(e), je ne peux pas retenir la candidature. Le Coach IA, lui, peut très bien se vivre seul(e). Je vous montre votre résultat.");
+      if (candMode === 'late') showStep('qz-step-result'); else showStep('qz-step-lead');
+      return;
+    }
+    if (!duree) return candError("Merci de répondre à la question 2.");
+    if (!dispo) return candError("Merci de répondre à la question 3.");
+    if (!$('cand-engagement').checked) return candError("Merci de cocher l'engagement à candidater en couple.");
+    if (!$('cand-consent').checked) return candError("Merci de cocher la case d'accord pour que je puisse étudier votre candidature.");
+    candError('');
+    candDone = true;
+    candidature = { active: true, conjoint: conjoint, duree: duree, dispo: dispo, attentes: $('cand-attentes').value.trim(), engagement: true, consent: true };
+    if (candMode === 'early') { showStep('qz-step-lead'); return; }
+
+    // dépôt après le quiz : appel direct à l'API
+    var btn = $('cand-btn'); btn.disabled = true; btn.textContent = 'Envoi…';
+    var url = API_URL.replace('submit-quiz', 'submit-candidature');
+    fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email: userLeadData.email, candidature: candidature, website: '' }) })
+      .then(function (r) { return r.json().catch(function () { return {}; }); })
+      .then(function (d) {
+        btn.disabled = false; btn.textContent = 'Envoyer ma candidature ➔';
+        if (d && d.ok) {
+          serverData = serverData || {};
+          serverData.candidature = { statut: d.statut, saved: d.saved }; serverData.rdvUrl = d.rdvUrl || serverData.rdvUrl;
+          showResult();
+        } else {
+          candError((d && d.error) || "Un souci est survenu. Réessayez, ou écrivez-moi à malka@chalombayitlelab.com.");
+        }
+      }, function () { btn.disabled = false; btn.textContent = 'Envoyer ma candidature ➔'; candError("Connexion impossible. Réessayez dans un instant."); });
   };
   window.prevQuestion = function () {
     if (qIdx > 0) { qIdx--; renderQ(); }
@@ -1603,7 +1737,7 @@
     return {
       prenom: userLeadData.prenom, nom: userLeadData.nom, email: userLeadData.email, telephone: userLeadData.tel,
       consent: $('qz-consent').checked === true, answers: answers.slice(), website: $('qz-website').value,
-      source: document.referrer || 'direct', page: location.href
+      candidature: candidature, source: document.referrer || 'direct', page: location.href
     };
   }
   function callApi() {
@@ -1723,12 +1857,51 @@
     quizCompleted = true;
     store('cbl_quiz_done', '1');
     $('qz-step-lead').style.display = 'none';
+    $('qz-step-cand-intro').style.display = 'none';
+    $('qz-step-cand-form').style.display = 'none';
     $('qz-res-heading').innerText = title;
     $('qz-res-text').innerHTML = desc;
-    $('qz-res-actions').innerHTML = cards;
+    $('qz-res-actions').innerHTML = candidatureBlock() + cards;
     renderMailStatus();
     $('qz-step-result').style.display = 'block';
     $('qz-overlay').scrollTop = 0;
+  }
+
+  /* Bloc candidature de la page de résultat : confirmation (détail + prix) ou invitation à candidater */
+  function candidatureBlock() {
+    var cd = serverData && serverData.candidature;
+    var rdv = serverData && serverData.rdvUrl;
+    if (cd) {
+      var toConfirm = cd.statut === 'A_confirmer';
+      var next = toConfirm
+        ? '<p>Vous m\'avez indiqué que votre conjoint(e) n\'était <strong>pas encore au courant</strong> : votre candidature est <strong>à confirmer</strong>. Parlez-en ensemble tranquillement ; je vous envoie par e-mail un lien pour la confirmer, avant le <strong>20&nbsp;décembre</strong>.</p>'
+        : '<p><strong>Prochaine étape&nbsp;: un appel de candidature de 15 à 30&nbsp;minutes avec moi</strong>, entre le 13&nbsp;décembre et le 10&nbsp;janvier.</p>' +
+          (rdv ? '<a href="' + rdv + '" target="_blank" rel="noopener" class="cta-card-action cta-card-action--pink" style="margin-bottom:10px;">📅 Choisir mon créneau →</a>' : '<p>Je vous écris par e-mail pour fixer ensemble ce rendez-vous (vous pouvez aussi répondre au mail reçu).</p>');
+      return '<div class="cand-box cand-box--ok"><span class="cand-badge">✓ Couples fondateurs</span>' +
+        '<h3>Votre candidature a bien été prise en compte</h3>' + next +
+        '<p style="margin-top:6px;"><strong>Le détail du programme</strong></p>' +
+        '<table class="cand-decompte">' +
+        '<tr><td>6 séances avec le Coach IA, valorisées 49&nbsp;€ chacune</td><td>294&nbsp;€</td></tr>' +
+        '<tr><td>2 séances de 30&nbsp;min avec moi (après le bilan et en conclusion)</td><td>100&nbsp;€</td></tr>' +
+        '<tr><td>Temps de supervision humaine (estimé)</td><td>300&nbsp;€</td></tr>' +
+        '<tr><td>Bonus&nbsp;: 6 mois d\'abonnement au Coach IA en mode soutien (9&nbsp;€/mois)</td><td>54&nbsp;€</td></tr>' +
+        '<tr class="val"><td>Valeur totale</td><td>748&nbsp;€</td></tr>' +
+        '<tr class="tot"><td>Tarif exceptionnel couples fondateurs</td><td>249&nbsp;€</td></tr></table>' +
+        '<p style="font-size:0.8rem;">Trois des huit programmes sont offerts&nbsp;; ce tarif concerne les autres couples fondateurs. Aucun paiement n\'est demandé à ce stade&nbsp;: nous en parlons lors de l\'appel. Un e-mail récapitulatif vous est envoyé.</p>' +
+        '<p style="font-size:0.8rem; margin:0;">Calendrier&nbsp;: candidatures jusqu\'au 20&nbsp;décembre · appels du 13&nbsp;décembre au 10&nbsp;janvier · réponse à chaque couple au plus tard le 10&nbsp;janvier.</p></div>';
+    }
+    if (candidature && candidature.active) { // candidature saisie mais l'enregistrement n'a pas abouti
+      return '<div class="cand-box"><span class="cand-badge">Couples fondateurs</span><h3>Votre candidature n\'a pas pu être enregistrée</h3><p>Un souci technique est survenu. Écrivez-moi simplement à <strong>malka@chalombayitlelab.com</strong> avec «&nbsp;Candidature couples fondateurs&nbsp;» et je m\'en occupe personnellement.</p></div>';
+    }
+    if (candOpenFront() && serverData && serverData.candOpen !== false) {
+      return '<div class="cand-box"><span class="cand-badge">Couples fondateurs · jusqu\'au 20 décembre</span>' +
+        '<h3>Candidater pour le programme de coaching hybride IA et supervision humaine</h3>' +
+        '<p>Je cherche <strong>8 couples fondateurs</strong> pour tester mon nouveau programme, et <strong>j\'offre 3 programmes parmi eux</strong>.</p>' +
+        '<ul class="cand-list"><li>6 séances avec le Coach IA sur WhatsApp, avec un bilan de couple</li><li>2 séances de 30&nbsp;min en visio avec moi (après le bilan et en conclusion)</li><li>Une supervision humaine tout au long du parcours</li><li>En bonus&nbsp;: 6 mois de Coach IA en mode soutien</li></ul>' +
+        '<p>Candidature en couple, 1&nbsp;minute, sans engagement. Le détail et le tarif vous sont présentés une fois la candidature déposée.</p>' +
+        '<button type="button" class="btn btn--pink" style="border:none; width:100%;" onclick="openLateCandidature()">Je candidate ➔</button></div>';
+    }
+    return '';
   }
 
   function renderMailStatus() {

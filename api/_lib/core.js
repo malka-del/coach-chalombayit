@@ -11,6 +11,12 @@
  *   BOOK_URL                lien d'achat du livre (optionnel : défaut = lien Amazon)
  *   API_BASE_URL            optionnel, défaut https://coach-chalombayit.vercel.app
  *   MAKE_API_KEY            optionnel, si l'authentification par clé est activée sur le webhook Make
+ *   Candidatures « couples fondateurs » (tous optionnels) :
+ *   CANDIDATURE_RDV_URL           lien de la page de réservation Google Agenda (appel de candidature 15–30 min)
+ *   CANDIDATURE_NOTIF_EMAIL       adresse qui reçoit l'alerte « nouvelle candidature » (défaut : malka@chalombayitlelab.com)
+ *   MAKE_CANDIDATURE_WEBHOOK_URL  webhook d'un scénario Make dédié aux e-mails de candidature (défaut : MAKE_QUIZ_WEBHOOK_URL)
+ *   CANDIDATURE_START / CANDIDATURE_END   fenêtre ISO (défaut : 2026-12-01T21:50+01:00 → 2026-12-20T22:00+01:00)
+ *   CANDIDATURE_FORCE_OPEN=1      force l'ouverture (À METTRE UNIQUEMENT sur l'environnement « Preview » pour tester)
  *   AIRTABLE_BASE_ID / AIRTABLE_TABLE_ID   optionnels (valeurs par défaut = base « Production », table « Couples & CRM »)
  */
 const crypto = require('crypto');
@@ -59,6 +65,31 @@ function clean(v, max) {
   return String(v == null ? '' : v).replace(/[\u0000-\u001f\u007f]/g, ' ').trim().slice(0, max);
 }
 
+/* ───────────── Candidature « couples fondateurs » ───────────── */
+const CAND_DEFAULT = { start: '2026-12-01T21:50:00+01:00', end: '2026-12-20T22:00:00+01:00' };
+const CAND_DUREES = ['moins_1_an', '1_a_3_ans', '3_a_10_ans', 'plus_10_ans'];
+function candWindow() {
+  return { start: process.env.CANDIDATURE_START || CAND_DEFAULT.start, end: process.env.CANDIDATURE_END || CAND_DEFAULT.end };
+}
+function candOpen(now = Date.now()) {
+  if (process.env.CANDIDATURE_FORCE_OPEN === '1') return true;
+  const w = candWindow();
+  return now >= Date.parse(w.start) && now <= Date.parse(w.end);
+}
+const rdvUrl = () => (process.env.CANDIDATURE_RDV_URL || '').trim();
+const candNotifEmail = () => (process.env.CANDIDATURE_NOTIF_EMAIL || 'malka@chalombayitlelab.com').trim();
+
+/* Renvoie null si pas de candidature (ou incomplète) ; sinon l'objet nettoyé. */
+function cleanCandidature(c) {
+  if (!c || typeof c !== 'object' || c.active !== true) return null;
+  const conjoint = c.conjoint === 'oui' || c.conjoint === 'pas_encore' ? c.conjoint : '';
+  const duree = CAND_DUREES.includes(c.duree) ? c.duree : '';
+  const dispo = c.dispo === 'oui' || c.dispo === 'a_discuter' ? c.dispo : '';
+  if (!conjoint || !duree || !dispo || c.engagement !== true || c.consent !== true) return null;
+  return { conjoint, duree, dispo, attentes: clean(c.attentes, 800).replace(/\s+/g, ' ') };
+}
+const candStatut = (cand) => (cand.conjoint === 'oui' ? 'A_appeler' : 'A_confirmer');
+
 function validate(body) {
   const errors = {};
   if (!body || typeof body !== 'object') return { ok: false, errors: { _: 'Requête invalide.' } };
@@ -77,12 +108,14 @@ function validate(body) {
   if (!Array.isArray(answers) || answers.length !== QUESTION_COUNT || !answers.every((a) => typeof a === 'string' && Object.prototype.hasOwnProperty.call(POINTS, a))) {
     errors.answers = 'Réponses incomplètes.';
   }
+  const candidature = cleanCandidature(body.candidature);
+  if (body.candidature && body.candidature.active && !candidature) errors.candidature = 'Candidature incomplète.';
   if (Object.keys(errors).length) return { ok: false, errors };
 
   return {
     ok: true,
     data: {
-      prenom, nom, email, telephone, answers,
+      prenom, nom, email, telephone, answers, candidature,
       honeypot: clean(body.website, 100),
       source: clean(body.source, 200) || 'direct',
       page: clean(body.page, 300),
@@ -229,6 +262,7 @@ async function upsertProspect(d, result) {
   const details = JSON.stringify({
     version: 1, answers: d.answers, pillars: result.pillars,
     consent_email_at: new Date().toISOString(), source: d.source, page: d.page,
+    ...(d.candidature ? { candidature: { ...d.candidature, consent_candidature_at: new Date().toISOString() } } : {}),
   });
   const existing = await findByEmail(d.email);
 
@@ -271,9 +305,39 @@ async function upsertProspect(d, result) {
   return { status: 'created', count: 1, id: made && made.id };
 }
 
+/* Enregistre la candidature sur la fiche (champs à créer dans Airtable, voir GUIDE-CANDIDATURES.md).
+   Les réponses détaillées sont de toute façon dans Reponses_quiz (JSON) : en cas de champ manquant on le journalise sans bloquer. */
+async function saveCandidature(recId, cand, extraDetails) {
+  const fields = {
+    Candidature_fondateur: true,
+    Candidature_date: parisDate(),
+    Candidature_statut: candStatut(cand),
+    Candidature_conjoint: cand.conjoint,
+    Candidature_duree: cand.duree,
+    Candidature_dispo: cand.dispo,
+    Candidature_attentes: cand.attentes || '',
+  };
+  if (extraDetails) fields.Reponses_quiz = extraDetails;
+  try { await atWrite('PATCH', atUrl(`/${recId}`), fields); return true; }
+  catch (e) { console.error('[candidature] Airtable (champs manquants ?):', e && e.message); return false; }
+}
+
+function signCand(email) {
+  return signEmail('cand:' + String(email).trim().toLowerCase());
+}
+function confirmUrl(email) {
+  return `${apiBase()}/api/confirm-candidature?e=${encodeURIComponent(email)}&t=${signCand(email)}`;
+}
+function verifyCand(email, token) {
+  try {
+    const a = Buffer.from(signCand(email)), b = Buffer.from(String(token || ''));
+    return a.length === b.length && crypto.timingSafeEqual(a, b);
+  } catch (e) { return false; }
+}
+
 /* ───────────── Make ───────────── */
-async function sendToMake(payload) {
-  const url = process.env.MAKE_QUIZ_WEBHOOK_URL;
+async function sendToMake(payload, urlOverride) {
+  const url = urlOverride || process.env.MAKE_CANDIDATURE_WEBHOOK_URL || process.env.MAKE_QUIZ_WEBHOOK_URL;
   if (!url) throw new Error('MAKE_QUIZ_WEBHOOK_URL manquant');
   const headers = { 'Content-Type': 'application/json' };
   if (process.env.MAKE_API_KEY) headers['x-make-apikey'] = process.env.MAKE_API_KEY;
@@ -282,10 +346,13 @@ async function sendToMake(payload) {
   return true;
 }
 
-function makePayload({ etape, profile, score, prenom, nom, email, telephone }) {
+function makePayload({ etape, profile, score, prenom, nom, email, telephone, cand }) {
   const { buildEmail } = require('./emails');
   const unsub_url = unsubUrl(email);
-  const { subject, html } = buildEmail({ etape, profil: profile.code, prenom, score, unsubUrl: unsub_url, bookUrl: bookUrl() });
+  const { subject, html } = buildEmail({
+    etape, profil: profile.code, prenom, score, unsubUrl: unsub_url, bookUrl: bookUrl(),
+    cand: cand ? { statut: candStatut(cand), rdvUrl: rdvUrl(), confirmUrl: confirmUrl(email) } : null,
+  });
   return {
     // ce que Make envoie tel quel (module Gmail, corps « HTML brut ») :
     email, subject, html,
@@ -298,7 +365,27 @@ function makePayload({ etape, profile, score, prenom, nom, email, telephone }) {
   };
 }
 
+/* Alerte pour Alison : même format que les autres envois (email/subject/html), donc le même module Gmail de Make suffit. */
+function notifPayload({ prenom, nom, email, cand, score, profilLabel, late, confirmed }) {
+  const L = { oui: 'Oui, ils en ont parlé', pas_encore: 'Pas encore (à confirmer)' };
+  const D = { moins_1_an: 'moins d’un an', '1_a_3_ans': '1 à 3 ans', '3_a_10_ans': '3 à 10 ans', plus_10_ans: 'plus de 10 ans' };
+  const e = (t) => String(t == null ? '' : t).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const titre = confirmed ? 'Candidature CONFIRMÉE' : (late ? 'Nouvelle candidature (après le quiz)' : 'Nouvelle candidature');
+  const subject = `${titre} · ${String(prenom || '').replace(/[<>\r\n]/g, '')}`;
+  const html = `<div style="font-family:Arial,sans-serif;font-size:15px;color:#1E293B;line-height:1.6">
+<h2 style="margin:0 0 8px">${e(titre)} — couples fondateurs</h2>
+<p><strong>${e(prenom)} ${e(nom || '')}</strong> · <a href="mailto:${e(email)}">${e(email)}</a></p>
+<ul><li>Conjoint(e) d'accord : <strong>${e(L[cand.conjoint] || cand.conjoint)}</strong></li>
+<li>En couple depuis : ${e(D[cand.duree] || cand.duree)}</li>
+<li>Disponibilité 6 mois : ${cand.dispo === 'oui' ? 'oui' : 'à discuter'}</li>
+${score !== undefined && score !== '' ? `<li>Quiz : ${e(score)}/30 · ${e(profilLabel || '')}</li>` : ''}</ul>
+<p><strong>Attentes :</strong><br>${e(cand.attentes || '(non renseignées)').replace(/\n/g, '<br>')}</p>
+<p style="color:#64748B;font-size:13px">Statut Airtable : ${e(candStatut(cand))}. Appels de candidature du 13 décembre au 10 janvier.</p></div>`;
+  return { email: candNotifEmail(), subject, html, etape: 'NOTIF_CAND', profil: 'cand', profil_label: 'Notification candidature', score: score === undefined ? '' : score, prenom: 'Alison', nom: '', telephone: '', unsub_url: '' };
+}
+
 module.exports = {
+  CAND_DEFAULT, candWindow, candOpen, rdvUrl, candNotifEmail, cleanCandidature, candStatut, saveCandidature, confirmUrl, verifyCand, notifPayload,
   POINTS, REVERSED, QUESTION_COUNT, PROFILES,
   scoreAnswers, profileFor, profileFromAirtable, validate, clean,
   parisDate, setCors, apiBase, signEmail, verifyEmail, makeRef, parseRef, unsubUrl, bookUrl, bookLine,
