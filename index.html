@@ -1516,9 +1516,10 @@
           <option value="plus_10_ans">Plus de 10 ans</option>
         </select>
 
-        <p class="cand-q">3. Pouvez-vous vous engager pendant 3 à 6&nbsp;mois, avec une séance avec le Coach IA toutes les 2&nbsp;semaines (ou plus souvent)&nbsp;?</p>
+        <p class="cand-q">3. Pouvez-vous vous engager pendant 3 à 6&nbsp;mois, avec une séance avec le Coach IA toutes les 1 à 2&nbsp;semaines&nbsp;?</p>
         <label class="cand-opt"><input type="radio" name="cand-dispo" value="oui"><span>Oui</span></label>
         <label class="cand-opt"><input type="radio" name="cand-dispo" value="a_discuter"><span>À discuter lors de l'appel</span></label>
+        <p class="cand-note">Bon à savoir&nbsp;: mes appels et mes visios ont lieu en soirée, en général après 21h (heure de Paris).</p>
 
         <p class="cand-q">4. Qu'attendez-vous de ce programme&nbsp;? <span style="font-weight:400; color:#8A8FA8;">(facultatif)</span></p>
         <textarea id="cand-attentes" class="qz-field" rows="3" maxlength="800" placeholder="Quelques mots suffisent" style="resize:vertical;"></textarea>
@@ -1870,13 +1871,11 @@
   /* Bloc candidature de la page de résultat : confirmation (détail + prix) ou invitation à candidater */
   function candidatureBlock() {
     var cd = serverData && serverData.candidature;
-    var rdv = serverData && serverData.rdvUrl;
     if (cd) {
       var toConfirm = cd.statut === 'A_confirmer';
       var next = toConfirm
         ? '<p>Vous m\'avez indiqué que votre conjoint(e) n\'était <strong>pas encore au courant</strong> : votre candidature est <strong>à confirmer</strong>. Parlez-en ensemble tranquillement ; je vous envoie par e-mail un lien pour la confirmer, avant le <strong>20&nbsp;décembre</strong>.</p>'
-        : '<p><strong>Prochaine étape&nbsp;: un appel de candidature de 15 à 30&nbsp;minutes avec moi</strong>, entre le 13&nbsp;décembre et le 10&nbsp;janvier.</p>' +
-          (rdv ? '<a href="' + rdv + '" target="_blank" rel="noopener" class="cta-card-action cta-card-action--pink" style="margin-bottom:10px;">📅 Choisir mon créneau →</a>' : '<p>Je vous écris par e-mail pour fixer ensemble ce rendez-vous (vous pouvez aussi répondre au mail reçu).</p>');
+        : '<p><strong>Prochaine étape&nbsp;:</strong> j\'étudie les candidatures au fil de l\'eau. Si la vôtre est présélectionnée, je vous écris pour vous envoyer mon agenda et vous laisser choisir un créneau pour un <strong>appel de candidature de 15 à 30&nbsp;minutes</strong>, entre le 13&nbsp;décembre et le 10&nbsp;janvier (en soirée, en général après 21h).</p>';
       return '<div class="cand-box cand-box--ok"><span class="cand-badge">✓ Couples fondateurs</span>' +
         '<h3>Votre candidature a bien été prise en compte</h3>' + next +
         '<p style="margin-top:6px;"><strong>Le détail du programme</strong></p>' +

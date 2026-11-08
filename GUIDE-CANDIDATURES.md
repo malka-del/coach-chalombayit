@@ -10,8 +10,12 @@
 3. Chaque candidature envoie **une alerte à Alison** (`CANDIDATURE_NOTIF_EMAIL`) avec toutes les réponses.
 
 ## À créer dans Airtable (table « Couples & CRM », noms exacts)
-`Candidature_fondateur` (case à cocher) · `Candidature_date` (date) · `Candidature_statut` (**texte sur une ligne** : `A_appeler`, `A_confirmer`, puis à la main `Appel_fait`, `Retenu`, `Offert`, `Refuse`) · `Candidature_conjoint`, `Candidature_duree`, `Candidature_dispo` (texte sur une ligne) · `Candidature_attentes` (texte long) · `Relance_cand_1`, `Relance_cand_2` (cases à cocher).
+`Candidature_fondateur` (case à cocher) · `Candidature_date` (date) · `Candidature_statut` (**texte sur une ligne** : `A_appeler`, `A_confirmer`, puis à la main `Appel_fait`, `Retenu`, `Offert`, `Refuse`) · `Candidature_conjoint`, `Candidature_duree`, `Candidature_dispo` (texte sur une ligne) · `Candidature_attentes` (texte long) · `Relance_cand_1`, `Relance_cand_2`, `Presel_mail_envoye` (cases à cocher).
 Si un champ manque, la candidature est quand même conservée dans `Reponses_quiz` (JSON, clé `candidature`) et l'alerte part.
+
+## Présélection (c'est toi qui envoies ton agenda)
+Les candidats ne reçoivent **pas** le lien de réservation à la candidature : le mail et la page disent que tu étudies les candidatures et que, si la leur est présélectionnée, tu leur envoies ton agenda.
+Pour présélectionner un couple : dans Airtable, passe `Candidature_statut` à **`Preselectionne`**. Au prochain passage du cron (chaque matin), il reçoit le mail « Félicitations, vous êtes présélectionnés » avec le lien `CANDIDATURE_RDV_URL` (case `Presel_mail_envoye` cochée ensuite pour éviter tout doublon). Le texte est dans `api/_lib/emails.js` (`CAND_PRESEL:cand`).
 
 ## Variables Vercel
 - `CANDIDATURE_RDV_URL` : lien de la page de réservation Google Agenda (créneaux de 30 min, 13 déc. → 10 janv.). Sans lui, les e-mails disent « je vous écris pour fixer l'appel ».

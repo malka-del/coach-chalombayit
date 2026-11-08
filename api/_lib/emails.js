@@ -90,7 +90,8 @@ function content(profil, etape, ctx) {
       ]
     : [
         { p: "**Votre candidature au programme de coaching hybride (Coach IA + supervision humaine) a bien été prise en compte.** Merci de votre confiance." },
-        rdvCard, programme, decompte, dates,
+        { p: "**Prochaine étape :** j'étudie les candidatures au fil de l'eau. Si la vôtre est présélectionnée, je vous écris pour vous envoyer mon agenda et vous laisser choisir un créneau pour un **appel de candidature de 15 à 30 minutes**, entre le 13 décembre et le 10 janvier (en soirée, en général après 21h)." },
+        programme, decompte, dates,
       ];
 
   const C = {
@@ -100,6 +101,19 @@ function content(profil, etape, ctx) {
       reason: "Vous recevez cet e-mail parce que vous avez candidaté au programme des couples fondateurs sur coach.chalombayitlelab.com.",
       kicker: 'Couples fondateurs', title: 'Candidature bien reçue', sub: 'Programme de coaching hybride',
       blocks: [...candOkBlocks, reply],
+    },
+    'CAND_PRESEL:cand': {
+      subject: '{prenom}, félicitations : vous êtes présélectionnés ✨',
+      pre: 'Votre candidature est présélectionnée : voici la suite.',
+      reason: "Vous recevez cet e-mail parce que vous avez candidaté au programme des couples fondateurs sur coach.chalombayitlelab.com.",
+      kicker: 'Couples fondateurs', title: 'Félicitations !', sub: 'Vous êtes présélectionnés',
+      blocks: [
+        { p: "**Félicitations, vous êtes présélectionnés pour intégrer le programme de coaching hybride comme couple fondateur.** Votre candidature m'a donné envie d'en savoir plus sur vous deux." },
+        { p: "**La suite :** choisissez un créneau pour votre appel de candidature, 15 à 30 minutes avec moi, pour faire connaissance et voir si le programme vous correspond. Mes appels ont lieu en soirée, en général après 21h (heure de Paris)." },
+        rdvCard,
+        { p: "À l'issue de nos échanges, **si vous êtes sélectionnés**, vous serez soit l'un des **3 couples pour qui le programme est offert**, soit vous rejoindrez le programme avec le **tarif spécial couples fondateurs**. Je vous en dis plus lors de l'appel." },
+        { p: "Mes réponses définitives arrivent **au plus tard le 10 janvier**. Une question d'ici là ? **Répondez simplement à cet e-mail**." },
+      ],
     },
     'CAND_R1:cand': {
       subject: '{prenom}, avez-vous pu en parler en couple ?',

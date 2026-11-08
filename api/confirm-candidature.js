@@ -57,7 +57,7 @@ module.exports = async function handler(req, res) {
       console.error('[confirm-candidature]', err.message);
       return res.status(500).send(page('Erreur', '<h1>Oups</h1><p>Une erreur est survenue. Écrivez-moi à malka@chalombayitlelab.com et je confirme votre candidature à la main.</p>'));
     }
-    return res.status(200).send(page('Candidature confirmée', '<h1>Candidature confirmée ✨</h1><p>Merci ! Je vous envoie à l\'instant un e-mail avec le lien pour réserver votre appel de candidature (15 à 30 minutes).</p><a class="g" href="https://coach.chalombayitlelab.com">Retour au site</a>'));
+    return res.status(200).send(page('Candidature confirmée', '<h1>Candidature confirmée ✨</h1><p>Merci ! Votre candidature est confirmée. Je l\'étudie, et si elle est présélectionnée je vous écris pour vous proposer un appel de 15 à 30 minutes.</p><a class="g" href="https://coach.chalombayitlelab.com">Retour au site</a>'));
   }
 
   return res.status(200).send(page('Confirmer notre candidature',
