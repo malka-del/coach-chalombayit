@@ -37,7 +37,7 @@ module.exports = async function handler(req, res) {
   let details = {};
   try { details = JSON.parse(f.Reponses_quiz || '{}') || {}; } catch (e) { details = {}; }
   const nb = (Number(details.candidature_depots) || 0) + 1;
-  if (nb > 3) return res.status(429).json({ ok: false, error: 'Merci d’écrire directement à malka@chalombayitlelab.com.' });
+  if (nb > 3) return res.status(429).json({ ok: false, error: 'Merci d’écrire à Alison via le formulaire de contact du site.' });
   details.candidature = { ...cand, consent_candidature_at: new Date().toISOString() };
   details.candidature_depots = nb;
 

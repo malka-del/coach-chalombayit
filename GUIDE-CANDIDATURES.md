@@ -2,7 +2,7 @@
 
 ## Parcours
 1. **Pendant la période (1er déc. 21h50 → 20 déc. 22h00, heure de Paris)** : après la 15e question, un écran explique en quelques lignes la candidature (8 couples, 3 programmes offerts, sans prix).
-   - **Je candidate** → 4 questions (conjoint d'accord / pas encore / non ; durée du couple ; dispo 6 mois ; attentes) + 2 cases (engagement en couple, consentement) → formulaire e-mail habituel → résultat du quiz + **« Votre candidature a bien été prise en compte »** + détail du programme et prix (294 + 100 + 300 + 54 = 748 € ; tarif fondateur 249 €) + lien de réservation de l'appel. Même contenu par e-mail (dans le mail de résultat).
+   - **Je candidate** → 4 questions (conjoint d'accord / pas encore / non ; durée du couple ; dispo 3 à 6 mois ; attentes) + 2 cases (engagement en couple, consentement) → formulaire e-mail habituel → résultat du quiz + **« Votre candidature a bien été prise en compte »** + détail du programme et prix (294 + 100 + 300 + 54 = 748 € ; tarif fondateur 249 €) + lien de réservation de l'appel. Même contenu par e-mail (dans le mail de résultat).
    - **Non merci** → résultat habituel + bloc **« Candidater pour le programme de coaching hybride IA et supervision humaine »** (détail du programme, sans prix) → bouton « Je candidate » → mêmes questions → envoi direct (`/api/submit-candidature`) → bloc de confirmation + e-mail de confirmation.
    - « Conjoint : non » → pas de candidature (le programme se vit en couple), résultat du quiz normal.
    - « Conjoint : pas encore » → statut `A_confirmer` : e-mail avec lien signé « Nous confirmons notre candidature » (`/api/confirm-candidature`), relance à J+3 puis rappel le 18 décembre.

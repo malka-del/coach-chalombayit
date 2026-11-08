@@ -377,7 +377,7 @@ function notifPayload({ prenom, nom, email, cand, score, profilLabel, late, conf
 <p><strong>${e(prenom)} ${e(nom || '')}</strong> · <a href="mailto:${e(email)}">${e(email)}</a></p>
 <ul><li>Conjoint(e) d'accord : <strong>${e(L[cand.conjoint] || cand.conjoint)}</strong></li>
 <li>En couple depuis : ${e(D[cand.duree] || cand.duree)}</li>
-<li>Disponibilité 6 mois : ${cand.dispo === 'oui' ? 'oui' : 'à discuter'}</li>
+<li>Disponibilité 3 à 6 mois : ${cand.dispo === 'oui' ? 'oui' : 'à discuter'}</li>
 ${score !== undefined && score !== '' ? `<li>Quiz : ${e(score)}/30 · ${e(profilLabel || '')}</li>` : ''}</ul>
 <p><strong>Attentes :</strong><br>${e(cand.attentes || '(non renseignées)').replace(/\n/g, '<br>')}</p>
 <p style="color:#64748B;font-size:13px">Statut Airtable : ${e(candStatut(cand))}. Appels de candidature du 13 décembre au 10 janvier.</p></div>`;

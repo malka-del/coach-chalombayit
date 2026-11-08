@@ -1516,7 +1516,7 @@
           <option value="plus_10_ans">Plus de 10 ans</option>
         </select>
 
-        <p class="cand-q">3. Pouvez-vous vous engager pendant 6&nbsp;mois maximum, avec une séance avec le Coach IA toutes les 1 à 2&nbsp;semaines&nbsp;?</p>
+        <p class="cand-q">3. Pouvez-vous vous engager pendant 3 à 6&nbsp;mois, avec une séance avec le Coach IA toutes les 2&nbsp;semaines (ou plus souvent)&nbsp;?</p>
         <label class="cand-opt"><input type="radio" name="cand-dispo" value="oui"><span>Oui</span></label>
         <label class="cand-opt"><input type="radio" name="cand-dispo" value="a_discuter"><span>À discuter lors de l'appel</span></label>
 
@@ -1529,7 +1529,7 @@
         </label>
         <label class="qz-consent">
           <input type="checkbox" id="cand-consent">
-          <span>J'accepte que ces réponses soient transmises à Alison pour étudier ma candidature et que l'on me recontacte par e-mail à ce sujet (appel de candidature, rappel si besoin). Si ma candidature n'est pas retenue, elles sont conservées 6 mois maximum après la fin de la sélection. <a href="https://coach.chalombayitlelab.com/politique-confidentialite" target="_blank" rel="noopener">Politique de confidentialité</a></span>
+          <span>J'accepte que ces réponses soient transmises à Alison Malka pour étudier ma candidature et que l'on me recontacte par e-mail à ce sujet (appel de candidature, rappel si besoin). Si ma candidature n'est pas retenue, elles sont conservées 6 mois maximum après la fin de la sélection. <a href="https://coach.chalombayitlelab.com/politique-confidentialite" target="_blank" rel="noopener">Politique de confidentialité</a></span>
         </label>
         <div id="cand-err" class="qz-err" style="display:none;"></div>
         <button type="submit" id="cand-btn" class="btn btn--pink btn--lg" style="width:100%; border:none; margin-top:4px;">Continuer ➔</button>
@@ -1713,7 +1713,7 @@
           serverData.candidature = { statut: d.statut, saved: d.saved }; serverData.rdvUrl = d.rdvUrl || serverData.rdvUrl;
           showResult();
         } else {
-          candError((d && d.error) || "Un souci est survenu. Réessayez, ou écrivez-moi à malka@chalombayitlelab.com.");
+          candError((d && d.error) || "Un souci est survenu. Réessayez, ou écrivez-moi (malka[at]chalombayitlelab.com, ou via le formulaire de contact du site).");
         }
       }, function () { btn.disabled = false; btn.textContent = 'Envoyer ma candidature ➔'; candError("Connexion impossible. Réessayez dans un instant."); });
   };
@@ -1891,7 +1891,7 @@
         '<p style="font-size:0.8rem; margin:0;">Calendrier&nbsp;: candidatures jusqu\'au 20&nbsp;décembre · appels du 13&nbsp;décembre au 10&nbsp;janvier · réponse à chaque couple au plus tard le 10&nbsp;janvier.</p></div>';
     }
     if (candidature && candidature.active) { // candidature saisie mais l'enregistrement n'a pas abouti
-      return '<div class="cand-box"><span class="cand-badge">Couples fondateurs</span><h3>Votre candidature n\'a pas pu être enregistrée</h3><p>Un souci technique est survenu. Écrivez-moi simplement à <strong>malka@chalombayitlelab.com</strong> avec «&nbsp;Candidature couples fondateurs&nbsp;» et je m\'en occupe personnellement.</p></div>';
+      return '<div class="cand-box"><span class="cand-badge">Couples fondateurs</span><h3>Votre candidature n\'a pas pu être enregistrée</h3><p>Un souci technique est survenu. Écrivez-moi simplement à <strong>malka[at]chalombayitlelab.com</strong> (remplacez [at] par @) avec «&nbsp;Candidature couples fondateurs&nbsp;», ou passez par le <a href="https://form.jotform.com/253446337227358" target="_blank" rel="noopener" style="color:#E2C266;">formulaire de contact</a>, et je m\'en occupe personnellement.</p></div>';
     }
     if (candOpenFront() && serverData && serverData.candOpen !== false) {
       return '<div class="cand-box"><span class="cand-badge">Couples fondateurs · jusqu\'au 20 décembre</span>' +
@@ -1907,7 +1907,7 @@
   function renderMailStatus() {
     var box = $('qz-res-mail');
     if (serverData && serverData.limited) {
-      box.innerHTML = '<p class="qz-mail-ok">✦ Vous avez déjà reçu ce diagnostic par e-mail plusieurs fois : pensez à vérifier vos courriers indésirables, ou écrivez-moi simplement à malka@chalombayitlelab.com ✦</p>';
+      box.innerHTML = '<p class="qz-mail-ok">✦ Vous avez déjà reçu ce diagnostic par e-mail plusieurs fois : pensez à vérifier vos courriers indésirables, ou écrivez-moi (malka[at]chalombayitlelab.com, en remplaçant [at] par @) ✦</p>';
     } else if (serverData && serverData.emailSent) {
       box.innerHTML = '<p class="qz-mail-ok">✦ Votre diagnostic a été envoyé par e-mail (pensez à vérifier vos courriers indésirables) ✦</p>';
     } else {
