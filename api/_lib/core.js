@@ -15,7 +15,7 @@
  *   CANDIDATURE_RDV_URL           lien de la page de réservation Google Agenda (appel de candidature 15–30 min)
  *   CANDIDATURE_NOTIF_EMAIL       adresse qui reçoit l'alerte « nouvelle candidature » (défaut : malka@chalombayitlelab.com)
  *   MAKE_CANDIDATURE_WEBHOOK_URL  webhook d'un scénario Make dédié aux e-mails de candidature (défaut : MAKE_QUIZ_WEBHOOK_URL)
- *   CANDIDATURE_START / CANDIDATURE_END   fenêtre ISO (défaut : 2026-12-01T21:50+01:00 → 2026-12-20T22:00+01:00)
+ *   CANDIDATURE_START / CANDIDATURE_END   fenêtre ISO (défaut : 2026-12-01T21:30+01:00 → 2026-12-20T22:00+01:00)
  *   CANDIDATURE_FORCE_OPEN=1      force l'ouverture (À METTRE UNIQUEMENT sur l'environnement « Preview » pour tester)
  *   AIRTABLE_BASE_ID / AIRTABLE_TABLE_ID   optionnels (valeurs par défaut = base « Production », table « Couples & CRM »)
  */
@@ -66,7 +66,7 @@ function clean(v, max) {
 }
 
 /* ───────────── Candidature « couples fondateurs » ───────────── */
-const CAND_DEFAULT = { start: '2026-12-01T21:50:00+01:00', end: '2026-12-20T22:00:00+01:00' };
+const CAND_DEFAULT = { start: '2026-12-01T21:30:00+01:00', end: '2026-12-20T22:00:00+01:00' };
 const CAND_DUREES = ['moins_1_an', '1_a_3_ans', '3_a_10_ans', 'plus_10_ans'];
 function candWindow() {
   return { start: process.env.CANDIDATURE_START || CAND_DEFAULT.start, end: process.env.CANDIDATURE_END || CAND_DEFAULT.end };
@@ -76,6 +76,9 @@ function candOpen(now = Date.now()) {
   const w = candWindow();
   return now >= Date.parse(w.start) && now <= Date.parse(w.end);
 }
+/* Webinaire du 1er décembre : préinscription possible dès maintenant, jusqu'à l'heure de début des candidatures (même instant par défaut). */
+const webinaireEnd = () => Date.parse((process.env.WEBINAIRE_END || '2026-12-01T21:30:00+01:00').trim());
+const webinaireOpen = (now = Date.now()) => now <= webinaireEnd();
 const rdvUrl = () => (process.env.CANDIDATURE_RDV_URL || '').trim();
 const candNotifEmail = () => (process.env.CANDIDATURE_NOTIF_EMAIL || 'malka@chalombayitlelab.com').trim();
 
@@ -385,7 +388,7 @@ ${score !== undefined && score !== '' ? `<li>Quiz : ${e(score)}/30 · ${e(profil
 }
 
 module.exports = {
-  CAND_DEFAULT, candWindow, candOpen, rdvUrl, candNotifEmail, cleanCandidature, candStatut, saveCandidature, confirmUrl, verifyCand, notifPayload,
+  webinaireOpen, CAND_DEFAULT, candWindow, candOpen, rdvUrl, candNotifEmail, cleanCandidature, candStatut, saveCandidature, confirmUrl, verifyCand, notifPayload,
   POINTS, REVERSED, QUESTION_COUNT, PROFILES,
   scoreAnswers, profileFor, profileFromAirtable, validate, clean,
   parisDate, setCors, apiBase, signEmail, verifyEmail, makeRef, parseRef, unsubUrl, bookUrl, bookLine,

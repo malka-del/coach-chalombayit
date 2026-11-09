@@ -1213,7 +1213,7 @@
             </a>
           </div>
 
-          <div class="offer-card" id="offer-hybride" style="display:none;">
+          <div class="offer-card" id="offer-hybride">
             <div class="offer-icon">🤝</div>
             <h3>Programme complet hybride</h3>
             <p class="offer-desc">Le Coach IA sur WhatsApp, supervisé par Malka, avec deux temps en visio avec elle. Ouvert sur candidature, pour un premier groupe de couples fondateurs.</p>
@@ -1226,7 +1226,14 @@
               <li><span>Supervision humaine tout au long du parcours</span></li>
               <li><span>Candidature en couple, en 1 minute</span></li>
             </ul>
-            <a href="#" onclick="openQuiz();return false;" class="btn btn--pink">
+            <div id="offer-hybride-web">
+              <p class="offer-note"><strong>Webinaire de lancement le mardi 1er décembre.</strong> Préinscrivez-vous dès maintenant, de préférence à deux.</p>
+              <a href="#" onclick="openWebinaire();return false;" class="btn btn--pink">
+                Je me préinscris au webinaire
+              </a>
+            </div>
+            <p id="offer-hybride-soon" class="offer-note" style="margin-top:12px;">Les candidatures ouvrent le <strong>mardi 1er décembre à 21h30</strong>.</p>
+            <a id="offer-hybride-cand" href="#" onclick="openQuiz();return false;" class="btn btn--pink" style="display:none;">
               Candidater comme couple fondateur
             </a>
           </div>
@@ -1429,6 +1436,17 @@
   .cta-card-action--wa   { background: #25D366; color: #000000; }
 
 
+
+  .offer-note { font-size: .82rem; color: var(--muted); line-height: 1.55; margin: 0 0 10px; text-align: center; }
+  .offer-note strong { color: #F0EDE6; }
+  #web-modal { position: fixed; inset: 0; z-index: 100001; background: rgba(0,0,0,0.85); display: none; align-items: center; justify-content: center; padding: 20px; overflow-y: auto; }
+  #web-modal.active { display: flex; }
+  .web-box { background: #171822; border: 1.5px solid rgba(232,69,168,.55); border-radius: 18px; padding: 26px 22px; max-width: 420px; width: 100%; text-align: left; position: relative; }
+  .web-box h3 { font-family: 'DM Serif Display', Georgia, serif; font-weight: 400; color: #FFFFFF; font-size: 1.35rem; margin: 0 0 8px; }
+  .web-box p { font-size: .88rem; color: #B7BACB; line-height: 1.6; margin: 0 0 12px; }
+  .web-box p strong { color: #F0EDE6; }
+  .web-close { position: absolute; top: 10px; right: 12px; background: none; border: none; color: #8A8FA8; font-size: 1.2rem; cursor: pointer; }
+
   /* ── Candidature « couples fondateurs » ── */
   .cand-box { background: #13141A; border: 1.5px solid rgba(232,69,168,.45); border-radius: 18px; padding: 20px 18px; text-align: left; margin: 0 0 14px; }
   .cand-box h3 { font-family: 'DM Serif Display', Georgia, serif; font-weight: 400; color: #FFFFFF; font-size: 1.25rem; margin: 0 0 8px; }
@@ -1595,6 +1613,38 @@
 <!-- Modal express numéro WhatsApp (si omis lors du quiz) -->
 
 
+<!-- Préinscription au webinaire du 1er décembre -->
+<div id="web-modal" role="dialog" aria-modal="true" aria-label="Préinscription au webinaire">
+  <div class="web-box">
+    <button type="button" class="web-close" onclick="closeWebinaire()" aria-label="Fermer">✕</button>
+    <div id="web-form-wrap">
+      <span class="cand-badge">Webinaire · mardi 1er décembre</span>
+      <h3>Je me préinscris</h3>
+      <p>Je lance un <strong>nouveau programme de coaching hybride</strong>, avec des évolutions du Coach IA de couple. Préinscrivez-vous : je vous envoie l'heure et le lien par e-mail. Venez de préférence <strong>à deux</strong>.</p>
+      <form id="web-form" onsubmit="submitWebinaire(event)" novalidate>
+        <input type="text" id="web-prenom" class="qz-field" placeholder="Votre prénom *" autocomplete="given-name">
+        <div id="web-e-prenom" class="qz-err" style="display:none;"></div>
+        <input type="email" id="web-email" class="qz-field" placeholder="Votre e-mail *" autocomplete="email" inputmode="email">
+        <div id="web-e-email" class="qz-err" style="display:none;"></div>
+        <div class="qz-hp" aria-hidden="true"><label>Ne pas remplir<input type="text" id="web-website" tabindex="-1" autocomplete="off"></label></div>
+        <label class="qz-consent">
+          <input type="checkbox" id="web-consent">
+          <span>J'accepte de recevoir par e-mail les informations sur ce webinaire (heure, lien) et, ensuite, sur le programme. Désinscription en 1 clic à tout moment. Mes données ne sont jamais revendues. <a href="https://coach.chalombayitlelab.com/politique-confidentialite" target="_blank" rel="noopener">Politique de confidentialité</a></span>
+        </label>
+        <div id="web-e-consent" class="qz-err" style="display:none;"></div>
+        <div id="web-e-global" class="qz-err" style="display:none;"></div>
+        <button type="submit" id="web-btn" class="btn btn--pink btn--lg" style="width:100%; border:none;">Valider ma préinscription ➔</button>
+      </form>
+    </div>
+    <div id="web-done" style="display:none;">
+      <span class="cand-badge">Préinscription enregistrée</span>
+      <h3>Merci, c'est noté&nbsp;!</h3>
+      <p>Je vous envoie un e-mail de confirmation. Pensez à vérifier vos courriers indésirables. L'heure et le lien de connexion suivront avant le webinaire du <strong>mardi 1er décembre</strong>.</p>
+      <button type="button" class="btn btn--ghost" style="width:100%;" onclick="closeWebinaire()">Fermer</button>
+    </div>
+  </div>
+</div>
+
 <!-- Bouton flottant de reprise -->
 <button id="qz-fab" onclick="openQuiz()"><span>📊</span> <span id="qz-fab-text">Reprendre le quiz</span></button>
 
@@ -1632,14 +1682,54 @@
   var candMode = 'early';          // 'early' = avant le formulaire e-mail, 'late' = depuis la page de résultat
   var candDone = false;            // la personne a déjà vu / tranché l'écran de candidature
   /* Période de candidature (le serveur applique la même fenêtre : c'est lui qui décide). Aperçu : ajouter ?cand=1 à l'adresse. */
-  var CAND_START = Date.parse('2026-12-01T21:50:00+01:00'), CAND_END = Date.parse('2026-12-20T22:00:00+01:00');
+  var CAND_START = Date.parse('2026-12-01T21:30:00+01:00'), CAND_END = Date.parse('2026-12-20T22:00:00+01:00');
   function candOpenFront() {
     if (/[?&]cand=1/.test(location.search)) return true;
     var n = Date.now(); return n >= CAND_START && n <= CAND_END;
   }
 
   var $ = function (id) { return document.getElementById(id); };
-  (function () { var o = document.getElementById('offer-hybride'); if (o && candOpenFront()) o.style.display = ''; })();
+  /* Carte « Programme hybride » : webinaire (préinscription) tant que les candidatures ne sont pas ouvertes, puis bouton de candidature. */
+  function syncHybride() {
+    var open = candOpenFront(), g = function (i) { return document.getElementById(i); };
+    if (g('offer-hybride-web')) g('offer-hybride-web').style.display = open ? 'none' : '';
+    if (g('offer-hybride-soon')) g('offer-hybride-soon').style.display = open ? 'none' : '';
+    if (g('offer-hybride-cand')) g('offer-hybride-cand').style.display = open ? '' : 'none';
+  }
+  syncHybride();
+  (function () { var d = CAND_START - Date.now(); if (d > 0 && d < 2000000000) setTimeout(syncHybride, d + 500); })();
+
+  /* Préinscription au webinaire du 1er décembre (disponible dès maintenant) */
+  var WEB_URL = API_URL.replace('submit-quiz', 'preinscription-webinaire');
+  window.openWebinaire = function () {
+    $('web-form-wrap').style.display = ''; $('web-done').style.display = 'none';
+    $('web-modal').classList.add('active');
+    setTimeout(function () { try { $('web-prenom').focus(); } catch (e) {} }, 50);
+  };
+  window.closeWebinaire = function () { $('web-modal').classList.remove('active'); };
+  function webErr(id, msg) { var el = $(id); if (!el) return; el.textContent = msg || ''; el.style.display = msg ? 'block' : 'none'; }
+  window.submitWebinaire = function (ev) {
+    ev.preventDefault();
+    var prenom = $('web-prenom').value.trim(), email = $('web-email').value.trim(), ok = true;
+    ['prenom', 'email', 'consent', 'global'].forEach(function (k) { webErr('web-e-' + k, ''); });
+    if (!prenom) { webErr('web-e-prenom', 'Merci de renseigner votre prénom.'); ok = false; }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) { webErr('web-e-email', "L'adresse e-mail ne semble pas valide."); ok = false; }
+    if (!$('web-consent').checked) { webErr('web-e-consent', 'Merci de cocher la case pour valider votre préinscription.'); ok = false; }
+    if (!ok) return;
+    var btn = $('web-btn'); btn.disabled = true; btn.textContent = 'Envoi…';
+    fetch(WEB_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ prenom: prenom, email: email, consent: true, website: $('web-website').value }) })
+      .then(function (r) { return r.json().catch(function () { return {}; }); })
+      .then(function (d) {
+        btn.disabled = false; btn.textContent = 'Valider ma préinscription ➔';
+        if (d && d.ok) { $('web-form-wrap').style.display = 'none'; $('web-done').style.display = 'block'; return; }
+        var e = (d && d.errors) || {};
+        if (e.prenom) webErr('web-e-prenom', e.prenom);
+        if (e.email) webErr('web-e-email', e.email);
+        if (e.consent) webErr('web-e-consent', e.consent);
+        if (!e.prenom && !e.email && !e.consent) webErr('web-e-global', (d && d.error) || 'Un souci est survenu. Réessayez dans un instant.');
+      })
+      .catch(function () { btn.disabled = false; btn.textContent = 'Valider ma préinscription ➔'; webErr('web-e-global', 'Connexion impossible. Réessayez dans un instant.'); });
+  };
   function store(k, v) { try { if (v === undefined) return window.localStorage.getItem(k); window.localStorage.setItem(k, v); } catch (e) { return null; } }
   function sstore(k, v) { try { if (v === undefined) return window.sessionStorage.getItem(k); window.sessionStorage.setItem(k, v); } catch (e) { return null; } }
 

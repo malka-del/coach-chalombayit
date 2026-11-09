@@ -32,6 +32,7 @@ const HEADERS = {
   urgence: { from: '#0E7490', to: '#155E75', accent: '#A5F3FC' }, // teintes apaisantes, pas de rouge
   essai:   { from: '#B8860B', to: '#8C6512', accent: '#38BDF8' },
   cand:    { from: '#9D174D', to: '#6B1D4A', accent: '#FBCFE8' },
+  web:     { from: '#9D174D', to: '#6B1D4A', accent: '#FBCFE8' },
 };
 const PROFIL_LABEL = { lune: 'Lune de Miel Active ✨', agile: 'Révision Agile Nécessaire 🔧', urgence: 'Urgence de Reconnexion 🌿' };
 
@@ -90,6 +91,19 @@ function content(profil, etape, ctx) {
       reason: "Vous recevez cet e-mail parce que vous avez candidaté au programme des couples fondateurs sur coach.chalombayitlelab.com.",
       kicker: 'Couples fondateurs', title: 'Candidature bien reçue', sub: 'Programme de coaching hybride',
       blocks: [...candOkBlocks, reply],
+    },
+    'WEB_OK:web': {
+      subject: '{prenom}, votre préinscription au webinaire du 1er décembre',
+      pre: 'Préinscription bien reçue : voici la suite.',
+      reason: "Vous recevez cet e-mail parce que vous vous êtes préinscrit(e) au webinaire du 1er décembre sur coach.chalombayitlelab.com.",
+      kicker: 'Webinaire · mardi 1er décembre', title: 'Préinscription bien reçue', sub: 'Lancement d\'un nouveau programme de coaching hybride',
+      blocks: [
+        { p: "**Votre préinscription au webinaire du mardi 1er décembre est bien enregistrée.** Merci !" },
+        { p: "Ce soir-là, je lance un **nouveau programme de coaching hybride**, qui inclut des évolutions du Coach IA de couple." },
+        { p: "Si c'est possible, venez **avec votre conjoint(e)** : ce programme est pensé pour se vivre à deux, et on avance toujours mieux à deux." },
+        { p: "**La suite :** je vous envoie l'heure exacte et le lien de connexion par e-mail avant le webinaire. Vous n'avez rien d'autre à faire d'ici là." },
+        reply,
+      ],
     },
     'CAND_R1:cand': {
       subject: '{prenom}, avez-vous pu en parler en couple ?',

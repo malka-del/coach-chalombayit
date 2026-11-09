@@ -1,13 +1,21 @@
 # Candidatures « couples fondateurs » (branche `candidatures-fondateurs`)
 
 ## Parcours
-1. **Pendant la période (1er déc. 21h50 → 20 déc. 22h00, heure de Paris)** : après la 15e question, un écran explique en quelques lignes la candidature (8 couples, 3 programmes offerts, sans prix).
+1. **Pendant la période (1er déc. 21h30 → 20 déc. 22h00, heure de Paris)** : après la 15e question, un écran explique en quelques lignes la candidature (8 couples, 3 programmes offerts, sans prix).
    - **Je candidate** → 4 questions (conjoint d'accord / pas encore / non ; durée du couple ; dispo 3 à 6 mois ; attentes) + 2 cases (engagement en couple, consentement) → formulaire e-mail habituel → résultat du quiz + **« Votre candidature a bien été prise en compte »** + détail du programme et prix (294 + 100 + 300 + 54 = 748 € ; tarif fondateur 249 €) + lien de réservation de l'appel. Même contenu par e-mail (dans le mail de résultat).
    - **Non merci** → résultat habituel + bloc **« Candidater pour le programme de coaching hybride IA et supervision humaine »** (détail du programme, sans prix) → bouton « Je candidate » → mêmes questions → envoi direct (`/api/submit-candidature`) → bloc de confirmation + e-mail de confirmation.
    - « Conjoint : non » → pas de candidature (le programme se vit en couple), résultat du quiz normal.
    - « Conjoint : pas encore » → statut `A_confirmer` : e-mail avec lien signé « Nous confirmons notre candidature » (`/api/confirm-candidature`), relance à J+3 puis rappel le 18 décembre.
 2. **Hors période** : aucun écran de candidature, aucun bloc (le quiz redevient identique à avant). Le serveur refuse aussi les candidatures hors fenêtre.
 3. Chaque candidature envoie **une alerte à Alison** (`CANDIDATURE_NOTIF_EMAIL`) avec toutes les réponses.
+
+## Préinscription au webinaire du 1er décembre (disponible dès maintenant)
+- Sur la carte « Programme complet hybride » du site : bouton **« Je me préinscris au webinaire »** (prénom, e-mail, case de consentement) → `/api/preinscription-webinaire`.
+- Avant le **1er décembre 21h30** : la carte affiche le webinaire + « Les candidatures ouvrent le mardi 1er décembre à 21h30 », **aucun bouton de candidature**. Le quiz n'affiche aucun écran de candidature et le serveur refuse les candidatures. À 21h30 (heure de Paris), la carte bascule toute seule : bouton « Candidater comme couple fondateur » (même fenêtre front et serveur).
+- Chaque préinscription : fiche Airtable créée ou mise à jour (`Webinaire_1dec` = coché, `Webinaire_date`), **mail de confirmation** à la personne (modèle `WEB_OK`, sans heure ni lien : tu les envoies plus tard) et **alerte** à Alison. Filtre Airtable des préinscrits : `Webinaire_1dec` coché. Source = `Webinaire` pour les nouvelles fiches.
+- À créer dans Airtable : `Webinaire_1dec` (case à cocher), `Webinaire_date` (date). Sans eux, la préinscription n'est pas perdue : l'alerte mail part quand même, avec la mention « non enregistré ».
+- Variable facultative `WEBINAIRE_END` : fin des préinscriptions (défaut 2026-12-01T21:30+01:00).
+- Les préinscrits n'entrent pas dans la séquence J+3 / J+10 du quiz (elle exige une date et un profil de quiz).
 
 ## À créer dans Airtable (table « Couples & CRM », noms exacts)
 `Candidature_fondateur` (case à cocher) · `Candidature_date` (date) · `Candidature_statut` (**texte sur une ligne** : `A_appeler`, `A_confirmer`, puis à la main `Appel_fait`, `Retenu`, `Offert`, `Refuse`) · `Candidature_conjoint`, `Candidature_duree`, `Candidature_dispo` (texte sur une ligne) · `Candidature_attentes` (texte long) · `Relance_cand_1`, `Relance_cand_2` (cases à cocher).
