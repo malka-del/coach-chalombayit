@@ -12,7 +12,7 @@
 ## Préinscription au webinaire du 1er décembre (disponible dès maintenant)
 - Sur la carte « Programme complet hybride » du site : bouton **« Je me préinscris au webinaire »** (prénom, e-mail, case de consentement) → `/api/preinscription-webinaire`.
 - Avant le **1er décembre 21h30** : la carte affiche le webinaire + « Les candidatures ouvrent le mardi 1er décembre à 21h30 », **aucun bouton de candidature**. Le quiz n'affiche aucun écran de candidature et le serveur refuse les candidatures. À 21h30 (heure de Paris), la carte bascule toute seule : bouton « Candidater comme couple fondateur » (même fenêtre front et serveur).
-- Chaque préinscription : fiche Airtable créée ou mise à jour (`Webinaire_1dec` = coché, `Webinaire_date`), **mail de confirmation** à la personne (modèle `WEB_OK`, sans heure ni lien : tu les envoies plus tard) et **alerte** à Alison. Filtre Airtable des préinscrits : `Webinaire_1dec` coché. Source = `Webinaire` pour les nouvelles fiches.
+- Chaque préinscription : fiche Airtable créée ou mise à jour (`Webinaire_1dec` = coché, `Webinaire_date`), **mail de confirmation** à la personne (modèle `WEB_OK`, avec l'heure (21h) mais sans lien : tu l'envoies plus tard) et **alerte** à Alison. Filtre Airtable des préinscrits : `Webinaire_1dec` coché. Source = `Webinaire` pour les nouvelles fiches.
 - À créer dans Airtable : `Webinaire_1dec` (case à cocher), `Webinaire_date` (date). Sans eux, la préinscription n'est pas perdue : l'alerte mail part quand même, avec la mention « non enregistré ».
 - Variable facultative `WEBINAIRE_END` : fin des préinscriptions (défaut 2026-12-01T21:30+01:00).
 - Les préinscrits n'entrent pas dans la séquence J+3 / J+10 du quiz (elle exige une date et un profil de quiz).
