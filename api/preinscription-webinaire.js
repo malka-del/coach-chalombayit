@@ -32,7 +32,7 @@ module.exports = async function handler(req, res) {
   if (Object.keys(errors).length) return res.status(400).json({ ok: false, errors });
 
   const today = core.parisDate();
-  let saved = false, already = false;
+  let saved = false, already = false, saveError = '';
   try {
     const rec = await core.findByEmail(email);
     if (rec) {
@@ -49,14 +49,14 @@ module.exports = async function handler(req, res) {
       });
     }
     saved = true;
-  } catch (e) { console.error('[preinscription-webinaire] Airtable (champs Webinaire_1dec / Webinaire_date manquants ?):', e && e.message); }
+  } catch (e) { saveError = String((e && e.message) || e).slice(0, 300); console.error('[preinscription-webinaire] Airtable (champs Webinaire_1dec / Webinaire_date manquants ?):', saveError); }
 
   // Alerte pour Alison : toujours envoyée, même si Airtable a échoué (rien n'est perdu).
   try {
     await core.sendToMake({
       email: core.candNotifEmail(),
       subject: `Préinscription webinaire · ${prenom.replace(/[<>\r\n]/g, '')}`,
-      html: `<div style="font-family:Arial,sans-serif;font-size:15px;color:#1E293B;line-height:1.6"><h2 style="margin:0 0 8px">Nouvelle préinscription au webinaire du 1er décembre</h2><p><strong>${esc(prenom)}</strong> · <a href="mailto:${esc(email)}">${esc(email)}</a></p><p style="color:#64748B;font-size:13px">${already ? 'Déjà préinscrit(e) (nouvelle demande). ' : ''}${saved ? 'Enregistré dans Airtable (Webinaire_1dec).' : 'ATTENTION : non enregistré dans Airtable (champs Webinaire_1dec / Webinaire_date à créer). Garde ce mail.'}</p></div>`,
+      html: `<div style="font-family:Arial,sans-serif;font-size:15px;color:#1E293B;line-height:1.6"><h2 style="margin:0 0 8px">Nouvelle préinscription au webinaire du 1er décembre</h2><p><strong>${esc(prenom)}</strong> · <a href="mailto:${esc(email)}">${esc(email)}</a></p><p style="color:#64748B;font-size:13px">${already ? 'Déjà préinscrit(e) (nouvelle demande). ' : ''}</p>${saved ? '' : `<p style="color:#B91C1C;font-size:13px"><strong>ATTENTION : non enregistré dans Airtable.</strong> Garde ce mail. Erreur : ${esc(saveError)}</p>`}</div>`,
       etape: 'NOTIF_WEB', profil: 'web', profil_label: 'Notification préinscription webinaire', score: '', prenom: 'Alison', nom: '', telephone: '', unsub_url: '',
     });
   } catch (e) { console.error('[preinscription-webinaire] notif:', e && e.message); }
