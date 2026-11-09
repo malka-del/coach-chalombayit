@@ -463,7 +463,7 @@
     .offers { background: var(--dark2); border-top: 1px solid rgba(255,255,255,.05); }
     .offers-grid {
       display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px;
-      margin-top: 44px; align-items: start;
+      margin-top: 44px; align-items: stretch;
     }
     .offer-card {
       background: var(--dark);
@@ -477,6 +477,12 @@
       border-color: var(--pink);
       box-shadow: 0 0 0 1px rgba(232,69,168,.2), 0 16px 48px rgba(232,69,168,.12);
     }
+    .offer-wide { display: grid; grid-template-columns: 1.4fr 1fr; gap: 40px; align-items: center; margin-top: 32px; padding: 36px 40px; border-color: var(--pink); box-shadow: 0 0 0 1px rgba(232,69,168,.2), 0 16px 48px rgba(232,69,168,.12); }
+    .offer-wide .offer-features { display: grid; grid-template-columns: 1fr 1fr; gap: 9px 24px; margin-bottom: 0; }
+    .offer-wide .offer-desc { margin-bottom: 18px; max-width: 560px; }
+    .offer-wide .offer-price { margin-bottom: 14px; }
+    .offer-wide-cta { text-align: center; }
+    .offer-wide .btn { margin-top: 0; }
     .offer-badge {
       position: absolute; top: -13px; left: 50%; transform: translateX(-50%);
       background: var(--pink); color: #fff;
@@ -495,7 +501,8 @@
     .offer-features li { font-size: .85rem; color: var(--muted); display: flex; gap: 10px; }
     .offer-features li::before { content:"✓"; color:var(--wa); flex-shrink:0; font-weight:700; }
     .offer-features li span { color: var(--text); }
-    .offer-card .btn { width: 100%; }
+    .offer-card .btn { width: 100%; margin-top: auto; }
+    .offer-card .offer-desc { flex-grow: 1; }
 
     /* ── TÉMOIGNAGES ───────────────────────────────────── */
     .testi { background: var(--dark); border-top: 1px solid rgba(255,255,255,.05); border-bottom: 1px solid rgba(255,255,255,.05); }
@@ -613,6 +620,8 @@
       .how-steps, .method-grid, .offers-grid, .testi-grid, .case-cards, .urgency-choices, .pain-grid {
         grid-template-columns: 1fr;
       }
+      .offer-wide { grid-template-columns: 1fr; gap: 24px; padding: 32px 22px; }
+      .offer-wide .offer-features { grid-template-columns: 1fr; }
       .who-stats { grid-template-columns: repeat(3,1fr); }
       .nav-btn-book { display: none; }
     }
@@ -1212,32 +1221,36 @@
               Prendre RDV pour une première séance
             </a>
           </div>
+        </div>
 
-          <div class="offer-card" id="offer-hybride">
-            <div class="offer-icon">🤝</div>
-            <h3>Programme complet hybride</h3>
-            <p class="offer-desc">Le Coach IA sur WhatsApp, supervisé par Malka, avec deux temps en visio avec elle. Ouvert sur candidature, pour un premier groupe de couples fondateurs.</p>
-            <div class="offer-price">
-              <span class="amount">Sur candidature</span>
-            </div>
-            <ul class="offer-features">
-              <li><span>Séances avec le Coach IA sur WhatsApp</span></li>
-              <li><span>2 visios avec Malka</span></li>
-              <li><span>Supervision humaine tout au long du parcours</span></li>
-              <li><span>Candidature en couple, en 1 minute</span></li>
-            </ul>
-            <div id="offer-hybride-web">
-              <p class="offer-note"><strong>Webinaire de lancement le mardi 1er décembre.</strong> Préinscrivez-vous dès maintenant, de préférence à deux.</p>
-              <a href="#" onclick="openWebinaire();return false;" class="btn btn--pink">
-                Je me préinscris au webinaire
-              </a>
-            </div>
-            <p id="offer-hybride-soon" class="offer-note" style="margin-top:12px;">Les candidatures ouvrent le <strong>mardi 1er décembre à 21h30</strong>.</p>
-            <a id="offer-hybride-cand" href="#" onclick="openQuiz();return false;" class="btn btn--pink" style="display:none;">
-              Candidater comme couple fondateur
+      <!-- Programme hybride : bandeau pleine largeur sous les trois offres Malka -->
+      <div class="offer-card offer-wide" id="offer-hybride">
+        <span class="offer-badge">✨ Nouveau · couples fondateurs</span>
+        <div class="offer-wide-main">
+          <div class="offer-icon">🤝</div>
+          <h3>Programme complet hybride</h3>
+          <p class="offer-desc">Le Coach IA sur WhatsApp, supervisé par Malka, avec deux temps en visio avec elle. Ouvert sur candidature, pour un premier groupe de couples fondateurs.</p>
+          <ul class="offer-features">
+            <li><span>Séances avec le Coach IA sur WhatsApp</span></li>
+            <li><span>2 visios avec Malka</span></li>
+            <li><span>Supervision humaine tout au long du parcours</span></li>
+            <li><span>Candidature en couple, en 1 minute</span></li>
+          </ul>
+        </div>
+        <div class="offer-wide-cta">
+          <div class="offer-price"><span class="amount">Sur candidature</span></div>
+          <div id="offer-hybride-web">
+            <p class="offer-note"><strong>Webinaire de lancement le mardi 1er décembre.</strong> Préinscrivez-vous dès maintenant, de préférence à deux.</p>
+            <a href="#" onclick="openWebinaire();return false;" class="btn btn--pink">
+              Je me préinscris au webinaire
             </a>
           </div>
+          <p id="offer-hybride-soon" class="offer-note" style="margin-top:12px;">Les candidatures ouvrent le <strong>mardi 1er décembre à 21h30</strong>.</p>
+          <a id="offer-hybride-cand" href="#" onclick="openQuiz();return false;" class="btn btn--pink" style="display:none;">
+            Candidater comme couple fondateur
+          </a>
         </div>
+      </div>
       </div>
     </div>
   </section>
