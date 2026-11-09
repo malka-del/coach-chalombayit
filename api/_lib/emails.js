@@ -100,7 +100,6 @@ function content(profil, etape, ctx) {
       blocks: [
         { p: "**Votre préinscription au webinaire du mardi 1er décembre à 21h est bien enregistrée.** Merci !" },
         { p: "Ce soir-là, à 21h, je lance un **nouveau programme de coaching hybride**, qui inclut des évolutions du Coach IA de couple." },
-        { p: "Si c'est possible, venez **avec votre conjoint(e)** : ce programme est pensé pour se vivre à deux, et on avance toujours mieux à deux." },
         { p: "**La suite :** je vous envoie le lien de connexion par e-mail avant le webinaire. Vous n'avez rien d'autre à faire d'ici là." },
         reply,
       ],
