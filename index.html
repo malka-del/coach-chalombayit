@@ -101,6 +101,14 @@
     .nav-logo span.le  { color: var(--blue); }
     .nav-logo span.lab { color: var(--pink); }
     .nav-ctas { display: flex; gap: 10px; align-items: center; }
+    html { scroll-behavior: smooth; }
+    section[id], #offer-hybride { scroll-margin-top: 112px; }
+    .nav-menu { border-top: 1px solid rgba(255,255,255,.05); }
+    .nav-menu-inner { display: flex; gap: 4px; max-width: 1080px; margin: 0 auto; padding: 0 16px; overflow-x: auto; scrollbar-width: none; justify-content: center; }
+    .nav-menu-inner::-webkit-scrollbar { display: none; }
+    .nav-menu a { flex: none; font-size: .74rem; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: var(--muted); text-decoration: none; padding: 11px 12px; border-bottom: 2px solid transparent; white-space: nowrap; }
+    .nav-menu a:hover, .nav-menu a.on { color: var(--gold); border-bottom-color: var(--gold); }
+    @media (max-width: 900px) { .nav-menu-inner { justify-content: flex-start; } }
 
     /* ── HERO SECTION ──────────────────────────────────── */
     .hero {
@@ -675,6 +683,17 @@
         </a>
       </div>
     </div>
+    <div class="nav-menu"><div class="nav-menu-inner" id="nav-menu">
+      <a href="#livre-section">Livre</a>
+      <a href="#vous">Vous</a>
+      <a href="#moi">Moi</a>
+      <a href="#methode">La méthode</a>
+      <a href="#cout">Le coût</a>
+      <a href="#temoignages">Témoignages</a>
+      <a href="#etude-de-cas">Étude de cas</a>
+      <a href="#accompagnements">Accompagnements</a>
+      <a href="#faq">FAQ</a>
+    </div></div>
   </nav>
 
   <!-- ── HERO SECTION ── -->
@@ -709,7 +728,7 @@
               📖 Découvrir le livre
             </a>
           </div>
-          <p class="hero-note">✨ Sans engagement · Confidentiel · Réponse instantanée sur WhatsApp</p>
+          <p class="hero-note">✨ Sans engagement · Réponse instantanée sur WhatsApp</p>
         </div>
 
         <div class="phone-wrap">
@@ -771,19 +790,18 @@
         <div class="book-details">
           <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;">
             <span class="pill">📖 Disponible sur Amazon</span>
-            <span class="pill--pink">Éditions Broché &amp; Relié Cartonné</span>
           </div>
 
           <h2>Chalom Bayit, Le LIVRE</h2>
           <p>
             <strong>54 défis hebdomadaires inspirés de la Paracha de la semaine</strong> pour devenir un couple agile, un Chabbat à la fois. 
-            Un rituel oral de 10 minutes à deux chaque vendredi soir sans écrans, complété par votre <em>Carnet de bord à deux</em> à remplir au stylo.
+            Un rituel oral de 10 minutes à deux chaque vendredi soir sans écrans, complété par votre <em>Carnet de bord</em> à remplir à deux.
           </p>
 
           <div class="book-perks">
             <div class="book-perk"><span>✓</span> 54 Sprints hebdomadaires guidés</div>
             <div class="book-perk"><span>✓</span> 1 rituel de 10 min sans écrans à Chabbat</div>
-            <div class="book-perk"><span>✓</span> 1 Carnet de bord à deux à remplir au stylo</div>
+            <div class="book-perk"><span>✓</span> 1 Carnet de bord à remplir à deux</div>
             <div class="book-perk"><span>✓</span> 1 Tableau de suivi des 54 Parachiot</div>
           </div>
 
@@ -803,16 +821,15 @@
     <div class="container">
       <div class="trust-items">
         <span class="trust-item">⭐⭐⭐⭐⭐ <strong>Avis 5 étoiles</strong></span>
-        <span class="trust-item">🕊️ <strong>Torah</strong> × Méthode <strong>Agile</strong></span>
+        <span class="trust-item">🕊️ <strong>Torah</strong> × <strong>Agile</strong></span>
         <span class="trust-item">🇫🇷 <strong>France</strong> · 🇮🇱 <strong>Israël</strong> · Monde entier</span>
-        <span class="trust-item">🔒 <strong>Confidentiel</strong> : lu par Alison seule</span>
         <span class="trust-item">👩‍💻 Supervisé par un <strong>coach humain</strong></span>
       </div>
     </div>
   </div>
 
   <!-- ── LE PROBLÈME ── -->
-  <section class="pain">
+  <section class="pain" id="vous">
     <div class="container">
       <span class="pill section-label">Le problème</span>
       <h2 class="section-title" style="margin-top:12px;">Vous vous reconnaissez ?</h2>
@@ -853,7 +870,7 @@
   </section>
 
   <!-- ── QUI JE SUIS ── -->
-  <section class="who">
+  <section class="who" id="moi">
     <div class="container">
       <div class="who-grid">
 
@@ -916,7 +933,7 @@
         <div class="how-step how-step--gold" data-n="1">
           <div class="step-icon">🎁</div>
           <h3>7 jours d'essai offerts</h3>
-          <p>Accédez immédiatement au Coach IA sur WhatsApp. <strong>Testez en conditions réelles</strong>, sans engagement, sans carte bleue.</p>
+          <p>Accédez immédiatement au Coach IA sur WhatsApp, en mode soutien. <strong>Testez en conditions réelles</strong>, sans engagement, sans carte bleue.</p>
         </div>
         <div class="how-step how-step--blue" data-n="2">
           <div class="step-icon">🤖</div>
@@ -933,7 +950,7 @@
   </section>
 
   <!-- ── LA MÉTHODE ── -->
-  <section class="method">
+  <section class="method" id="methode">
     <div class="container">
       <span class="pill section-label">La méthode</span>
       <h2 class="section-title" style="margin-top:12px;">3 piliers. 1 système qui tient.</h2>
@@ -942,12 +959,12 @@
       <div class="method-grid">
         <div class="method-card">
           <div class="mc-icon">🕎</div>
-          <h3 class="gold">Sagesse Torah (Chalom Bayit)</h3>
+          <h3 class="gold">Torah</h3>
           <p>La Torah donne du sens et de la sacralité au lien. Chalom Bayit, la paix du foyer, n'est pas un idéal : c'est une pratique. Des principes millénaires de respect, d'écoute et de construction du foyer.</p>
         </div>
         <div class="method-card">
           <div class="mc-icon">⚙️</div>
-          <h3 class="blue">Méthode Agile</h3>
+          <h3 class="blue">Agile</h3>
           <p>La même méthode itérative qui fait avancer les meilleurs projets tech. On avance pas à pas, on mesure, on ajuste. Pas de grands discours : <strong>des actions concrètes à chaque séance</strong>.</p>
         </div>
         <div class="method-card">
@@ -960,7 +977,7 @@
   </section>
 
   <!-- ── URGENCE & CHOIX ── -->
-  <section class="urgency">
+  <section class="urgency" id="cout">
     <div class="container">
       <div class="urgency-inner">
         <span class="pill--pink pill">Le choix qui change tout</span>
@@ -1001,7 +1018,7 @@
   </section>
 
   <!-- ── TÉMOIGNAGES RÉELS ── -->
-  <section class="testi">
+  <section class="testi" id="temoignages">
     <div class="container">
       <div style="text-align:center;margin-bottom:8px;">
         <span class="pill section-label">Témoignages</span>
@@ -1035,7 +1052,7 @@
   </section>
 
   <!-- ── ÉTUDE DE CAS ── -->
-  <section class="case">
+  <section class="case" id="etude-de-cas">
     <div class="container">
       <div class="case-inner">
         <span class="pill section-label">Étude de cas</span>
@@ -1090,7 +1107,7 @@
   </section>
 
   <!-- ── OFFRES & TARIFS ── -->
-  <section class="offers">
+  <section class="offers" id="accompagnements">
     <div class="container">
       <div style="text-align:center;">
         <span class="pill section-label">Choisissez votre point de départ</span>
@@ -1103,16 +1120,16 @@
         <div class="offer-card featured">
           <div class="offer-badge">⭐ La porte d'entrée</div>
           <div class="offer-icon">🎁</div>
-          <h3>Essai Coach IA 7 jours</h3>
-          <p class="offer-desc">Testez le coach de poche dans votre vie réelle. 7 jours pour mesurer la différence, sans risque.</p>
+          <h3>Essai Coach IA, mode soutien</h3>
+          <p class="offer-desc">Testez le coach de poche en mode soutien, dans votre vie réelle. 7 jours pour mesurer la différence, sans risque.</p>
           <div class="offer-price">
             <span class="amount">Offert</span>
             <span class="period">pendant 7 jours</span>
           </div>
           <ul class="offer-features">
-            <li><span>Accès immédiat au Coach IA sur WhatsApp</span></li>
+            <li><span>Accès immédiat au Coach IA sur WhatsApp, en mode soutien</span></li>
             <li><span>Disponible 24h/24, 7j/7</span></li>
-            <li><span>Confidentiel &amp; supervisé</span></li>
+            <li><span>Supervisé par Alison</span></li>
             <li><span>Sans engagement ni carte bleue</span></li>
           </ul>
           <a href="https://wa.me/33974997226?text=Bonjour%20!%20Je%20veux%20d%C3%A9marrer%20mon%20essai%20offert" class="btn btn--wa">
@@ -1168,7 +1185,7 @@
           <div class="offer-card">
             <div class="offer-icon">👩‍💻</div>
             <h3>Bilan de couple hybride</h3>
-            <p class="offer-desc">Bilan avec le Coach IA, suivi d'un debrief de 30 min avec Malka, plus 1 mois de Coach IA. La formule la plus complète pour démarrer.</p>
+            <p class="offer-desc">Bilan avec le Coach IA, suivi d'un debrief de 30 min avec Malka, plus 1 mois de Coach IA.</p>
             <div class="offer-price">
               <span class="amount">89 €</span>
               <span class="slash">129 €</span>
@@ -1195,7 +1212,7 @@
             </div>
             <ul class="offer-features">
               <li><span>1h en visio avec Malka</span></li>
-              <li><span>En couple ou seul(e) (le couple est systémique)</span></li>
+              <li><span>En couple ou seule</span></li>
               <li><span>Déblocage ciblé ou exploration</span></li>
               <li><span>Des outils concrets à appliquer dès le soir</span></li>
             </ul>
@@ -1234,7 +1251,7 @@
             <li><span>Séances avec le Coach IA sur WhatsApp</span></li>
             <li><span>2 visios avec Malka</span></li>
             <li><span>Supervision humaine tout au long du parcours</span></li>
-            <li><span>Candidature en couple, en 1 minute</span></li>
+            <li><span>Candidature en couple, en 3 minutes</span></li>
           </ul>
         </div>
         <div class="offer-wide-cta">
@@ -1273,7 +1290,7 @@
 </section>
 
   <!-- ── FAQ ── -->
-  <section class="faq">
+  <section class="faq" id="faq">
     <div class="container--narrow">
       <span class="pill section-label">Questions fréquentes</span>
       <div class="faq-list" style="margin-top:28px;">
@@ -1347,7 +1364,7 @@
             📖 Découvrir le Livre sur Amazon
           </a>
         </div>
-        <p class="cta-note">✨ Sans engagement · Coach IA disponible 24h/24 · Supervisé par un coach humain · Lu uniquement par Alison</p>
+        <p class="cta-note">✨ Sans engagement · Coach IA disponible 24h/24 · Supervisé par un coach humain</p>
       </div>
     </div>
   </section>
@@ -1544,10 +1561,12 @@
       <h2 class="qz-title">Un dernier mot&nbsp;: je cherche 8 couples fondateurs ✨</h2>
       <div class="cand-box">
         <p>Je lance un nouveau <strong>programme de coaching de couple hybride</strong>&nbsp;: des séances avec le Coach IA sur WhatsApp, <strong>supervisées par moi</strong>, avec deux temps en visio avec moi.</p>
+        <p><strong>Ce que vous y gagnez&nbsp;:</strong></p>
+        <ul class="cand-list"><li>Un accompagnement complet&nbsp;: 6 séances avec le Coach IA, avec un bilan de couple, 2 visios de 30&nbsp;min avec moi et une supervision humaine</li><li>En bonus&nbsp;: 6 mois de Coach IA en mode soutien</li><li>Une place parmi les premiers couples, dont les retours façonnent le programme</li></ul>
         <p>Je constitue un premier groupe de <strong>8 couples fondateurs</strong>, avec un <strong>tarif spécial très réduit</strong>, et <strong>3 d'entre eux auront un accès offert au programme</strong>. Couples choisis après nos échanges, selon la motivation et l'adéquation.</p>
-        <p>Candidater prend 1&nbsp;minute, se fait <strong>en couple</strong> et n'engage à rien. Candidatures ouvertes <strong>jusqu'au 20&nbsp;décembre</strong>, puis un appel de 15 à 30&nbsp;minutes avec moi pour faire connaissance.</p>
+        <p>Candidater prend environ 3&nbsp;minutes, se fait <strong>en couple</strong> et n'engage à rien. Candidatures ouvertes <strong>jusqu'au 20&nbsp;décembre</strong>, puis un appel de 15 à 30&nbsp;minutes avec moi pour faire connaissance.</p>
       </div>
-      <button type="button" class="btn btn--pink btn--lg" style="width:100%; border:none;" onclick="candStart()">Je candidate (1 minute) ➔</button>
+      <button type="button" class="btn btn--pink btn--lg" style="width:100%; border:none;" onclick="candStart()">Je candidate (3 minutes) ➔</button>
       <button type="button" class="qz-skip" onclick="candSkip()">Non merci, voir mon résultat</button>
     </div>
 
@@ -2011,15 +2030,19 @@
     if (candidature && candidature.active) { // candidature saisie mais l'enregistrement n'a pas abouti
       return '<div class="cand-box"><span class="cand-badge">Couples fondateurs</span><h3>Votre candidature n\'a pas pu être enregistrée</h3><p>Un souci technique est survenu. Écrivez-moi via le <a href="https://form.jotform.com/253446337227358" target="_blank" rel="noopener" style="color:#E2C266;">formulaire de contact</a> en indiquant «&nbsp;Candidature couples fondateurs&nbsp;», et je m\'en occupe personnellement.</p></div>';
     }
-    if (candOpenFront() && serverData && serverData.candOpen !== false) {
-      return '<div class="cand-box"><span class="cand-badge">Couples fondateurs · jusqu\'au 20 décembre</span>' +
-        '<h3>Candidater pour le programme de coaching hybride IA et supervision humaine</h3>' +
-        '<p>Je cherche <strong>8 couples fondateurs</strong> pour tester mon nouveau programme, avec un <strong>tarif spécial très réduit</strong>, et <strong>3 d\'entre eux auront un accès offert</strong>.</p>' +
-        '<ul class="cand-list"><li>6 séances avec le Coach IA sur WhatsApp, avec un bilan de couple</li><li>2 séances de 30&nbsp;min en visio avec moi (après le bilan et en conclusion)</li><li>Une supervision humaine tout au long du parcours</li><li>En bonus&nbsp;: 6 mois de Coach IA en mode soutien</li></ul>' +
-        '<p>Candidature en couple, 1&nbsp;minute, sans engagement. Je vous présente le détail du programme lors de notre appel.</p>' +
+    /* Carte « programme hybride » de la page de résultat : avant le 1er déc. 21h30 → invitation au webinaire ; ensuite → candidature. */
+    var open = candOpenFront() && serverData && serverData.candOpen !== false;
+    var head = '<div class="cand-box"><span class="cand-badge">' + (open ? 'Couples fondateurs · jusqu\'au 20 décembre' : 'Nouveau · couples fondateurs') + '</span>' +
+      '<h3>' + (open ? 'Candidater pour le programme de coaching hybride IA et supervision humaine' : 'Et si vous faisiez partie des premiers couples du programme hybride ?') + '</h3>' +
+      '<p>Je lance un programme de coaching de couple hybride et je cherche <strong>8 couples fondateurs</strong>, avec un <strong>tarif spécial très réduit</strong>. <strong>3 d\'entre eux auront un accès offert</strong>.</p>' +
+      '<p><strong>Ce que vous y gagnez&nbsp;:</strong></p>' +
+      '<ul class="cand-list"><li>6 séances avec le Coach IA sur WhatsApp, avec un bilan de couple</li><li>2 séances de 30&nbsp;min en visio avec moi (après le bilan et en conclusion)</li><li>Une supervision humaine tout au long du parcours</li><li>En bonus&nbsp;: 6 mois de Coach IA en mode soutien</li><li>Une place parmi les premiers couples, dont les retours façonnent le programme</li></ul>';
+    if (open) {
+      return head + '<p>Candidature en couple, environ 3&nbsp;minutes, sans engagement. Je vous présente le détail du programme lors de notre appel.</p>' +
         '<button type="button" class="btn btn--pink" style="border:none; width:100%;" onclick="openLateCandidature()">Je candidate ➔</button></div>';
     }
-    return '';
+    return head + '<p><strong>Je présente le programme en direct lors d\'un webinaire, le mardi 1er décembre à 21h.</strong> Les candidatures ouvrent le soir même, à 21h30. Préinscrivez-vous pour ne pas le manquer, de préférence à deux.</p>' +
+      '<button type="button" class="btn btn--pink" style="border:none; width:100%;" onclick="openWebinaire()">Je me préinscris au webinaire ➔</button></div>';
   }
 
   function renderMailStatus() {
