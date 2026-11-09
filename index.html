@@ -108,7 +108,7 @@
     .nav-menu-inner::-webkit-scrollbar { display: none; }
     .nav-menu a { flex: none; font-size: .74rem; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: var(--muted); text-decoration: none; padding: 11px 12px; border-bottom: 2px solid transparent; white-space: nowrap; }
     .nav-menu a:hover, .nav-menu a.on { color: var(--gold); border-bottom-color: var(--gold); }
-    @media (max-width: 900px) { .nav-menu-inner { justify-content: flex-start; } }
+    @media (max-width: 900px) { .nav-menu-inner { flex-wrap: wrap; justify-content: center; overflow-x: visible; gap: 0 2px; padding: 0 8px; } .nav-menu a { font-size: .64rem; padding: 6px 6px; letter-spacing: .02em; } }
 
     /* ── HERO SECTION ──────────────────────────────────── */
     .hero {
