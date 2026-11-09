@@ -380,7 +380,7 @@ function notifPayload({ prenom, nom, email, cand, score, profilLabel, late, conf
 <li>Disponibilité 3 à 6 mois : ${cand.dispo === 'oui' ? 'oui' : 'à discuter'}</li>
 ${score !== undefined && score !== '' ? `<li>Quiz : ${e(score)}/30 · ${e(profilLabel || '')}</li>` : ''}</ul>
 <p><strong>Attentes :</strong><br>${e(cand.attentes || '(non renseignées)').replace(/\n/g, '<br>')}</p>
-<p style="color:#64748B;font-size:13px">Statut Airtable : ${e(candStatut(cand))}. Appels de candidature du 13 décembre au 10 janvier.</p></div>`;
+<p style="color:#64748B;font-size:13px">Statut Airtable : ${e(candStatut(cand))}. Appels de candidature du 2 décembre au 10 janvier.</p></div>`;
   return { email: candNotifEmail(), subject, html, etape: 'NOTIF_CAND', profil: 'cand', profil_label: 'Notification candidature', score: score === undefined ? '' : score, prenom: 'Alison', nom: '', telephone: '', unsub_url: '' };
 }
 

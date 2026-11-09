@@ -69,29 +69,18 @@ function content(profil, etape, ctx) {
 
   /* ── Candidature « couples fondateurs » ── */
   const cd = ctx.cand || { statut: 'A_appeler', rdvUrl: '', confirmUrl: '' };
-  const decompte = { decompte: true };
-  const programme = { p: "**Le programme hybride** : un accompagnement avec le Coach IA sur WhatsApp, supervisé par moi, et deux temps de 30 minutes en visio avec moi (après votre bilan, puis en conclusion). Je constitue un premier groupe de **8 couples fondateurs**, et **3 programmes seront offerts** parmi eux (choisis après les appels, selon la motivation et l'adéquation)." };
-  const rdvCard = cd.rdvUrl
-    ? { card: true, accent: 'pink', kicker: 'Étape suivante · 15 à 30 minutes', title: 'Réserver votre appel de candidature',
-        desc: "Un échange avec moi pour faire connaissance, comprendre votre situation et confirmer votre place dans le groupe. Créneaux ouverts du 13 décembre au 10 janvier.",
-        label: '📅 Choisir mon créneau →', href: cd.rdvUrl }
-    : { card: true, accent: 'pink', kicker: 'Étape suivante · 15 à 30 minutes', title: 'Votre appel de candidature',
-        desc: "Je vous écris personnellement pour fixer ensemble un appel de 15 à 30 minutes, entre le 13 décembre et le 10 janvier. Vous pouvez aussi simplement répondre à cet e-mail.",
-        label: '✉️ Répondre à ce mail →', href: 'mailto:malka@chalombayitlelab.com' };
   const confirmCard = { card: true, accent: 'gold', kicker: 'Candidature à confirmer', title: 'Nous en avons parlé, nous candidatons',
-    desc: "Dès que vous avez pu en parler à votre conjoint(e) et que vous êtes d'accord tous les deux, confirmez ici : vous pourrez alors réserver votre appel. Vous avez jusqu'au 20 décembre.",
+    desc: "Dès que vous avez pu en parler à votre conjoint(e) et que vous êtes d'accord tous les deux, confirmez ici : je pourrai alors étudier votre candidature. Vous avez jusqu'au 20 décembre.",
     label: '✅ Confirmer notre candidature →', href: cd.confirmUrl };
-  const dates = { steps: ["**Du 1er au 20 décembre** : candidatures ouvertes.", "**Du 13 décembre au 10 janvier** : appels de candidature (15 à 30 minutes).", "**Le 10 janvier** : fin de la sélection et réponse à chaque couple (les premiers couples retenus peuvent être contactés plus tôt)."] };
   const candOkBlocks = cd.statut === 'A_confirmer'
     ? [
         { p: "Votre candidature au programme de coaching hybride (Coach IA + supervision humaine) a bien été prise en compte. Merci de votre confiance." },
         { p: "Vous m'avez indiqué que votre conjoint(e) n'était **pas encore au courant**. Pas de souci : votre candidature est **à confirmer**. Parlez-en ensemble tranquillement, c'est un projet de couple." },
-        confirmCard, programme, decompte, dates,
+        confirmCard,
       ]
     : [
         { p: "**Votre candidature au programme de coaching hybride (Coach IA + supervision humaine) a bien été prise en compte.** Merci de votre confiance." },
-        { p: "**Prochaine étape :** j'étudie les candidatures au fil de l'eau. Si la vôtre est présélectionnée, je vous écris pour vous envoyer mon agenda et vous laisser choisir un créneau pour un **appel de candidature de 15 à 30 minutes**, entre le 13 décembre et le 10 janvier (en soirée, en général après 21h)." },
-        programme, decompte, dates,
+        { p: "**Prochaine étape :** j'étudie les candidatures au fil de l'eau. Si la vôtre est présélectionnée, je vous écris personnellement pour fixer un appel de 15 à 30 minutes, entre le 2 décembre et le 10 janvier (en soirée, en général après 21h). Réponse à chaque couple au plus tard le 10 janvier." },
       ];
 
   const C = {
@@ -109,7 +98,7 @@ function content(profil, etape, ctx) {
       kicker: 'Couples fondateurs', title: 'Avez-vous pu en parler en couple ?', sub: 'Votre candidature attend votre confirmation',
       blocks: [
         { p: "Il y a quelques jours, vous avez candidaté au programme de coaching hybride pour couples fondateurs, en précisant que votre conjoint(e) n'était pas encore au courant." },
-        { p: "**Avez-vous pu en parler ?** Si oui et que vous êtes d'accord tous les deux, il vous suffit de confirmer ci-dessous pour réserver votre appel. Si vous avez des questions ou des doutes, **répondez simplement à cet e-mail** : je lis tout." },
+        { p: "**Avez-vous pu en parler ?** Si oui et que vous êtes d'accord tous les deux, il vous suffit de confirmer ci-dessous pour que j'étudie votre candidature. Si vous avez des questions ou des doutes, **répondez simplement à cet e-mail** : je lis tout." },
         confirmCard,
         { p: "Les candidatures sont ouvertes **jusqu'au 20 décembre**." },
       ],
@@ -299,16 +288,6 @@ function renderBlock(b, ctx) {
       <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-top:10px;"><tr>
         <td width="${Math.max(pct, 3)}%" style="background:${ctx.hdr.from};height:8px;border-radius:8px;font-size:0;line-height:0;">&nbsp;</td>
         <td width="${100 - Math.max(pct, 3)}%" style="background:#E7E0D3;height:8px;border-radius:8px;font-size:0;line-height:0;">&nbsp;</td></tr></table>
-    </td></tr></table>`;
-  }
-  if (b.decompte) {
-    const rows = [['6 séances avec le Coach IA, valorisées 49 € chacune', '294 €'], ['2 séances de 30 min avec moi (après le bilan et en conclusion)', '100 €'], ['Temps de supervision humaine (estimé)', '300 €'], ['Bonus : 6 mois d’abonnement au Coach IA en mode soutien (9 €/mois)', '54 €']];
-    return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 16px;"><tr><td style="background:#fff;border:1px solid #E2D8CC;border-left:4px solid #DB2777;border-radius:8px;padding:14px 16px;">
-      <p style="font-family:${F_MONO};font-size:9.5px;letter-spacing:1.5px;text-transform:uppercase;color:#BE185D;margin:0 0 8px;">Le détail du programme</p>
-      ${rows.map(([l, v]) => `<table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr><td style="font-family:${F_SANS};font-size:13px;color:#475569;padding:5px 8px 5px 0;line-height:1.5;">${esc(l)}</td><td align="right" valign="top" style="font-family:${F_SANS};font-size:13px;font-weight:700;color:#1E293B;padding:5px 0;white-space:nowrap;">${esc(v)}</td></tr></table>`).join('')}
-      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-top:1px solid #E2D8CC;margin-top:6px;"><tr><td style="font-family:${F_SANS};font-size:13px;color:#475569;padding:8px 8px 4px 0;">Valeur totale</td><td align="right" style="font-family:${F_SANS};font-size:13px;color:#64748B;padding:8px 0 4px;text-decoration:line-through;">748 €</td></tr>
-      <tr><td style="font-family:${F_SANS};font-size:14px;font-weight:700;color:#BE185D;padding:2px 8px 4px 0;">Tarif exceptionnel couples fondateurs</td><td align="right" style="font-family:${F_SERIF};font-size:20px;font-weight:700;color:#BE185D;padding:2px 0 4px;">249 €</td></tr></table>
-      <p style="font-family:${F_SANS};font-size:12px;color:#64748B;line-height:1.6;margin:8px 0 0;">Trois des huit programmes sont offerts ; ce tarif concerne les autres couples fondateurs. Aucun paiement n'est demandé à ce stade : nous en parlons lors de l'appel.</p>
     </td></tr></table>`;
   }
   if (b.steps) return b.steps.map((t, i) => `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 10px;"><tr>

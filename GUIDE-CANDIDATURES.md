@@ -17,7 +17,7 @@ Si un champ manque, la candidature est quand même conservée dans `Reponses_qui
 Les candidats ne reçoivent **pas** le lien de réservation à la candidature : le mail et la page disent que tu étudies les candidatures et que, si la leur est présélectionnée, tu leur envoies ton agenda. Le mail de présélection est **envoyé à la main** depuis Gmail (modèle fourni par Claude). Dans Airtable, passe simplement `Candidature_statut` à `Preselectionne` pour garder la trace.
 
 ## Variables Vercel
-- `CANDIDATURE_RDV_URL` : lien de la page de réservation Google Agenda (créneaux de 30 min, 13 déc. → 10 janv.). Sans lui, les e-mails disent « je vous écris pour fixer l'appel ».
+- `CANDIDATURE_RDV_URL` : lien de la page de réservation Google Agenda (créneaux de 30 min, 2 déc. → 10 janv.). Sans lui, les e-mails disent « je vous écris pour fixer l'appel ».
 - `CANDIDATURE_NOTIF_EMAIL` (facultatif, défaut malka@chalombayitlelab.com).
 - `MAKE_CANDIDATURE_WEBHOOK_URL` (facultatif) : webhook d'un scénario Make dédié (même modèle Webhook → Gmail que le quiz). Sans lui, on utilise `MAKE_QUIZ_WEBHOOK_URL`.
 - `CANDIDATURE_FORCE_OPEN=1` : **uniquement sur l'environnement Preview**, pour tester avant le 1er décembre. Aperçu côté navigateur : ajouter `?cand=1` à l'adresse.
