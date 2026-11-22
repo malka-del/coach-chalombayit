@@ -274,6 +274,11 @@
         </div>
       </div>
 
+      <label style="display:flex; gap:10px; align-items:flex-start; text-align:left; font-size:0.8rem; color:var(--muted); margin-top:14px; cursor:pointer;">
+        <input type="checkbox" id="privacy-consent" style="width:auto; margin:3px 0 0 0; flex-shrink:0; accent-color:var(--gold);">
+        <span>J'ai lu <a href="https://coach.chalombayitlelab.com/politique-confidentialite#jeu" target="_blank" rel="noopener" style="color:var(--gold);">la politique de confidentialité du jeu</a> et j'accepte que mes réponses soient enregistrées dans ces conditions.</span>
+      </label>
+
       <button class="btn btn-gold" onclick="login()">Démarrer le jeu</button>
       <p id="error-msg" style="color:var(--pink); font-size:0.85rem; font-weight:600; margin-top:12px;"></p>
     </div>
@@ -549,6 +554,12 @@
       document.getElementById('error-msg').innerText = "⚠️ Veuillez entrer votre code d'accès.";
       return;
     }
+
+    if (!document.getElementById('privacy-consent').checked) {
+      document.getElementById('error-msg').innerText = "⚠️ Pour jouer, veuillez accepter la politique de confidentialité du jeu.";
+      return;
+    }
+    document.getElementById('error-msg').innerText = "";
 
     updateCardsCounterBadge();
     showScreen('setup-screen');
