@@ -37,6 +37,16 @@ const HEADERS = {
 const PROFIL_LABEL = { lune: 'Lune de Miel Active ✨', agile: 'Révision Agile Nécessaire 🔧', urgence: 'Urgence de Reconnexion 🌿' };
 
 /* ───────────────────────── CONTENU ───────────────────────── */
+/* Lien Google Meet du webinaire : lu dans la variable Vercel WEBINAIRE_MEET_URL (jamais dans le code public). */
+function webinaireLien() {
+  const url = String(process.env.WEBINAIRE_MEET_URL || '').trim();
+  if (!/^https:\/\//.test(url)) return [{ p: "**La suite :** je vous envoie le lien de connexion par e-mail avant le webinaire." }];
+  return [
+    { card: true, accent: 'pink', kicker: 'Votre lien de connexion · gardez cet e-mail', title: 'Mardi 1er décembre : 21h en France, 22h en Israël',
+      desc: url, label: '🎥 Rejoindre le webinaire →', href: url },
+  ];
+}
+
 function content(profil, etape, ctx) {
   const book = { card: true, accent: 'gold', kicker: 'Maintenance préventive', title: 'Chalom Bayit, Le LIVRE (54 défis)',
     desc: "54 défis hebdomadaires inspirés de la Paracha et alliés aux méthodes Agile : un rituel de 10 minutes par semaine pour entretenir et réaligner votre couple, un Chabbat à la fois.",
@@ -104,7 +114,7 @@ function content(profil, etape, ctx) {
         { p: "L'un comme l'autre a l'impression de ne jamais en faire assez aux yeux de l'autre… Ça vous parle ?" },
         { p: "Le partage des tâches est une des thématiques qui revient le plus en coaching, auprès du Coach IA ou dans vos retours sur Instagram. Alors, pour ce webinaire, je vous propose d'aborder ce sujet avec **des clés concrètes pour prendre de la hauteur et agir**." },
         { p: "Je vous présenterai également mon nouveau programme de coaching hybride et comment l'IA peut participer au coaching de couple. 2 coachings sont à gagner, ainsi que d'autres bonus." },
-        { p: "**La suite :** je vous envoie le lien de connexion par e-mail avant le webinaire. Vous n'avez rien d'autre à faire d'ici là." },
+        ...webinaireLien(),
         reply,
       ],
     },
