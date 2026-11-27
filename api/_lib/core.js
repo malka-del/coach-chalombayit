@@ -76,7 +76,7 @@ function candOpen(now = Date.now()) {
   const w = candWindow();
   return now >= Date.parse(w.start) && now <= Date.parse(w.end);
 }
-/* Webinaire du 1er décembre : préinscription possible dès maintenant, jusqu'à l'heure de début des candidatures (même instant par défaut). */
+/* Webinaire du 1er décembre : inscription possible dès maintenant, jusqu'à l'heure de début des candidatures (même instant par défaut). */
 const webinaireEnd = () => Date.parse((process.env.WEBINAIRE_END || '2026-12-01T21:30:00+01:00').trim());
 const webinaireOpen = (now = Date.now()) => now <= webinaireEnd();
 const rdvUrl = () => (process.env.CANDIDATURE_RDV_URL || '').trim();

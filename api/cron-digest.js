@@ -1,7 +1,7 @@
 'use strict';
 /**
  * GET /api/cron-digest  (déclenché chaque soir par Vercel Cron, ou à la main avec ?dry=1)
- * Résumé quotidien pour Alison : nouveaux quiz, préinscriptions webinaire, essais Coach IA démarrés,
+ * Résumé quotidien pour Alison : nouveaux quiz, inscriptions webinaire, essais Coach IA démarrés,
  * candidatures, et nombre de conversations Coach IA actives aujourd'hui.
  * Confidentialité : seuls les prénoms et des compteurs sont lus/écrits ; ni coordonnées ni texte des conversations.
  * Le mail n'est envoyé qu'à Alison (CANDIDATURE_NOTIF_EMAIL), uniquement s'il s'est passé quelque chose.
@@ -61,7 +61,7 @@ module.exports = async function handler(req, res) {
   if (!activity && !out.errors.length) return res.status(200).json({ ok: true, ...summary, note: 'rien à signaler, aucun mail' });
 
   const html = `<div style="font-family:Arial,sans-serif;font-size:15px;color:#1E293B;line-height:1.6"><h2 style="margin:0 0 4px">Résumé du jour</h2><p style="margin:0;color:#64748B;font-size:13px">${esc(core.parisDate())}</p>`
-    + block('Quiz terminés', out.quiz) + block('Préinscriptions au webinaire', out.web) + block('Essais Coach IA démarrés', out.essai) + block('Candidatures', out.cand)
+    + block('Quiz terminés', out.quiz) + block('Inscriptions au webinaire', out.web) + block('Essais Coach IA démarrés', out.essai) + block('Candidatures', out.cand)
     + (out.conv ? `<h3 style="margin:18px 0 6px;font-size:15px">Conversations Coach IA actives aujourd'hui</h3><p style="margin:0">${out.conv} personne(s) ont écrit au coach.</p>` : '')
     + (out.errors.length ? `<p style="color:#B91C1C;font-size:13px;margin-top:18px">Une partie du résumé n'a pas pu être lue : ${esc(out.errors.join(' · '))}</p>` : '')
     + `<p style="color:#64748B;font-size:12px;margin-top:22px">Prénoms et compteurs uniquement. Les coordonnées et les conversations restent dans Airtable.</p></div>`;

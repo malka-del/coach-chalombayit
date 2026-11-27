@@ -93,12 +93,12 @@ function content(profil, etape, ctx) {
       blocks: [...candOkBlocks, reply],
     },
     'WEB_OK:web': {
-      subject: '{prenom}, votre préinscription au webinaire du 1er décembre',
-      pre: 'Préinscription bien reçue : voici la suite.',
-      reason: "Vous recevez cet e-mail parce que vous vous êtes préinscrit(e) au webinaire du 1er décembre sur coach.chalombayitlelab.com.",
-      kicker: 'Webinaire · mardi 1er décembre à 21h', title: 'Préinscription bien reçue', sub: 'Lancement d\'un nouveau programme de coaching hybride',
+      subject: '{prenom}, votre inscription au webinaire du 1er décembre',
+      pre: 'Inscription bien reçue : voici la suite.',
+      reason: "Vous recevez cet e-mail parce que vous vous êtes inscrit(e) au webinaire du 1er décembre sur coach.chalombayitlelab.com.",
+      kicker: 'Webinaire · mardi 1er décembre à 21h', title: 'Inscription bien reçue', sub: 'Lancement d\'un nouveau programme de coaching hybride',
       blocks: [
-        { p: "**Votre préinscription au webinaire du mardi 1er décembre à 21h est bien enregistrée.** Merci !" },
+        { p: "**Votre inscription au webinaire du mardi 1er décembre à 21h est bien enregistrée.** Merci !" },
         { p: "Ce soir-là, à 21h, je lance un **nouveau programme de coaching hybride**, qui inclut des évolutions du Coach IA de couple." },
         { p: "**La suite :** je vous envoie le lien de connexion par e-mail avant le webinaire. Vous n'avez rien d'autre à faire d'ici là." },
         reply,

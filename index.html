@@ -1266,9 +1266,9 @@
         <div class="offer-wide-cta">
           <div class="offer-price"><span class="amount">Sur candidature</span></div>
           <div id="offer-hybride-web">
-            <p class="offer-note"><strong>Webinaire de lancement le mardi 1er décembre à 21h.</strong> Préinscrivez-vous dès maintenant.</p>
+            <p class="offer-note"><strong>Webinaire de lancement le mardi 1er décembre à 21h.</strong> Inscrivez-vous dès maintenant.</p>
             <a href="#" onclick="openWebinaire();return false;" class="btn btn--pink">
-              Je me préinscris au webinaire
+              Je m’inscris au webinaire
             </a>
           </div>
           <p id="offer-hybride-soon" class="offer-note" style="margin-top:12px;">Les candidatures ouvrent le <strong>mardi 1er décembre à 21h30</strong>.</p>
@@ -1490,9 +1490,19 @@
 
   .offer-note { font-size: .82rem; color: var(--muted); line-height: 1.55; margin: 0 0 10px; text-align: center; }
   .offer-note strong { color: #F0EDE6; }
-  #web-modal { position: fixed; inset: 0; z-index: 100001; background: rgba(0,0,0,0.85); display: none; align-items: center; justify-content: center; padding: 20px; overflow-y: auto; }
+  #web-modal { position: fixed; inset: 0; z-index: 100001; background: rgba(0,0,0,0.85); display: none; align-items: flex-start; justify-content: center; padding: 20px; overflow-y: auto; }
   #web-modal.active { display: flex; }
-  .web-box { background: #171822; border: 1.5px solid rgba(232,69,168,.55); border-radius: 18px; padding: 26px 22px; max-width: 420px; width: 100%; text-align: left; position: relative; }
+  .web-box { background: #171822; border: 1.5px solid rgba(232,69,168,.55); border-radius: 18px; padding: 26px 22px; max-width: 420px; width: 100%; margin: auto 0; text-align: left; position: relative; }
+  .web-visuel { display: block; width: 100%; height: auto; border-radius: 12px; margin: 14px 0 0; }
+  #web-modal { padding: 10px; }
+  .web-box { padding: 16px; }
+  .web-box h3 { font-size: 1.2rem; margin-bottom: 4px; }
+  .web-box p { font-size: .8rem; line-height: 1.4; margin-bottom: 8px; }
+  .web-box .qz-field { padding: 9px 12px; margin-bottom: 6px; }
+  .web-box .qz-consent { font-size: .8rem; line-height: 1.35; margin-top: 0; margin-bottom: 8px; }
+  .web-box .qz-consent span { font-size: inherit; line-height: inherit; }
+  .web-box #web-btn { padding-top: 11px; padding-bottom: 11px; }
+  .web-after { text-align: center; margin: 8px 0 0 !important; }
   .web-box h3 { font-family: 'DM Serif Display', Georgia, serif; font-weight: 400; color: #FFFFFF; font-size: 1.35rem; margin: 0 0 8px; }
   .web-box p { font-size: .88rem; color: #B7BACB; line-height: 1.6; margin: 0 0 12px; }
   .web-box p strong { color: #F0EDE6; }
@@ -1666,35 +1676,39 @@
 <!-- Modal express numéro WhatsApp (si omis lors du quiz) -->
 
 
-<!-- Préinscription au webinaire du 1er décembre -->
-<div id="web-modal" role="dialog" aria-modal="true" aria-label="Préinscription au webinaire">
+<!-- Inscription au webinaire du 1er décembre -->
+<div id="web-modal" role="dialog" aria-modal="true" aria-label="Inscription au webinaire">
   <div class="web-box">
     <button type="button" class="web-close" onclick="closeWebinaire()" aria-label="Fermer">✕</button>
     <div id="web-form-wrap">
-      <span class="cand-badge">Webinaire · mardi 1er décembre à 21h</span>
-      <h3>Je me préinscris</h3>
-      <p>Je lance un <strong>nouveau programme de coaching hybride</strong>, avec des évolutions du Coach IA de couple. Préinscrivez-vous : je vous envoie le lien de connexion par e-mail.</p>
+      <span class="cand-badge">Webinaire gratuit · mardi 1er décembre à 21h</span>
+      <h3>Partage des tâches</h3>
+      <p><strong>Repartez avec des conseils concrets sur le partage des tâches</strong>, pour sortir du « je fais tout » et du « j'en fais jamais assez ».</p>
       <form id="web-form" onsubmit="submitWebinaire(event)" novalidate>
         <input type="text" id="web-prenom" class="qz-field" placeholder="Votre prénom *" autocomplete="given-name">
         <div id="web-e-prenom" class="qz-err" style="display:none;"></div>
         <input type="email" id="web-email" class="qz-field" placeholder="Votre e-mail *" autocomplete="email" inputmode="email">
         <div id="web-e-email" class="qz-err" style="display:none;"></div>
+        <textarea id="web-defi" class="qz-field" rows="1" maxlength="800" placeholder="Votre principal défi (facultatif)" aria-label="Votre principal défi Chalom Bayit (facultatif)" style="resize:vertical;"></textarea>
+        <textarea id="web-attentes" class="qz-field" rows="1" maxlength="800" placeholder="Vos attentes (facultatif)" aria-label="Ce que vous attendez du webinaire (facultatif)" style="resize:vertical;"></textarea>
         <div class="qz-hp" aria-hidden="true"><label>Ne pas remplir<input type="text" id="web-website" tabindex="-1" autocomplete="off"></label></div>
         <label class="qz-consent">
           <input type="checkbox" id="web-consent">
-          <span>J'accepte de recevoir par e-mail les informations sur ce webinaire (heure, lien) puis sur le programme et les actualités de Chalom Bayit Le LAB, et que mes coordonnées soient conservées pour me recontacter (3 ans maximum après le dernier contact). Désinscription en 1 clic à tout moment. Mes données ne sont jamais revendues. <a href="https://coach.chalombayitlelab.com/politique-confidentialite" target="_blank" rel="noopener">Politique de confidentialité</a></span>
+          <span>J'accepte la <a href="https://coach.chalombayitlelab.com/politique-confidentialite" target="_blank" rel="noopener">politique de confidentialité</a>.</span>
         </label>
         <div id="web-e-consent" class="qz-err" style="display:none;"></div>
         <div id="web-e-global" class="qz-err" style="display:none;"></div>
-        <button type="submit" id="web-btn" class="btn btn--pink btn--lg" style="width:100%; border:none;">Valider ma préinscription ➔</button>
+        <button type="submit" id="web-btn" class="btn btn--pink btn--lg" style="width:100%; border:none;">Valider mon inscription ➔</button>
+        <p class="web-after">Lien de connexion envoyé par e-mail. En fin de soirée : mon nouveau programme de coaching hybride.</p>
       </form>
     </div>
     <div id="web-done" style="display:none;">
-      <span class="cand-badge">Préinscription enregistrée</span>
+      <span class="cand-badge">Inscription enregistrée</span>
       <h3>Merci, c'est noté&nbsp;!</h3>
       <p>Je vous envoie un e-mail de confirmation. Pensez à vérifier vos courriers indésirables. Le lien de connexion suivra avant le webinaire du <strong>mardi 1er décembre à 21h</strong>.</p>
       <button type="button" class="btn btn--ghost" style="width:100%;" onclick="closeWebinaire()">Fermer</button>
     </div>
+    <img class="web-visuel" src="/webinaire/visuel.jpg" width="1080" height="1080" loading="lazy" alt="Webinaire gratuit « Partage des tâches », mardi 1er décembre, 21 h en France et 22 h en Israël. Ouverture des candidatures au programme de coaching hybride avec l'IA, 2 coachings offerts sur candidature, des bonus pour les participants.">
   </div>
 </div>
 
@@ -1742,7 +1756,7 @@
   }
 
   var $ = function (id) { return document.getElementById(id); };
-  /* Carte « Programme hybride » : webinaire (préinscription) tant que les candidatures ne sont pas ouvertes, puis bouton de candidature. */
+  /* Carte « Programme hybride » : webinaire (inscription) tant que les candidatures ne sont pas ouvertes, puis bouton de candidature. */
   function syncHybride() {
     var open = candOpenFront(), g = function (i) { return document.getElementById(i); };
     if (g('offer-hybride-web')) g('offer-hybride-web').style.display = open ? 'none' : '';
@@ -1752,7 +1766,7 @@
   syncHybride();
   (function () { var d = CAND_START - Date.now(); if (d > 0 && d < 2000000000) setTimeout(syncHybride, d + 500); })();
 
-  /* Préinscription au webinaire du 1er décembre (disponible dès maintenant) */
+  /* Inscription au webinaire du 1er décembre (disponible dès maintenant) */
   var WEB_URL = API_URL.replace('submit-quiz', 'preinscription-webinaire');
   window.openWebinaire = function () {
     $('web-form-wrap').style.display = ''; $('web-done').style.display = 'none';
@@ -1767,13 +1781,13 @@
     ['prenom', 'email', 'consent', 'global'].forEach(function (k) { webErr('web-e-' + k, ''); });
     if (!prenom) { webErr('web-e-prenom', 'Merci de renseigner votre prénom.'); ok = false; }
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) { webErr('web-e-email', "L'adresse e-mail ne semble pas valide."); ok = false; }
-    if (!$('web-consent').checked) { webErr('web-e-consent', 'Merci de cocher la case pour valider votre préinscription.'); ok = false; }
+    if (!$('web-consent').checked) { webErr('web-e-consent', 'Merci de cocher la case pour valider votre inscription.'); ok = false; }
     if (!ok) return;
     var btn = $('web-btn'); btn.disabled = true; btn.textContent = 'Envoi…';
-    fetch(WEB_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ prenom: prenom, email: email, consent: true, website: $('web-website').value }) })
+    fetch(WEB_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ prenom: prenom, email: email, defi: $('web-defi').value.trim(), attentes: $('web-attentes').value.trim(), consent: true, website: $('web-website').value }) })
       .then(function (r) { return r.json().catch(function () { return {}; }); })
       .then(function (d) {
-        btn.disabled = false; btn.textContent = 'Valider ma préinscription ➔';
+        btn.disabled = false; btn.textContent = 'Valider mon inscription ➔';
         if (d && d.ok) { $('web-form-wrap').style.display = 'none'; $('web-done').style.display = 'block'; return; }
         var e = (d && d.errors) || {};
         if (e.prenom) webErr('web-e-prenom', e.prenom);
@@ -1781,7 +1795,7 @@
         if (e.consent) webErr('web-e-consent', e.consent);
         if (!e.prenom && !e.email && !e.consent) webErr('web-e-global', (d && d.error) || 'Un souci est survenu. Réessayez dans un instant.');
       })
-      .catch(function () { btn.disabled = false; btn.textContent = 'Valider ma préinscription ➔'; webErr('web-e-global', 'Connexion impossible. Réessayez dans un instant.'); });
+      .catch(function () { btn.disabled = false; btn.textContent = 'Valider mon inscription ➔'; webErr('web-e-global', 'Connexion impossible. Réessayez dans un instant.'); });
   };
   function store(k, v) { try { if (v === undefined) return window.localStorage.getItem(k); window.localStorage.setItem(k, v); } catch (e) { return null; } }
   function sstore(k, v) { try { if (v === undefined) return window.sessionStorage.getItem(k); window.sessionStorage.setItem(k, v); } catch (e) { return null; } }
@@ -2057,8 +2071,8 @@
       return head + '<p>Candidature en couple, environ 3&nbsp;minutes, sans engagement. Je vous présente le détail du programme lors de notre appel.</p>' +
         '<button type="button" class="btn btn--pink" style="border:none; width:100%;" onclick="openLateCandidature()">Je candidate ➔</button></div>';
     }
-    return head + '<p><strong>Je présente le programme en direct lors d\'un webinaire, le mardi 1er décembre à 21h.</strong> Les candidatures ouvrent le soir même, à 21h30. Préinscrivez-vous pour ne pas le manquer.</p>' +
-      '<button type="button" class="btn btn--pink" style="border:none; width:100%;" onclick="openWebinaire()">Je me préinscris au webinaire ➔</button></div>';
+    return head + '<p><strong>Je présente le programme en direct lors d\'un webinaire, le mardi 1er décembre à 21h.</strong> Les candidatures ouvrent le soir même, à 21h30. Inscrivez-vous pour ne pas le manquer.</p>' +
+      '<button type="button" class="btn btn--pink" style="border:none; width:100%;" onclick="openWebinaire()">Je m’inscris au webinaire ➔</button></div>';
   }
 
   function renderMailStatus() {
@@ -2086,6 +2100,11 @@
     }
   } catch (e) {}
   function autoOpen() {
+    /* Lien direct vers l’inscription : ?webinaire (le quiz ne s'ouvre pas par-dessus). Après la clôture, arrivée normale sur le site. */
+    if (/[?&]webinaire(=|&|$)/i.test(location.search) && Date.now() < CAND_START) {
+      $('qz-fab').style.display = 'flex'; $('qz-fab-text').innerText = 'Faire le quiz (2 min)';
+      window.openWebinaire(); return;
+    }
     if (store('cbl_quiz_done')) return;
     if (sstore('cbl_quiz_closed')) { $('qz-fab').style.display = 'flex'; $('qz-fab-text').innerText = 'Faire le quiz (2 min)'; return; }
     window.openQuiz();
